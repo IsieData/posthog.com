@@ -54,7 +54,7 @@ This is an overview for what you should actually be doing with a customer at eac
 
 ### 1. You get a lead
 
-We're constantly experimenting with the best lead types, documented [here](/handbook/growth/sales/lead-scoring). Info on _how_ leads are assigned can be [found here](/handbook/growth/sales/crm#how-we-do-lead-assignments). 
+We're constantly experimenting with the best lead types, documented in the [lead scoring guide](/handbook/growth/sales/lead-scoring). Info on _how_ leads are assigned can be [found in the CRM handbook](/handbook/growth/sales/crm#how-we-do-lead-assignments).
 
 ### 2. You qualify
 
@@ -351,7 +351,7 @@ Here is minimum checklist of things that we find customers should know how to do
 
 Post-onboarding, you'll want to change gears to start thinking about [retention, expansion and/or cross-sell](/handbook/growth/sales/expansion-and-retention). 
 
-Simon and Charles review accounts every month to see if/when it makes sense to reassign accounts once they've closed. 
+Simon and Ben review accounts every month to see if/when it makes sense to reassign accounts once they've closed. 
 
 ### 7. Closed - lost
 

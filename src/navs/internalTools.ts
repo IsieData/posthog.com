@@ -2,5 +2,10 @@
 export const internalToolsNav = [
     { name: 'Components', url: '/components' },
     { name: 'Feature matrix', url: '/feature-matrix' },
-    { name: 'HogWatch 3000', url: '/hogwatch' },
+    { name: 'Team', url: '/team-directory' },
+    {
+        name: 'HogWatch 3000',
+        url: '/hogwatch',
+        children: [{ name: 'Performance', url: '/hogwatch/performance' }],
+    },
 ]
