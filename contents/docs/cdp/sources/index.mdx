@@ -109,7 +109,38 @@ When you expand each source, you can see:
 
 If you add new tables to your source database, click **Pull new schemas** to discover them without waiting for the next sync. This only updates the list of available schemas – it doesn't trigger a data sync.
 
-To sync all enabled schemas at once, click **Sync now**. A confirmation dialog appears before the sync starts. This triggers a new sync for every enabled schema that isn't already syncing, so you don't need to sync schemas one by one.
+To sync all enabled schemas at once, click **Sync all enabled schemas**. A confirmation dialog appears before the sync starts. This triggers a new sync for every enabled schema that isn't already syncing, so you don't need to sync schemas one by one.
+
+### Filtering and sorting schemas
+
+Filter schemas in large sources by:
+
+- **Status** – sync status (Running, Completed, Failed, etc.)
+- **Sync method** – method type (Incremental, Full refresh, CDC, Webhook, or not yet set up)
+- **Frequency** – sync frequency
+
+Click any column header to sort by schema name, status, frequency, last synced, or rows synced.
+
+### Bulk actions
+
+Select multiple schemas with the checkboxes to:
+
+- **Disable** – stop syncing for selected schemas (CDC and webhook tables warn that re-enabling requires a full resync)
+- **Set frequency** – change sync frequency for all selected schemas
+- **Sync now** – trigger an immediate sync for all selected enabled schemas
+- **Delete tables and resync** – remove existing data and re-import from scratch (useful for data quality issues)
+- **Delete tables from PostHog** – remove synced data from PostHog without affecting the source
+
+Bulk enable isn't available – enabling schemas requires choosing a sync method and configuring keys for each table individually.
+
+### Sync frequency limits
+
+The minimum sync frequency depends on the sync method:
+
+- **CDC schemas** – can sync as frequently as every 1 minute
+- **All other sync types** (Incremental, Full refresh, Append only) – minimum is every 5 minutes
+
+When you set frequency for multiple schemas with bulk actions, non-CDC schemas stay at their 5-minute minimum.
 
 ### Managing webhook tables
 
