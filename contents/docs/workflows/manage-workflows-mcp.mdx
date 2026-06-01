@@ -23,16 +23,27 @@ The MCP server provides these tools for working with Workflows:
 |------|-------------|
 | `workflows-list` | List all workflows in the current project with their status, trigger type, and timestamps. |
 | `workflows-get` | Get the full definition of a workflow, including trigger, actions, edges, and variables. |
-| `workflows-create` | Create a new workflow with triggers, actions, delays, and branching logic. |
-| `workflows-update` | Update a workflow's name, description, actions, or status. |
-| `workflows-run` | Test-run a workflow with mock event data to verify execution. |
+| `workflows-create` | Create a new workflow as a draft with triggers, actions, delays, and branching logic. |
+| `workflows-update` | Update a draft workflow's name, description, actions, or configuration. |
+| `workflows-run` | Test-run a workflow with mock event data to verify execution before enabling. |
+
+## Lifecycle tools
+
+These tools manage workflow state transitions:
+
+| Tool | Description |
+|------|-------------|
+| `workflows-enable` | Enable a draft workflow so it starts processing triggers. Prompts for confirmation. |
+| `workflows-disable` | Disable an active workflow, returning it to draft state. Prompts for confirmation. |
+| `workflows-archive` | Archive a workflow you no longer need. Cannot be undone via MCP. |
 
 ## MCP guardrails
 
-The MCP server includes guardrails to prevent accidental changes to live workflows:
+The MCP server enforces a create-test-enable workflow to prevent accidental changes to live automations:
 
-- **No editing active workflows** – You can't modify a workflow that's currently enabled. Disable it first (set status to `draft`), make your changes, then re-enable.
-- **Archive instead of delete** – Workflows are archived rather than permanently deleted. Set status to `archived` to remove a workflow from active use.
+- **Workflows start as drafts** – You can't create an active workflow directly. Create it as a draft, test it with `workflows-run`, then enable it.
+- **No editing active workflows** – You can't modify an enabled workflow's configuration. Disable it first, make changes, then re-enable.
+- **Archive instead of delete** – Hard delete isn't available via MCP. Use `workflows-archive` to remove workflows from active use.
 
 ## Example prompts
 
@@ -42,6 +53,7 @@ Try these with your MCP-enabled agent:
 - `Create a workflow that sends a Slack message when a user signs up.`
 - `Show me the full configuration of my onboarding-email workflow.`
 - `Test my welcome-sequence workflow with a mock signup event.`
+- `Enable my welcome-sequence workflow now that testing passed.`
 - `Disable my maintenance-alerts workflow so I can update it.`
 - `Archive the old-drip-campaign workflow.`
 
