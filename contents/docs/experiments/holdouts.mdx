@@ -32,16 +32,13 @@ Once created, you can assign a holdout to a draft experiment in the **Manage dis
   alt="Screenshot of the Manage distribution modal with the holdout selector"
 />
 
-## How to view holdout results
+## How holdouts appear in experiments
 
-When assigned to an experiment, your holdout will be treated as another variant in experiment analysis. You'll be able to see the conversion rate, delta %, credible interval, and win probability alongside other experiment variants.
+When you assign a holdout to an experiment, it appears in the Distribution table on the **Variants** tab so you can see how many users are in the holdout. Holdouts are excluded from metric analysis.
 
-<ProductScreenshot
-  imageLight = "https://res.cloudinary.com/dmukukwp6/image/upload/holdout_results_light_v2_9670e2a73b.png"
-  imageDark = "https://res.cloudinary.com/dmukukwp6/image/upload/holdout_results_dark_v2_1128fa41c3.png"
-  classes="rounded"
-  alt="Screenshot of the experiment with the results displayed"
-/>
+Why? Comparing holdout users to control wouldn't measure your experiment's effect. Holdout users never saw the experiment, so any metric difference reflects cumulative product impact over time – not the specific change you're testing.
+
+To measure holdout impact, compare the holdout group's metrics to your overall user base in [Product analytics](/docs/product-analytics) or create a dedicated analysis using [Cohorts](/docs/data/cohorts).
 
 ## How holdouts affect feature flags
 
