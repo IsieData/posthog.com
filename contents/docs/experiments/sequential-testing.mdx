@@ -1,0 +1,51 @@
+---
+title: Sequential testing
+---
+
+Sequential testing is an optional statistical method for frequentist experiments. It produces always-valid p-values and confidence sequences, letting you check results as often as you like without inflating the false positive rate.
+
+Standard frequentist tests assume you pick a sample size upfront and check the result once. In practice, you peek at dashboards continuously. Each peek inflates the chance of a false positive. Sequential testing solves this by using a different statistical construction that stays valid under continuous monitoring.
+
+The tradeoff is wider confidence intervals. You can check as often as you want, but you need more data to reach the same precision.
+
+## Configure sequential testing
+
+Set a project-level default, then override it on individual experiments when needed.
+
+The project-level setting controls the default for all experiments in the project. When enabled there, sequential testing applies to frequentist experiments unless an experiment overrides it.
+
+To set the project default, go to **Experiments > Settings** and enable **Default sequential testing**.
+
+To configure sequential testing for a single experiment, open its **Settings** tab. You can use the project default or override it for that experiment.
+
+Sequential testing only applies to experiments using the frequentist statistical method. Bayesian experiments use a different approach that doesn't have the peeking problem.
+
+## Tuning parameter
+
+The tuning parameter controls where along the data-collection timeline the confidence sequence is tightest. Set it close to your expected total sample size.
+
+When the parameter matches your actual sample size, the confidence intervals are narrowest. If you underestimate, intervals stay wide throughout the experiment. If you overestimate, they narrow more slowly at first but eventually converge.
+
+The default is 5,000. For most experiments, this is a reasonable starting point. Adjust it if you expect significantly more or fewer participants.
+
+## How it works
+
+Sequential testing uses confidence sequences from Waudby-Smith et al. 2023 ([Time-uniform, nonparametric, nonasymptotic confidence sequences](https://arxiv.org/abs/2103.06476)). Instead of a fixed critical value, the method uses a boundary that grows with the sample size, keeping the overall false positive rate bounded no matter how many times you check.
+
+The always-valid p-value has a slightly different interpretation than a standard p-value. Early in the experiment, p-values are often exactly 1.0. This is expected – the e-value (the underlying statistic) is below 1 until enough evidence accumulates. Once the p-value drops below your threshold, the result is significant and stays significant.
+
+When sequential testing is enabled, the experiment results page shows an info icon next to the p-value column header explaining the always-valid interpretation.
+
+## When to use sequential testing
+
+Enable sequential testing when you expect to monitor results frequently before deciding to ship or stop. It's useful for:
+
+- Experiments you check daily or more often
+- Situations where you want to stop early if results are clearly positive or negative
+- Teams that review experiments in progress during standups or weekly reviews
+
+Sequential testing is less useful when:
+
+- You have a fixed end date and will only check results once
+- Your experiment runs for a very short time with a small sample
+- You're using Bayesian statistics, which handles peeking differently

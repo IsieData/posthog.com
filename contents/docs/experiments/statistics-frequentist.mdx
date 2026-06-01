@@ -203,6 +203,12 @@ You can choose between 90%, 95%, or 99% confidence levels, which correspond to a
 
 To set the default confidence level for all experiments, go to **Experiments > Settings**. You can also override this for individual experiments in the **Statistics** section of the experiment.
 
+### Sequential testing
+
+Standard p-values and confidence intervals assume you check results once at a fixed sample size. If you peek at results repeatedly, each check inflates the false positive rate.
+
+[Sequential testing](/docs/experiments/sequential-testing) solves this by producing always-valid p-values that stay valid under continuous monitoring. The tradeoff is wider confidence intervals. Enable it when you plan to check results frequently before deciding to ship or stop.
+
 ## Mathematical formulas reference
 
 ### T-test with Welch-Satterthwaite degrees of freedom

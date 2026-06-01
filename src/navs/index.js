@@ -4582,6 +4582,12 @@ export const docsMenu = {
                     color: 'orange',
                 },
                 {
+                    name: 'Sequential testing',
+                    url: '/docs/experiments/sequential-testing',
+                    icon: 'IconRewindPlay',
+                    color: 'purple',
+                },
+                {
                     name: 'Holdouts',
                     url: '/docs/experiments/holdouts',
                     icon: 'IconPeople',
