@@ -108,6 +108,24 @@ This specifies the conditions a user must meet to access the feature flag and re
 
 Condition sets are evaluated from **top to bottom**, and the **first** condition set that matches will be used. A condition matches when all property filters pass and the target falls within the rollout percentage.
 
+#### Early exit
+
+By default, PostHog evaluates all condition sets and returns `true` if any condition passes. Enable **Stop evaluation at first matching condition set** to stop evaluation at the first condition where property filters match – even if the user falls outside the rollout percentage.
+
+This is useful when you want users who match a condition's targeting criteria but miss the rollout to get a consistent `false` instead of potentially matching a later, broader condition.
+
+**Example:** You have a flag with two conditions:
+1. Users in the "Beta testers" cohort at 50% rollout
+2. All users at 10% rollout
+
+Without early exit, a beta tester who falls outside the 50% rollout can still match the 10% rollout in condition 2. With early exit enabled, that beta tester gets `false` immediately after failing the rollout check in condition 1.
+
+<CalloutBox icon="IconWarning" title="Local evaluation limitation" type="caution">
+
+Early exit only takes effect when flags are evaluated through the `/flags` API endpoint. Server-side SDKs using [local evaluation](/docs/feature-flags/local-evaluation) evaluate all condition sets regardless of this setting.
+
+</CalloutBox>
+
 By default, release conditions **match by user**, meaning the flag is evaluated based on your distinct ID. You can change this using the **Match by** dropdown:
 
 - **User** (default) – Evaluates based on your distinct ID. Best for in-app features targeting logged-in users.
