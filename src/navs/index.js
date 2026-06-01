@@ -6536,6 +6536,10 @@ export const docsMenu = {
                     url: '/docs/posthog-code/tasks',
                     icon: 'IconListCheck',
                     color: 'blue',
+                    children: [
+                        { name: 'Overview', url: '/docs/posthog-code/tasks' },
+                        { name: 'Query tasks with MCP', url: '/docs/posthog-code/query-tasks-mcp' },
+                    ],
                 },
                 {
                     name: 'PostHog integration',

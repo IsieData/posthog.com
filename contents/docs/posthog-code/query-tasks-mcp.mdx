@@ -1,0 +1,47 @@
+---
+title: Query Tasks with MCP
+sidebar: Docs
+showTitle: true
+---
+
+The [PostHog MCP server](/docs/model-context-protocol) exposes read-only tools for querying [PostHog Code tasks](/docs/posthog-code/tasks). External coding agents like Claude Code, Cursor, or Windsurf can check task status, inspect run history, and read session logs without leaving your editor.
+
+With MCP, your agents can:
+
+- **List tasks** – Query by origin product, repository, stage, or creator.
+- **Check task status** – Get details for a specific task including its latest run summary.
+- **Inspect run history** – List all runs for a task and see which succeeded or failed.
+- **Read session logs** – Fetch session log events for debugging failed runs.
+
+## Example prompts
+
+Try these prompts with your MCP-enabled agent:
+
+- `List my PostHog Code tasks.`
+- `Show me tasks from the posthog/posthog-js repository.`
+- `What's the status of my most recent task?`
+- `List runs for task ID abc123.`
+- `Show me the session logs for the failed run.`
+- `Which tasks were created from Slack?`
+
+## Tasks tools
+
+The MCP server provides five read-only tools for working with Tasks:
+
+| Tool | Description |
+|------|-------------|
+| `tasks-list` | List tasks in the current project. Filter by `origin_product`, `stage`, `repository`, `created_by`, or `internal`. Returns lightweight metadata. |
+| `tasks-retrieve` | Get a specific task by ID, including description, repository, origin product, stage, and latest run summary. |
+| `tasks-runs-list` | List all runs for a specific task. Returns lightweight run metadata including status, environment, and timestamps. |
+| `tasks-runs-retrieve` | Get full details for a specific run including status, stage, environment, branch, artifacts summary, state, and error message. |
+| `tasks-runs-session-logs-retrieve` | Fetch session log events emitted by the agent for a specific run. Supports filtering by event types and pagination. |
+
+A typical workflow:
+
+1. Call `tasks-list` to find your tasks.
+2. Call `tasks-retrieve` to check a specific task's status and latest run.
+3. If a run failed, call `tasks-runs-session-logs-retrieve` to debug.
+
+## Get started
+
+See the [MCP server documentation](/docs/model-context-protocol) for setup instructions.
