@@ -3894,6 +3894,10 @@ export const docsMenu = {
                             name: 'Column definitions',
                             url: '/docs/web-analytics/marketing-analytics-schema',
                         },
+                        {
+                            name: 'Query marketing data with MCP',
+                            url: '/docs/web-analytics/query-marketing-mcp',
+                        },
                     ],
                 },
                 {

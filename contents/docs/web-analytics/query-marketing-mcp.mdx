@@ -1,0 +1,54 @@
+---
+title: Query marketing data with MCP
+---
+
+The [PostHog MCP server](/docs/model-context-protocol) lets your AI coding agent query [marketing analytics](/docs/web-analytics/marketing-analytics) data directly from your code editor. Diagnose your marketing setup, audit UTM tagging, review conversion goals, and get optimization suggestions – without switching to the PostHog app.
+
+This works in any MCP client – Claude Desktop, Cursor, Claude Code, Windsurf, VS Code, and others.
+
+## How it works
+
+With MCP, your coding agent can:
+
+- **Diagnose marketing setup** – ask "What's wrong with my marketing analytics setup?" to get a health check of your configuration
+- **Audit UTM tagging** – ask "Audit my UTM parameters" to find tagging inconsistencies and coverage gaps
+- **Review conversion goals** – ask "List my conversion goals and explain how they work" to understand your current tracking
+- **Get optimization suggestions** – ask "Suggest conversion goals for my project" to discover tracking opportunities
+
+## Marketing analytics tools
+
+The MCP server exposes these tools for marketing analytics:
+
+| Tool | Description |
+|------|-------------|
+| `marketing-analytics-diagnose-retrieve` | Run a diagnostic check on your marketing analytics setup, surfacing configuration issues and data health problems. |
+| `marketing-analytics-utm-audit-retrieve` | Audit your UTM parameter usage across campaigns, identifying inconsistencies and missing tags. |
+| `marketing-analytics-conversion-goals-retrieve` | List all configured conversion goals with their event definitions and attribution settings. |
+| `marketing-analytics-explain-conversion-goal-retrieve` | Get a detailed explanation of how a specific conversion goal works, including its attribution logic. |
+| `marketing-analytics-data-sources-retrieve` | Check the health and sync status of your connected marketing data sources. |
+| `marketing-analytics-suggest-conversion-goals` | Get AI-powered suggestions for conversion goals based on your event data. |
+| `marketing-analytics-suggest-utm-mappings-retrieve` | Get suggestions for UTM parameter mappings to improve campaign attribution. |
+
+## Example prompts
+
+Try these with your MCP-enabled agent:
+
+- `Run a diagnostic on my marketing analytics setup.`
+- `Audit my UTM parameters and show me any issues.`
+- `List all my conversion goals.`
+- `Explain how the "purchase" conversion goal attributes conversions.`
+- `Check the sync status of my marketing data sources.`
+- `Suggest new conversion goals I should track.`
+- `What UTM mappings would improve my campaign attribution?`
+
+## Install the MCP server
+
+The recommended way to install is with the [AI wizard](/docs/ai-engineering/ai-wizard):
+
+```bash
+npx @posthog/wizard mcp add
+```
+
+The wizard supports Claude, Cursor, Windsurf, VS Code, and more. You can also [configure it manually](/docs/model-context-protocol#manual-install).
+
+See the [MCP server docs](/docs/model-context-protocol) for full setup instructions.
