@@ -25,11 +25,13 @@ The bot picked up new OAuth scopes on 2026-05-04 (`app_mentions:read`, `users:re
 
 ## 2. Connect your personal GitHub (mandatory for coding)
 
-A personal GitHub integration is **required** for the coding agent to run. Without one, the bot refuses to start any repo-bound task and replies in-thread:
+A personal GitHub integration is **required** for coding tasks. If you ask a coding question (like "fix the broken checkout flow") without GitHub connected, the bot prompts you to connect first:
 
 > I can't start this task yet – you haven't connected your personal GitHub. Connect it so I can open the pull request as you, then mention me again.
 
-This is a hard block on the whole task, not just the PR step – the agent doesn't plan, edit, or run anything until you've connected GitHub. Each teammate who wants to ship code connects their own account at [**Settings → Personal integrations**](https://app.posthog.com/settings/user-personal-integrations) and clicks **Connect GitHub**. You can connect multiple accounts or organizations – the agent uses them for repo access, commit attribution, and pull request authorship.
+Non-coding questions work without GitHub. If you ask about product data (like "how do I configure retention?" or "what's our conversion rate?"), the bot answers using the PostHog MCP without repo access.
+
+For coding tasks, this is a hard block – the agent won't plan, edit, or run anything until you've connected GitHub. Each teammate who wants to ship code connects their own account at [**Settings → Personal integrations**](https://app.posthog.com/settings/user-personal-integrations) and clicks **Connect GitHub**. You can connect multiple accounts or organizations – the agent uses them for repo access, commit attribution, and pull request authorship.
 
 PRs can't be authored under the bot itself – the agent always commits and opens PRs as whichever teammate triggered the task.
 
