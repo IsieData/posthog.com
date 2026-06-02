@@ -87,7 +87,6 @@ Configure how PostHog fetches multiple pages of results.
 
 | Type | Description |
 |------|-------------|
-| **Auto-detect** | PostHog attempts to detect the pagination pattern automatically |
 | **Single page** | No pagination. Use when the API returns all results in one response |
 | **JSON body next-URL** | The response contains a URL for the next page. Enter the JSONPath to the next URL (for example, `links.next`) |
 | **Cursor in JSON body** | The response contains a cursor for the next page. Enter the cursor JSONPath (for example, `meta.next_cursor`) and the query parameter name (for example, `cursor`) |
@@ -129,4 +128,4 @@ If incremental sync is skipping records:
 
 ### Pagination not working
 
-Try switching from **Auto-detect** to a specific pagination type. Check your API documentation to find the correct pagination pattern and parameters.
+If pagination isn't fetching all results, double-check that you've selected the correct pagination type. Review your API documentation to find the correct pattern and parameters.
