@@ -36,7 +36,7 @@ The scanner type is chosen when you create a scanner and determines the shape of
 
 | Type | What it produces | Use it for |
 | --- | --- | --- |
-| **Monitor** | A true/false verdict, with reasoning | Flagging whether a specific condition occurred, e.g. "did someone get stuck with no clear next step?" |
+| **Monitor** | A verdict (`yes`, `no`, or optionally `inconclusive`), with reasoning | Flagging whether a specific condition occurred, e.g. "did someone get stuck with no clear next step?" |
 | **Classifier** | One or more tags from a vocabulary you define | Bucketing sessions, e.g. user intent (`browsing`, `purchasing`, `support`) or outcome (`task_completed`, `task_abandoned`, `blocked_by_error`) |
 | **Scorer** | A numeric score on a scale you define | Rating sessions on a dimension, e.g. a 0 to 10 frustration score |
 | **Summarizer** | A title and prose summary | Generating a short narrative of what happened in each session |
@@ -49,6 +49,7 @@ Every scanner also returns a **confidence** value and, in its reasoning, may inc
 2. Pick a [scanner type](#scanner-types). Templates are available for common cases – dead-end detection, session summary, user intent, frustration score, and session outcome.
 3. Write a prompt describing what the scanner should look for. Be concrete and avoid speculation – e.g. *"Return true if someone appears stuck on a page – scrolling without engaging, hovering over elements with no clear CTA, or abandoning shortly after arriving."*
 4. Configure the type-specific options:
+   - **Monitor** – optionally enable **Allow inconclusive** to let the model return `inconclusive` when the session doesn't provide enough signal to decide; otherwise verdicts are constrained to `yes` or `no`.
    - **Classifier** – define your tag vocabulary, and optionally allow multiple tags per session or freeform tags.
    - **Scorer** – set the numeric scale (min, max, and an optional label).
    - **Summarizer** – set the summary length.
@@ -105,12 +106,12 @@ Key properties on each event:
 | `triggered_by` | Whether the observation was scheduled or run on-demand |
 | `model_used` | The Gemini model used |
 | `scanner_output_confidence` | The model's confidence (0.0 to 1.0) |
-| `scanner_output_verdict` | (Monitor) the true/false verdict |
+| `scanner_output_verdict` | (Monitor) the verdict: `yes`, `no`, or `inconclusive` |
 | `scanner_output_tags` | (Classifier) the assigned tags |
 | `scanner_output_score` | (Scorer) the numeric score |
 | `scanner_output_reasoning` | The model's reasoning |
 
-For example, to count monitor sessions flagged true by a "Dead-end pages" scanner over the last week:
+For example, to count sessions flagged `yes` by a "Dead-end pages" monitor scanner over the last week:
 
 ```sql
 SELECT
@@ -119,7 +120,7 @@ SELECT
 FROM events
 WHERE event = '$recording_observed'
   AND properties.scanner_name = 'Dead-end pages'
-  AND properties.scanner_output_verdict = true
+  AND properties.scanner_output_verdict = 'yes'
   AND timestamp > now() - INTERVAL 7 DAY
 GROUP BY day
 ORDER BY day
