@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import ReaderView from 'components/ReaderView'
+import WhyPostHogReader from 'components/WhyPostHog'
 import SEO from 'components/seo'
 import { useApp } from '../../../context/App'
 import { useWindow } from '../../../context/Window'
@@ -31,14 +31,7 @@ export default function HomeTest() {
                 description="All your developer tools in one place. PostHog gives engineers everything to build, test, measure, and ship successful products faster. Get started free."
                 image="/images/og/default.png"
             />
-            <ReaderView
-                hideTitle
-                proseSize="lg"
-                showQuestions={false}
-                hideRightSidebar
-                hideMenu
-                defaultNavVisible={false}
-            >
+            <WhyPostHogReader hideTitle proseSize="lg" showQuestions={false} hideRightSidebar>
                 <div className="space-y-12">
                     <Hero />
                     <Customers />
@@ -50,7 +43,7 @@ export default function HomeTest() {
                     <ShamelessCTASection />
                     <HitCounter />
                 </div>
-            </ReaderView>
+            </WhyPostHogReader>
         </>
     )
 }

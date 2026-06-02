@@ -1851,10 +1851,6 @@
             "destination": "/docs/ai-observability"
         },
         {
-            "source": "/why",
-            "destination": "/about"
-        },
-        {
             "source": "/platform-addons",
             "destination": "/platform-packages"
         },

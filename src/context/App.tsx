@@ -652,23 +652,6 @@ const appSettings: AppSettings = {
             center: true,
         },
     },
-    '/start': {
-        size: {
-            min: {
-                width: 850,
-                height: 580,
-            },
-            max: {
-                width: 850,
-                height: 580,
-            },
-            autoHeight: true,
-            fixed: true,
-        },
-        position: {
-            center: true,
-        },
-    },
     '/about': {
         size: {
             min: {
@@ -742,22 +725,6 @@ const appSettings: AppSettings = {
             },
             fixed: true,
             autoHeight: true,
-        },
-        position: {
-            center: true,
-        },
-    },
-    '/why': {
-        size: {
-            min: {
-                width: 750,
-                height: 575,
-            },
-            max: {
-                width: 750,
-                height: 575,
-            },
-            fixed: true,
         },
         position: {
             center: true,
