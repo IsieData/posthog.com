@@ -120,6 +120,16 @@ Below is a list of some of the properties that PostHog captures by default in cl
 | Plugins Deferred            | `$plugins_deferred`      | `['plugin4']`                  |
 | IP Address                  | `$ip`                    | `192.168.1.1`                  |
 
+#### Server-side SDK properties
+
+Server-side SDKs like [Node.js](/docs/libraries/node) and [Python](/docs/libraries/python) add properties to distinguish their events from browser and mobile clients:
+
+| Name            | Key          | Value  |
+|-----------------|--------------|--------|
+| Server          | `$is_server` | `true` |
+
+They also include `$lib` (e.g., `posthog-node`, `posthog-python`) and `$lib_version` to identify which SDK captured the event.
+
 ### Different timestamp properties
 
 An event has 2 `DATETIME` type fields - `timestamp` and `created_at`.
