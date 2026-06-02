@@ -116,12 +116,16 @@ Tags can also be set automatically via [workflow automation](/docs/support/workf
 
 Messages you send to customers display delivery status indicators:
 
-| Status   | Meaning                                    |
-| -------- | ------------------------------------------ |
-| **Sent** | Message has been delivered to the customer |
-| **Read** | Customer has viewed the message            |
+| Status             | Meaning                                                  |
+| ------------------ | -------------------------------------------------------- |
+| **Sending…**       | Message is being delivered (email channel only)          |
+| **Sent**           | Message has been delivered to the customer               |
+| **Read**           | Customer has viewed the message                          |
+| **Failed to send** | Message delivery failed permanently (email channel only) |
 
 Status indicators appear on messages sent by your team. They help you understand whether customers have seen your responses.
+
+For the email channel, "Sending…" indicates your reply is queued and being retried if the email provider is temporarily unavailable. If delivery permanently fails (for example, invalid recipient address or misconfigured domain), the message shows "Failed to send" – check your [email channel settings](/docs/support/email) and resend if needed.
 
 ### Private notes
 
