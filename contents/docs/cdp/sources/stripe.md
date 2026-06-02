@@ -117,10 +117,12 @@ If you'd rather scope the webhook down to just the resources you're syncing, sel
 | Account                    | `account.*`               |
 | BalanceTransaction         | `transfer.*`              |
 | Charge                     | `charge.*`                |
+| Coupon                     | `coupon.*`                |
 | CreditNote                 | `credit_note.*`           |
 | Customer                   | `customer.*`              |
 | CustomerBalanceTransaction | `billing.*`               |
 | CustomerPaymentMethod      | `payment_method.*`        |
+| Discount                   | `customer.discount.*`     |
 | Dispute                    | `dispute.*`               |
 | Invoice                    | `invoice.*`               |
 | InvoiceItem                | `invoiceitem.*`           |
