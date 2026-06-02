@@ -34,6 +34,7 @@ export const TeamMember = (props: any) => {
         startDate,
         isTeamLead,
         viewingOwnTeam,
+        profileUrl,
     } = props
     const [ref, inView] = useInView({
         threshold: 0,
@@ -93,7 +94,7 @@ export const TeamMember = (props: any) => {
     return (
         <div ref={ref}>
             <Link
-                to={`/community/profiles/${squeakId}`}
+                to={profileUrl || `/community/profiles/${squeakId}`}
                 wrapperClassName={`group container-size not-prose aspect-[3/4] border border-primary bg-${color} block rounded max-w-96 relative z-0`}
                 state={{ newWindow: true }}
             >
@@ -108,8 +109,8 @@ export const TeamMember = (props: any) => {
                                                 pineappleOnPizza === true
                                                     ? 'StickerPineappleYes'
                                                     : pineappleOnPizza === false
-                                                    ? 'StickerPineappleNo'
-                                                    : 'StickerPineappleUnknown'
+                                                      ? 'StickerPineappleNo'
+                                                      : 'StickerPineappleUnknown'
                                             }
                                         />
                                     }
@@ -117,8 +118,8 @@ export const TeamMember = (props: any) => {
                                     {pineappleOnPizza === true
                                         ? 'Loves'
                                         : pineappleOnPizza === false
-                                        ? 'Hates'
-                                        : 'Undecided about'}{' '}
+                                          ? 'Hates'
+                                          : 'Undecided about'}{' '}
                                     pineapple on pizza
                                 </Tooltip>
                             </ZoomHover>
@@ -280,6 +281,26 @@ export const TeamMember = (props: any) => {
     )
 }
 
+// Honorary team member: the PostHog Code agent. It isn't a Strapi profile (it's an AI
+// agent, not a human hire), so it's added to the listing here and links to its hand-built
+// community profile instead of /community/profiles/:id.
+const POSTHOG_CODE_TEAM_MEMBER = {
+    squeakId: 'posthog-code',
+    profileUrl: '/community/posthog-code',
+    firstName: 'PostHog',
+    lastName: 'Code',
+    companyRole: 'AI coding agent',
+    country: 'world',
+    color: 'blue',
+    biography:
+        "AI coding agent. I turn product signals into draft PRs. I don't sleep, drink coffee, or attend standup — but I do sign every commit.",
+    avatar: { url: 'https://res.cloudinary.com/dmukukwp6/image/upload/hog_engineer_0eebaf7af1.png' },
+    teams: { data: [] },
+    leadTeams: { data: [] },
+    // startDate intentionally omitted — no fake tenure trophy
+    // pineappleOnPizza intentionally omitted — can't eat pizza
+}
+
 interface PeopleProps {
     searchTerm?: string
     filteredMembers?: any[] | null
@@ -292,10 +313,21 @@ export default function People({ searchTerm, filteredMembers }: PeopleProps = {}
         team: { teamMembers },
         allTeams,
     } = useStaticQuery(teamQuery)
-    const [filteredTeamMembers, setFilteredTeamMembers] = useState(teamMembers)
+
+    // Surface the PostHog Code agent on the full team listing, but not on filtered
+    // team-specific views (those are driven entirely by the filteredMembers prop).
+    const displayMembers = useMemo(
+        () =>
+            filteredMembers !== null && filteredMembers !== undefined
+                ? filteredMembers
+                : [...teamMembers, POSTHOG_CODE_TEAM_MEMBER],
+        [filteredMembers, teamMembers]
+    )
+
+    const [filteredTeamMembers, setFilteredTeamMembers] = useState(displayMembers)
 
     // Use filteredMembers from props if provided
-    const baseMembers = filteredMembers !== null && filteredMembers !== undefined ? filteredMembers : teamMembers
+    const baseMembers = displayMembers
 
     const teamSize = teamMembers.length - 1
 
@@ -453,7 +485,12 @@ export default function People({ searchTerm, filteredMembers }: PeopleProps = {}
                 )}
                 {activeTab === 'map' && (
                     <div className="h-[70vh] min-h-[480px] mt-2">
-                        <PeopleMap members={filteredTeamMembers} />
+                        {/* The agent lives in the cloud, not on the map */}
+                        <PeopleMap
+                            members={filteredTeamMembers.filter(
+                                (m: any) => m.squeakId !== POSTHOG_CODE_TEAM_MEMBER.squeakId
+                            )}
+                        />
                     </div>
                 )}
             </ScrollArea>
