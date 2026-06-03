@@ -47,7 +47,7 @@ Every scanner also returns a **confidence** value and, in its reasoning, may inc
 
 1. Go to **Replay Vision** in the PostHog app and select **New scanner** (or start from a template).
 2. Pick a [scanner type](#scanner-types). Templates are available for common cases – dead-end detection, session summary, user intent, frustration score, and session outcome.
-3. Write a prompt describing what the scanner should look for. Be concrete and avoid speculation – e.g. *"Return true if someone appears stuck on a page – scrolling without engaging, hovering over elements with no clear CTA, or abandoning shortly after arriving."*
+3. Write a prompt describing what the scanner should look for. Be concrete and avoid speculation – e.g. *"Answer 'yes' if the user appears stuck on a page – scrolling without engaging, hovering over elements with no clear CTA, or abandoning shortly after arriving."*
 4. Configure the type-specific options:
    - **Monitor** – optionally enable **Allow inconclusive** to let the model return `inconclusive` when the session doesn't provide enough signal to decide; otherwise verdicts are constrained to `yes` or `no`.
    - **Classifier** – define your tag vocabulary, and optionally allow multiple tags per session or freeform tags.
@@ -128,7 +128,7 @@ ORDER BY day
 
 ## Signals
 
-When you enable **Signals** on a scanner, notable findings (such as a monitor returning true, or a scorer crossing a threshold) can surface as actionable [Signals](/docs/signals) – so a human gets notified about important sessions without anyone manually reviewing replays.
+When you enable **Signals** on a scanner, notable findings (such as a monitor returning `yes`, or a scorer crossing a threshold) can surface as actionable [Signals](/docs/signals) – so a human gets notified about important sessions without anyone manually reviewing replays.
 
 ## Quota and limits
 
