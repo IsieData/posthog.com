@@ -134,6 +134,18 @@ If you'd rather scope the webhook down to just the resources you're syncing, sel
 
 Narrowing events down means you'll need to revisit the webhook any time you enable a new table, which is why we still recommend **All events** unless you have a specific reason not to.
 
+### Missing events warning
+
+If your Stripe webhook is missing events PostHog needs for your enabled tables, a warning banner appears on the **Webhook** tab listing what's missing. This can happen when:
+
+- You created the webhook manually without all required events
+- You enabled a new table after creating the webhook, and it wasn't updated
+- Your API key lacks **Write** permission on **Webhooks**, so PostHog couldn't add the events automatically
+
+The banner includes a **Copy events** button to copy the missing event names and add them in your Stripe dashboard.
+
+When you enable a new table on a Stripe source that already has a webhook, PostHog tries to add the required events automatically. If your API key has **Write** permission on **Webhooks**, this happens silently. If not, the table is still enabled, but you'll see the missing events warning and need to add them manually.
+
 > **Note:** The Discount table is **webhook-only** – Stripe has no API list endpoint for discounts. This means PostHog can't backfill historical discounts; only new `customer.discount.created`, `customer.discount.updated`, and `customer.discount.deleted` events are captured going forward.
 
 ### Subscription discount data

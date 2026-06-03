@@ -8,6 +8,19 @@ This page covers troubleshooting for Data Warehouse. For setup, see the [install
 
 <AskAIInput placeholder="Type your question and hit enter..." />
 
+## Why is my webhook-synced table empty?
+
+If a webhook-synced table isn't receiving data, your webhook may be missing required events. Check your source's **Webhook** tab for a missing events warning.
+
+Common causes:
+- **Manual webhook setup** – You created the webhook in Stripe's dashboard without selecting all required events.
+- **New table enabled** – You enabled a table after the webhook was created, and the webhook wasn't updated with the new events.
+- **Missing permissions** – Your API key lacks **Write** permission on **Webhooks**, so PostHog couldn't add events automatically when you enabled new tables.
+
+When events are missing, the **Webhook** tab shows a banner listing them. Click **Copy events** to get the list, then add them in your Stripe dashboard under **Developers** > **Webhooks** > your endpoint > **Update details**.
+
+For Stripe sources, use an API key with **Write** permission on **Webhooks** so PostHog can keep the event subscription in sync automatically.
+
 ## How can I see why my syncs are failing?
 
 From the [source page](https://app.posthog.com/data-management/sources), click the source that's failing, scroll over to the **Status** column and hover over the error message.
