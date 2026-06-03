@@ -22,7 +22,18 @@ interface RollingWordsProps {
 const FAST_EASE = [0.33, 1, 0.68, 1] as const
 const fastRoll = (hold: number) => ({ duration: Math.min(0.26, Math.max(0.07, hold / 1400)), ease: FAST_EASE })
 // Graceful ease-out-expo settle for the final word
-const SETTLE_TRANSITION = { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const }
+export const ROLLING_WORDS_SETTLE_MS = 700
+const SETTLE_TRANSITION = { duration: ROLLING_WORDS_SETTLE_MS / 1000, ease: [0.22, 1, 0.36, 1] as const }
+
+/**
+ * Total time (ms) from mount until the final word has finished rolling in: the sum of all holds
+ * (time spent advancing through the list) plus the settle animation on the last word. Useful for
+ * sequencing other animations to start once the cycle has come to rest.
+ */
+export function rollingWordsDuration(steps: RollingWordStep[]): number {
+    const totalHolds = steps.reduce((sum, step) => sum + step.hold, 0)
+    return totalHolds + ROLLING_WORDS_SETTLE_MS
+}
 
 /**
  * Slot-machine word cycler for headlines. Words roll vertically in place — the outgoing word

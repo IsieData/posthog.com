@@ -11,7 +11,7 @@ import Logo from 'components/Logo'
 import { useApp } from '../../../context/App'
 import { DebugContainerQuery } from 'components/DebugContainerQuery'
 import { CTAs } from 'components/CTAs'
-import { RollingWords, type RollingWordStep } from './RollingWords'
+import { RollingWords, rollingWordsDuration, type RollingWordStep } from './RollingWords'
 
 // Cycling verbs for the hero headline. The suite runs twice — readable at the start, blurring
 // faster as it goes — so it feels like the product does even more, before settling on "code".
@@ -33,6 +33,10 @@ const HERO_CYCLE: RollingWordStep[] = Array.from({ length: HERO_STEP_COUNT }, (_
 })
 
 const HERO_VERBS: RollingWordStep[] = [...HERO_CYCLE, { word: 'code', hold: 0 }]
+
+// Hold the hero carousel's auto-advance until the rolling verbs have settled on "code", so the
+// page isn't animating in two places at once on load.
+const HERO_CAROUSEL_DELAY = rollingWordsDuration(HERO_VERBS)
 
 const heroTabs: TabbedCarouselTab[] = [
     {
@@ -110,7 +114,7 @@ export const Hero = () => {
                 </div>
             </div>
             <div className="@container">
-                <TabbedCarousel variant="hero" tabs={heroTabs} />
+                <TabbedCarousel variant="hero" tabs={heroTabs} autoplayStartDelay={HERO_CAROUSEL_DELAY} />
             </div>
         </>
     )

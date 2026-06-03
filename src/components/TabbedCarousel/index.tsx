@@ -22,6 +22,13 @@ export type TabbedCarouselVariant = 'minimal' | 'hero'
 export interface TabbedCarouselProps {
     tabs: TabbedCarouselTab[]
     slideDuration?: number
+    /**
+     * Delay (ms) before auto-advance begins after mount. The carousel renders the first slide but
+     * holds it (progress bar paused) until the delay elapses — useful for letting an intro
+     * animation finish before this starts moving. Manual tab clicks, hover-pause, and the
+     * offscreen-pause logic all continue to work during and after the delay. Default: 0.
+     */
+    autoplayStartDelay?: number
     className?: string
     /** Appended to the slide outer container — overrides default chrome (min-h, padding, rounded). */
     slideClassName?: string
@@ -92,6 +99,7 @@ const VARIANT_CONFIG: Record<TabbedCarouselVariant, VariantConfig> = {
 export default function TabbedCarousel({
     tabs,
     slideDuration = DEFAULT_SLIDE_DURATION,
+    autoplayStartDelay = 0,
     className,
     slideClassName,
     showActiveBg = true,
@@ -101,8 +109,16 @@ export default function TabbedCarousel({
     const [isPaused, setIsPaused] = useState(false)
     const [isHovering, setIsHovering] = useState(false)
     const [isOffscreen, setIsOffscreen] = useState(false)
+    // Holds auto-advance paused until `autoplayStartDelay` ms have elapsed after mount.
+    const [isWaitingToStart, setIsWaitingToStart] = useState(autoplayStartDelay > 0)
     const [progressKey, setProgressKey] = useState(0)
     const containerRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        if (autoplayStartDelay <= 0) return
+        const timer = setTimeout(() => setIsWaitingToStart(false), autoplayStartDelay)
+        return () => clearTimeout(timer)
+    }, [autoplayStartDelay])
 
     // Pause auto-advance when the carousel scrolls mostly out of view, so
     // height changes between slides don't shift the content the reader is
@@ -125,7 +141,7 @@ export default function TabbedCarousel({
         return () => observer.disconnect()
     }, [])
 
-    const effectivelyPaused = isPaused || isHovering || isOffscreen
+    const effectivelyPaused = isPaused || isHovering || isOffscreen || isWaitingToStart
 
     const advance = useCallback(() => {
         setActiveTab((prev) => {
