@@ -111,9 +111,9 @@ Every page is a resizable window, so the *viewport* width is irrelevant — what
 
 **Grep (broad — Rust regex has no lookbehind):** search for `(sm|md|lg|xl|2xl):` and then eyeball each hit for a leading `@`. Hits **without** a preceding `@` are bugs.
 
-### C2 — Stack for 1–2 container sizes before going to columns *(Should fix)*
+### C2 — Stack on narrow widths before going to columns *(Should fix)*
 
-Make elements stack for 1–2 container-query sizes before switching to side-by-side columns. Default to a single stacked column and only break into columns at a larger container breakpoint, so narrow windows stay readable.
+Default to a single stacked column and only break into side-by-side columns at a larger container breakpoint, so narrow windows stay readable. Multi-column layouts that kick in immediately get cramped when the window is small.
 
 ```tsx
 // Good — single column until @2xl, then two columns
@@ -204,9 +204,9 @@ import { IconCheck } from '@posthog/icons'
 
 **Grep:** sweep the diff for emoji codepoints, e.g. ripgrep `[\x{1F300}-\x{1FAFF}\x{2600}-\x{27BF}\x{2190}-\x{21FF}\x{2B00}-\x{2BFF}]`.
 
-### E2 — Use icons sparingly; prefer green checkmarks in two columns *(Consider)*
+### E2 — Use icons intentionally, not decoratively *(Consider)*
 
-Decorative icon rows are often fragile or add no meaning. For feature/benefit lists, green checkmarks (`IconCheck` in `text-green`) laid out in two columns usually read better and are more robust. Don't add icons that don't earn their place — posthog.com is information-dense, not a landing page.
+Don't add icons that don't earn their place — posthog.com is information-dense, not a landing page, and decorative icon rows tend to be fragile or add no real meaning. Favor simple, consistent treatments for feature/benefit lists over icon-per-item flourishes. Any icon you keep should come from `@posthog/icons` and read cleanly in both light and dark mode.
 
 ---
 
