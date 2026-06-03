@@ -24,7 +24,8 @@ A pre-commit hook (`.husky/pre-commit` → lint-staged) and CI already cover pur
 - **Prettier** auto-formats `js/ts/tsx/json/yml/css` on commit: single quotes, no semicolons, 4-space indent, 120-char width. Don't flag code quote/semicolon style.
 - **ESLint** runs on commit and **blocks** it on errors (notably unused vars — see F4).
 - **markdownlint** auto-fixes `.md`/`.mdx` on commit and also blocks the PR in CI.
-- **codespell** (CI) auto-commits typo fixes; **Vale** (CI) posts prose suggestions as a non-blocking PR comment.
+- **codespell** (CI) auto-commits plain typo fixes — ignore those.
+- **Vale** (CI) is different: it enforces PostHog's *prose conventions* on website content and posts every finding as a PR comment. It's technically non-blocking, but a wall of Vale comments is exactly the noise this skill exists to prevent — so for content PRs, **pre-empt the Vale rules** (group M) rather than letting CI surface them. Run them locally with `pnpm vale:staged`. (Vale only lints `contents/`; internal docs like skills and `agents/` are excluded.)
 
 ## The official PR checklist (the merge gate)
 
@@ -419,3 +420,31 @@ Don't skip heading levels (h2 → h4) and don't introduce a second `<h1>` in bod
 ### L5 — `src/navs/index.js` and docs sidebars are shared / "ask first" *(Must fix)*
 
 `src/navs/index.js` feeds the docs and handbook sidebars and is **shared with the live site** — modifying it is an "ask-first" action. A new docs/handbook page still needs a sidebar entry to be reachable, so flag a new page that isn't wired into its nav, but treat editing the nav file itself as a deliberate, flagged change (filter on the front end during local dev rather than editing it casually).
+
+## M. Prose conventions (Vale-enforced, content only)
+
+These are objective rules the project's Vale linter enforces on `contents/` prose. Unlike subjective tone (group H), these are safe to fix directly. Pre-empting them keeps a content PR from coming back covered in linter comments. Run `pnpm vale:staged` locally to check. (Source: `.vale/styles/PostHogBase/`, PostHog style guide.)
+
+### M1 — Use a spaced en dash, not an em dash or spaced hyphen *(Should fix)*
+
+This is the most-flagged rule and counterintuitive: PostHog style uses a **spaced en dash ` – `** for parenthetical and range dashes — *not* an em dash (`—`) and not a spaced hyphen (` - `).
+
+```
+Good:  PostHog is fast – really fast.
+Bad:   PostHog is fast — really fast.     (em dash)
+Bad:   PostHog is fast - really fast.     (spaced hyphen)
+```
+
+**Grep:** `—` (em dash) or ` - ` (spaced hyphen) in `contents/` prose.
+
+### M2 — Capitalize product and technology names correctly *(Should fix)*
+
+Vale's term rules flag wrong casing. Common ones: **PostHog** (not "posthog"/"Posthog"), **GitHub** (not "github"), **JavaScript**, **TypeScript**, **PostgreSQL**, **PR**, **API**. Product names follow their canonical casing (e.g. "Feature Flags", "Session Replay" when used as product names).
+
+### M3 — Headings in sentence case (product names keep their casing) *(Should fix)*
+
+Headings are sentence case — only the first word and proper nouns/product names are capitalized. "Setting up feature flags", not "Setting Up Feature Flags".
+
+### M4 — American English, Oxford comma, descriptive link text *(Should fix)*
+
+Use American spelling ("color", "behavior", "analyze"), the Oxford comma, and descriptive link text — never "click here" or a bare URL as the anchor (Vale's `DescriptiveLinkText`). `[set up feature flags](/docs/feature-flags)`, not `[click here](/docs/feature-flags)`.

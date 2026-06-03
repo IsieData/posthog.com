@@ -38,7 +38,7 @@ Read the full diff for each changed file before judging — `git diff master...H
 Load `references/review-checklist.md` for the full rule catalog with good/bad code examples and the exact grep sweeps. Work through every changed file against it.
 
 First decide **which kind of PR** this is — it changes which rules matter:
-- **Content PR** — `.md`/`.mdx` under `contents/` (blog, tutorial, docs, customers). The common case for marketers. Check frontmatter, images, MDX components, links, SEO/structure, tone (checklist groups I, J, K, L, A2/A3, H).
+- **Content PR** — `.md`/`.mdx` under `contents/` (blog, tutorial, docs, customers). The common case for marketers. Check frontmatter, images, MDX components, links, SEO/structure, prose conventions, tone (checklist groups I, J, K, L, M, A2/A3, H).
 - **Page/component PR** — `.tsx`/`.ts` under `src/`. Check windows, layout, colors, components, SSR safety (groups A–G).
 
 Use grep to find candidates fast, then **read the surrounding code** before flagging — most rules have legitimate exceptions:
@@ -51,6 +51,7 @@ For **content PRs**:
 - Frontmatter: required fields present for the content type; every `author` handle exists in `src/data/authors.json`; `category` is a real category; `seo.metaTitle`/`metaDescription` present.
 - Plain UI screenshots (`<img>`/`![]()`) that should be `<ProductScreenshot>` with a dark-mode variant.
 - Under-linked content (few/no internal links to related docs/posts); a new docs page that may actually belong in the monorepo (`docs/published/`); skipped heading levels.
+- Vale-enforced prose conventions (group M): em dashes (`—`) or spaced hyphens that should be spaced en dashes (` – `), miscapitalized terms (`posthog`/`github`), title-case headings, non-American spelling, "click here" links. Pre-empt these so CI doesn't bury the PR in comments.
 
 For **page/component PRs**:
 
@@ -100,7 +101,8 @@ End with: **"Want me to apply the Must and Should fixes? Copy and design items I
 2. Run Prettier on the touched files: `pnpm format` (the repo uses `pnpm`, never `npm`).
 3. Re-run the grep sweeps from `references/review-checklist.md` to confirm the anti-patterns are gone.
 4. If `vercel.json` or any page path changed, run `pnpm test-redirects`.
-5. Report what you changed and what still needs a human decision.
+5. For content PRs, run `pnpm vale:staged` to confirm the prose conventions (group M) pass before CI does.
+6. Report what you changed and what still needs a human decision.
 
 Do **not** run `pnpm build` or `pnpm check-links-post-build` as part of review — they need ~16GB RAM and are too slow for an interactive loop. Only run them if the user explicitly asks.
 
