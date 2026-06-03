@@ -36,6 +36,8 @@ If stack traces show minified code instead of original source:
 
 See the [source maps guide](/docs/error-tracking/upload-source-maps/) for upload instructions.
 
+> **Tip:** PostHog detects when a significant portion of your JavaScript stack frames are missing source maps and shows a warning banner on the Issues list. Click **Fix with wizard** to run the setup wizard, which automatically configures source map uploads for your framework.
+
 ## 'Script error' with no stack trace
 
 For security purposes, browsers hide error details from scripts loaded from different domains. This shows as `Script error` with no stack trace.
