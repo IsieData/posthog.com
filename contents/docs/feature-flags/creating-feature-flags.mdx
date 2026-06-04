@@ -120,9 +120,9 @@ This is useful when you want users who match a condition's targeting criteria bu
 
 Without early exit, a beta tester who falls outside the 50% rollout can still match the 10% rollout in condition 2. With early exit enabled, that beta tester gets `false` immediately after failing the rollout check in condition 1.
 
-<CalloutBox icon="IconWarning" title="Local evaluation limitation" type="caution">
+<CalloutBox icon="IconInfo" title="Local evaluation support" type="fyi">
 
-Early exit only takes effect when flags are evaluated through the `/flags` API endpoint. Server-side SDKs using [local evaluation](/docs/feature-flags/local-evaluation) evaluate all condition sets regardless of this setting.
+Early exit is supported in both the `/flags` API endpoint and [local evaluation](/docs/feature-flags/local-evaluation) for the Node SDK. Other server-side SDKs using local evaluation evaluate all condition sets regardless of this setting.
 
 </CalloutBox>
 
