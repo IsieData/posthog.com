@@ -44,7 +44,7 @@ export default function HTML(props: HTMLProps): JSX.Element {
                 />
                 <script
                     dangerouslySetInnerHTML={{
-                        __html: `setTimeout(function(){if(document.body&&document.body.getAttribute('data-wallpaper-ready')==='false'){document.body.setAttribute('data-wallpaper-ready','true');var s=document.getElementById('initial-loader-wallpaper-hide');if(s)s.remove();}},5000);`,
+                        __html: `setTimeout(function(){if(document.body&&document.body.getAttribute('data-wallpaper-ready')==='false'){document.body.setAttribute('data-wallpaper-ready','true');var s=document.getElementById('initial-loader-wallpaper-hide');if(s)s.remove();var l=document.getElementById('initial-loader');if(l)l.remove();}},13000);`,
                     }}
                 />
 

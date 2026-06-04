@@ -112,7 +112,11 @@
         body.appendChild(loadingStyles)
         body.appendChild(loadingWrapper)
 
+        const FALLBACK_MS = 10000
+        let fallbackTimer
+
         const cleanup = () => {
+            clearTimeout(fallbackTimer)
             body.setAttribute('data-wallpaper-ready', 'true')
             const hideStyle = document.getElementById('initial-loader-wallpaper-hide')
             if (hideStyle) hideStyle.remove()
@@ -124,6 +128,9 @@
             cleanup()
         } else {
             window.addEventListener('desktopLoaded', cleanup, { once: true })
+            // Safety net: if the desktop never signals it's ready, reveal it and remove
+            // the loader together so the two can never render at the same time.
+            fallbackTimer = setTimeout(cleanup, FALLBACK_MS)
         }
     } catch (error) {
         console.error('Failed to initialize loading spinner:', error)
