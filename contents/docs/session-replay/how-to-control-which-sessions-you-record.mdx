@@ -167,6 +167,8 @@ For example if you set an event trigger for Exception events, a URL trigger for 
 
 You'll capture 20% of every session, and any session that has an exception event or is on the checkout page.
 
+> **Warning:** If you use "any" matching with **100% sampling** and other trigger conditions (URL triggers, event triggers, or a feature flag), every session gets recorded. The 100% sampling condition always matches, so your other conditions have no effect. To use trigger conditions as filters, either lower the sampling rate below 100% or switch to "all" matching.
+
 ### With all matching
 
 You'll capture 20% of any session on the checkout page that has an exception event.
