@@ -90,7 +90,7 @@ The `useFeatureFlagPayload` hook does *not* send a [`$feature_flag_called`](http
 </CalloutBox>
 
 ```react
-import { useFeatureFlagPayload } from '@posthog/react'
+import { useFeatureFlagPayload, useFeatureFlagEnabled } from '@posthog/react'
 
 function App() {
   const variant = useFeatureFlagEnabled('show-welcome-message')
