@@ -105,7 +105,17 @@ If the log does not appear, check:
 
 ## Customizing the attribute key
 
-If your pipeline emits the person identifier under a different key (for example `user.id`, `customerId`, or a legacy `distinct_id`), point PostHog at that key with the `logs_config` endpoint:
+If your pipeline emits the person identifier under a different key (like `user.id`, `customerId`, or a legacy `distinct_id`), you can configure PostHog to use that key instead.
+
+### Using the settings UI
+
+Go to [**Settings** > **Environment** > **Logs** > **Link to person**](https://app.posthog.com/settings/environment-logs#logs-distinct-id-attribute-key), enter the attribute key your pipeline emits, and click **Save**.
+
+> **Note:** Changing this setting requires project admin permissions. You can also access it by clicking the gear icon on the person profile's **Logs** tab.
+
+### Using the API
+
+You can also configure this via the `logs_config` endpoint:
 
 ```bash
 curl -X PATCH "https://app.posthog.com/api/projects/<PROJECT_ID>/logs_config/" \
@@ -114,9 +124,9 @@ curl -X PATCH "https://app.posthog.com/api/projects/<PROJECT_ID>/logs_config/" \
      -d '{"logs_distinct_id_attribute_key": "user.id"}'
 ```
 
-Only one key per project. Pick the key your pipeline actually emits — there is no fallback chain, so a log that lacks the configured key is unlinked from any person.
+You can only set one key per project. Pick the key your pipeline actually emits — there's no fallback chain, so logs without the configured key won't be linked to any person.
 
-When the key has been customized, the person profile's **Logs** tab shows a small hint above the volume chart indicating which attribute is being used as the person pivot.
+When you've customized the key, the person profile's **Logs** tab shows a hint above the volume chart indicating which attribute is being used.
 
 ## What this does not do
 
