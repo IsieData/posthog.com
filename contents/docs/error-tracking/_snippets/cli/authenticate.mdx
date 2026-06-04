@@ -16,13 +16,15 @@ If you are using the CLI in a CI/CD environment such as GitHub Actions, you can 
 
 </div>
 
-For local development, you can load these variables from a dotenv-style file using `--env-file`:
+For local development, you can load these variables from a dotenv-style file using `--dotenv-file`:
 
 ```bash
-posthog-cli --env-file .env sourcemap upload ...
+posthog-cli --dotenv-file .env sourcemap upload ...
 ```
 
-Credentials are resolved in this order: CLI args, then process environment, then `--env-file`, then `~/.posthog/credentials.json` (from `posthog-cli login`). Process environment always takes precedence over file values. Credentials are resolved atomically from a single source – `POSTHOG_CLI_HOST` in a file can't redirect a key supplied by the process environment.
+> **Note:** Use `--dotenv-file` when running the CLI via npm (`npx posthog-cli`). The `--env-file` alias works only with native binary installs because Node.js has its own built-in `--env-file` flag that intercepts the argument before it reaches the CLI binary.
+
+Credentials are resolved in this order: CLI args, then process environment, then `--dotenv-file`, then `~/.posthog/credentials.json` (from `posthog-cli login`). Process environment always takes precedence over file values. Credentials are resolved atomically from a single source – `POSTHOG_CLI_HOST` in a file can't redirect a key supplied by the process environment.
 
 You can also use the `--host` option instead of the `POSTHOG_CLI_HOST` environment variable to target a different PostHog instance or region. For EU users:
 
