@@ -139,6 +139,8 @@ Replace all `[PLACEHOLDER_...]` and `![PLACEHOLDER: ...](PLACEHOLDER)` entries w
 
 ## Step 4: Run /suggest-links on the new file
 
+Prioritize backlinks as forward links should already be set. But, if the article has almost no forward links, recommend forward links, too.
+
 After writing the file, invoke the `/suggest-links` skill passing the path to the new newsletter file as the argument. The skill will:
 
 - Suggest forward links (PostHog product/feature mentions to link in the new post)
