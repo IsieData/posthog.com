@@ -122,12 +122,13 @@ The video below shows how to create a new cohort from a trend, although you can 
 
 You can create and manage cohorts using AI agents through the PostHog [MCP server](/docs/model-context-protocol). Ask your AI agent to create, list, retrieve, update, or delete cohorts and it uses the appropriate MCP tools.
 
-For static cohorts, you can also ask the agent to add or remove persons by their UUIDs.
+For static cohorts, you can ask the agent to populate them from a SQL query or insight actors. This is the recommended approach for larger sets of users since there's no row limit. For small ad-hoc additions, you can also add or remove persons by their UUIDs.
 
 Example prompts:
 
 - "Create a dynamic cohort called 'power-users' for users who completed the purchase event more than 5 times"
-- "Create a static cohort called 'beta-testers' that I can manually add users to"
+- "Create a static cohort of everyone who did a pageview in the last 7 days"
+- "Save the people behind my funnel drop-off as a static cohort called 'checkout-abandoners'"
 - "List all cohorts in my project"
 
 See the [MCP documentation](/docs/model-context-protocol) for setup instructions and the full list of available tools.
