@@ -26,11 +26,34 @@ The MCP server provides these tools for working with LLM traces:
 
 A typical workflow starts with `get-llm-total-costs-for-project` to check overall spend and identify which models are most expensive, then uses `query-run` with a HogQL query to drill into specific traces by feature, time range, or cost threshold.
 
+## Tracing tools
+
+These tools give you direct access to OpenTelemetry span data for APM-style investigation:
+
+| Tool | Description |
+|------|-------------|
+| `apm-services-list` | List all services that have sent spans. Use this first to discover available services before filtering. |
+| `apm-attributes-list` | List span attribute keys for a service. Helps you discover what attributes are available for filtering. |
+| `apm-attribute-values-list` | List values for a specific attribute. Useful for building filter conditions. |
+| `apm-spans-count` | Count spans matching a filter set without fetching rows. Use as a pre-flight before `query-apm-spans` to size results before pulling data. |
+| `query-apm-spans` | Query individual spans with full attribute data. Supports filtering by service, status code, time range, and custom attributes. |
+| `apm-spans-aggregate` | Aggregate span statistics by operation. Returns counts, durations, and error rates per operation. |
+| `apm-spans-tree` | Aggregate spans as a call tree showing parent-child relationships. Useful for understanding request flow and identifying slow operations. |
+| `apm-trace-get` | Get all spans for a specific trace ID. Use when you know the exact trace you want to inspect. |
+
+A typical tracing workflow:
+1. List available services with `apm-services-list`
+2. Size your query with `apm-spans-count` before fetching data
+3. Fetch matching spans with `query-apm-spans`, or get aggregated statistics with `apm-spans-aggregate`
+4. Drill into a specific trace with `apm-trace-get`
+
 > **Querying prompts and completions?** The large content fields – `$ai_input`, `$ai_output_choices`, `$ai_input_state`, `$ai_output_state`, and `$ai_tools` – live only on the `posthog.ai_events` table, not `events`. Query `posthog.ai_events` and anchor on `trace_id` to read them. Metadata like model, cost, token counts, and trace IDs stays on `events`. Rows in `posthog.ai_events` are dropped after the [retention period](/docs/ai-observability/data-retention) (30 days by default), but rows in `events` have the same retention policy as product analytics events.
 
 ## Example prompts
 
 Try these with your MCP-enabled agent:
+
+### Cost and performance
 
 - `What are my total LLM costs this week, broken down by model?`
 - `Find the most expensive LLM calls from the last 24 hours.`
@@ -38,6 +61,15 @@ Try these with your MCP-enabled agent:
 - `Compare token usage between GPT-4 and Claude for the search feature.`
 - `How has LLM latency changed over the past 7 days?`
 - `Show me traces where a single call cost more than $0.50.`
+
+### Tracing and spans
+
+- `What services are sending traces?`
+- `How many error spans are there in the api-gateway service today?`
+- `Show me the slowest operations in the checkout service over the last hour.`
+- `What does the request flow look like for POST /api/orders?`
+- `Find spans with HTTP 500 errors from the last 6 hours.`
+- `Compare latency for the payment service between today and last week.`
 
 ## Install the MCP server
 
