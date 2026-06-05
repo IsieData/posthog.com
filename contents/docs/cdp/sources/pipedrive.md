@@ -9,40 +9,52 @@ availability:
 sourceId: Pipedrive
 ---
 
-The Pipedrive connector syncs your CRM data to PostHog, including deals, contacts, organizations, activities, and more.
+<CalloutBox icon="IconInfo" title="Alpha release" type="fyi">
 
-## Schemas
+This source is currently in **alpha**. The interface and available tables may change.
 
-| Schema               | Description                                       |
-| -------------------- | ------------------------------------------------- |
-| `deals`              | Sales deals in your pipeline                      |
-| `persons`            | Contact records                                   |
-| `organizations`      | Companies or organizations                        |
-| `products`           | Products or services you sell                     |
-| `pipelines`          | Sales pipelines                                   |
-| `stages`             | Stages within your pipelines                      |
-| `activities`         | Scheduled activities (calls, meetings, tasks)     |
-| `notes`              | Notes attached to deals, persons, or organizations|
-| `leads`              | Pre-qualified leads before they become deals      |
-| `users`              | Users in your Pipedrive account                   |
-| `deal_fields`        | Custom field definitions for deals                |
-| `person_fields`      | Custom field definitions for persons              |
-| `organization_fields`| Custom field definitions for organizations        |
+</CalloutBox>
 
-## To link Pipedrive
+The Pipedrive connector syncs your CRM data – deals, persons, organizations, products, pipelines, stages, activities, notes, leads, users, and field metadata – into PostHog.
 
-1. Go to the [Data pipeline page](https://app.posthog.com/data-management/sources) and select the **Sources** tab.
-2. Click **New source** and select Pipedrive.
-3. Enter your Pipedrive company domain. This is the subdomain in your Pipedrive URL (for example, if you access Pipedrive at `mycompany.pipedrive.com`, enter `mycompany`).
-4. Enter your Pipedrive API token. You can find it in Pipedrive under **Settings > Personal preferences > API**. The token inherits your user's permissions, so make sure your user can access the data you want to sync.
-5. _Optional:_ Add a prefix to your table names.
-6. Click **Next**.
+## Adding a data source
 
-The data warehouse then starts syncing your Pipedrive data. You can see details and progress in the [data pipeline sources tab](https://app.posthog.com/data-management/sources).
+1. Go to the [sources tab](https://app.posthog.com/data-management/sources) of the data pipeline section in PostHog.
+
+2. Click **+ New source** and then click **Link** next to Pipedrive.
+
+3. Enter your **Company domain**. This is the subdomain of your Pipedrive account URL. For example, if your Pipedrive URL is `https://mycompany.pipedrive.com`, enter `mycompany`. You can also paste the full URL – PostHog normalizes it automatically.
+
+4. Next, you need an API token from Pipedrive. In your Pipedrive account, go to **Settings** > **Personal preferences** > **API**. Copy your personal API token. The token inherits your user's permissions, so make sure your user can access the data you want to sync.
+
+5. Back in PostHog, paste the API token in the **API token** field and click **Next**.
+
+6. Select the tables you want to sync, set the sync frequency, then click **Import**.
+
+Once the syncs are complete, you can start using Pipedrive data in PostHog.
+
+## Available tables
+
+| Table                 | Description                                        | Sync method  |
+| --------------------- | -------------------------------------------------- | ------------ |
+| `deals`               | Sales deals in your Pipedrive account              | Full refresh |
+| `persons`             | Contact persons                                    | Full refresh |
+| `organizations`       | Organizations linked to deals and persons          | Full refresh |
+| `products`            | Products available in your catalog                 | Full refresh |
+| `pipelines`           | Sales pipelines                                    | Full refresh |
+| `stages`              | Stages within pipelines                            | Full refresh |
+| `activities`          | Activities like calls, meetings, and tasks         | Full refresh |
+| `notes`               | Notes attached to deals, persons, or organizations | Full refresh |
+| `leads`               | Sales leads                                        | Full refresh |
+| `users`               | Users in your Pipedrive account                    | Full refresh |
+| `deal_fields`         | Custom field definitions for deals                 | Full refresh |
+| `person_fields`       | Custom field definitions for persons               | Full refresh |
+| `organization_fields` | Custom field definitions for organizations         | Full refresh |
+
+**Full refresh** tables reload all data on each sync. Incremental syncing isn't supported because Pipedrive's server-side filters haven't been verified for reliable incremental updates.
 
 ## Sync limitations
 
-- **Full refresh only** – Pipedrive syncs use full refresh mode. Incremental syncing isn't supported because Pipedrive's server-side filters haven't been verified for reliable incremental updates.
 - **API rate limits** – Pipedrive enforces API rate limits. Large accounts with many records may take longer to sync.
 
 ## Configuration
