@@ -131,11 +131,11 @@ These standards are likely to change as the TAE role evolves. Any changes will b
 - 100% quota attainment leads to a 50/50 of OTE and Commission split
 - TAMs cover 5x their OTE with their quota
 
-> This plan may change as we scale up the size and complexity of our sales machine! This is completely normal - we will ensure everyone is treated fairly. For now we are generally trying to optimize for something straightforward here so it’s easy for PostHog (and you) to calculate commission.
+> This plan, including the OTE to quota ratio, may change as we scale up the size and complexity of our sales machine! This is completely normal - we will ensure everyone is treated fairly. For now we are generally trying to optimize for something straightforward here so it’s easy for PostHog (and you) to calculate commission.
 
 **How we calculate**
 - Quota is calculated annually, and is paid out quarterly
-- Quota is retired on cash collected by PostHog in the quarter, both for annual credits purchases or monthly payments
+- Quota is retired on cash collected by PostHog in the quarter, both for annual credits purchases or monthly payments on named accounts in the TAM's book
 - The Commission rate is 10% flat and uncapped, regardless of whether it is monthly or annual
 	- There is an additional 6.7% incentive on net-new annual contracts 
 	- There is also an additional 6.7% incentive on growth in annual renewals
@@ -144,13 +144,13 @@ These standards are likely to change as the TAE role evolves. Any changes will b
 **Examples**
 Ator, the TAM has a book account that pays month to month. In the quarter, that account makes 3 payments of $2,200, $2,100, and $2,500 totaling $6,800. The quota realized and paid out to Ator on this account is 10% of the total for that quarter, $680.
 
-Ator has another account that he lands on an annual credit purchase that quarter. The first month of the quarter, they paid $8,000 and then they signed an annual credit purchase for $142,857.15 in credits. After discount, they paid PostHog $100,000. Ator realizes: 
+Ator has another book account that he lands on an annual credit purchase that quarter. The first month of the quarter, they paid $8,000 and then they signed an annual credit purchase for $142,857.15 in credits. After discount, they paid PostHog $100,000. Ator realizes: 
 - $10,000 in quota from the 10% on the cash paid
 - $6,700 in quota from the 6.7% incentive to balance out the annual discount
 - $800 from their single monthly payment that quarter
 Ator is paid a total of $17,500 for that account that quarter.
 
-Ator has (yet) another account coming up for renewal. Last year, that account spent $100,000 with PostHog. This year, they are increasing their annual credit purchase to $171,428.57. After discount, they pay PostHog $120,000. Ator realizes:
+Ator has (yet) another book account coming up for renewal. Last year, that account spent $100,000 with PostHog. This year, they are increasing their annual credit purchase to $171,428.57. After discount, they pay PostHog $120,000. Ator realizes:
 - $12,000 in quota from the 10% on the cash paid
 - $1,340 in quota from the 6.7% incentive on the increase over last year
 Ator is paid a total of $13,340 for this account.
