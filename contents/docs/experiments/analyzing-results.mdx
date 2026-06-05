@@ -25,6 +25,18 @@ export const ClickIntervalDark = "https://res.cloudinary.com/dmukukwp6/image/upl
 
 After your experiment runs and collects data, you'll want to analyze the results to determine if your changes had a statistically significant impact. This guide shows you how to understand and interpret your experiment results in PostHog.
 
+## Configuring the baseline variant
+
+By default, the `control` variant is the baseline for all statistical comparisons. All other variants are compared against it to calculate deltas, significance, and win probability.
+
+You can change the baseline to any variant in your experiment. To do this, go to the experiment's **Settings** tab and select a different variant from the **Baseline variant** dropdown.
+
+Changing the baseline takes effect immediately for all result calculations. This is useful when:
+
+- Your experiment doesn't have a variant named `control`
+- You want to compare all variants against a specific treatment variant
+- You're using a different baseline convention
+
 ## Understanding exposures
 
 The exposures panel shows you how many users have been exposed to each variant of your experiment:
@@ -87,7 +99,7 @@ The hover popup shows:
 - **Total value**: The actual measured value for this metric (e.g., mean for trends, conversion rate for funnels)
 - **Exposures**: Number of users exposed to this variant (matches the exposures panel)
 - **Chance to win** (Bayesian) or **p-value** (Frequentist): Statistical confidence measure
-- **Delta**: Percentage change compared to the control variant
+- **Delta**: Percentage change compared to the baseline variant
 - **Confidence/Credible interval**: The range within which the true effect likely falls
 
 ### Viewing detailed results and recordings

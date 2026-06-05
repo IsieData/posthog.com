@@ -74,7 +74,7 @@ Before analysis proceeds, the engine validates the data quality based on metric 
 - **Normal approximation validity**: Both `n × p > 5` and `n × (1-p) > 5` must be satisfied, where `n` is the number of users and `p` is the conversion rate. This ensures the normal approximation to the binomial distribution is accurate.
 
 **Mean and ratio metrics only:**
-- **Non-zero baseline**: The control variant must have a non-zero mean (needed for relative difference calculations like "20% increase")
+- **Non-zero baseline**: The baseline variant must have a non-zero mean (needed for relative difference calculations like "20% increase")
 
 If any validation fails, the analysis stops and returns appropriate error messages instead of potentially misleading results.
 
