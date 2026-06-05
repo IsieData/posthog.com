@@ -1,0 +1,70 @@
+---
+title: Linking Salesloft as a source
+sidebar: Docs
+showTitle: true
+availability:
+  free: full
+  selfServe: full
+  enterprise: full
+sourceId: Salesloft
+---
+
+The Salesloft connector can link people, accounts, cadences, emails, calls, and more to PostHog.
+
+## Adding a data source
+
+1. Go to the [Data pipeline page](https://app.posthog.com/data-management/sources) and select the **Sources** tab.
+2. Click **+ New source** and select Salesloft by clicking the **Link** button.
+3. Enter your Salesloft API key:
+   - In Salesloft, go to **Settings** > **Integrations** > **API**.
+   - Click **Create API key** and give it a name (e.g., "PostHog data warehouse").
+   - Copy the API key and paste it into PostHog.
+4. _Optional:_ Add a prefix to your table names.
+5. Click **Next**.
+
+The data warehouse then starts syncing your Salesloft data. You can see details and progress in the [data pipeline sources tab](https://app.posthog.com/data-management/sources).
+
+## Available tables
+
+The Salesloft source syncs the following tables:
+
+| Table                      | Description                                          | Sync mode       |
+| -------------------------- | ---------------------------------------------------- | --------------- |
+| accounts                   | Companies and organizations you're selling to        | Incremental     |
+| account_stages             | Sales stages for accounts                            | Incremental     |
+| account_tiers              | Tier classifications for accounts                    | Full refresh    |
+| actions                    | Actions taken on cadence steps                       | Incremental     |
+| cadences                   | Sales sequences and workflows                        | Incremental     |
+| cadence_memberships        | People enrolled in cadences                          | Incremental     |
+| call_data_records          | Detailed call data and recordings                    | Incremental     |
+| call_dispositions          | Call outcome categories                              | Full refresh    |
+| call_sentiments            | Sentiment classifications for calls                  | Full refresh    |
+| calls                      | Phone calls made through Salesloft                   | Incremental     |
+| crm_activities             | Activities synced with your CRM                      | Incremental     |
+| crm_users                  | CRM user mappings                                    | Full refresh    |
+| custom_fields              | Custom field definitions                             | Full refresh    |
+| email_template_attachments | Attachments linked to email templates                | Full refresh    |
+| email_templates            | Email templates for outreach                         | Incremental     |
+| emails                     | Emails sent through Salesloft                        | Incremental     |
+| groups                     | User groups in your organization                     | Full refresh    |
+| imports                    | Data imports into Salesloft                          | Full refresh    |
+| meetings                   | Scheduled meetings                                   | Full refresh    |
+| notes                      | Notes on people and accounts                         | Incremental     |
+| people                     | Contacts and prospects                               | Incremental     |
+| person_stages              | Sales stages for people                              | Full refresh    |
+| phone_number_assignments   | Phone number assignments to users                    | Full refresh    |
+| steps                      | Cadence steps configuration                          | Full refresh    |
+| successes                  | Successful outcomes from sales activities            | Incremental     |
+| team_template_attachments  | Attachments linked to team templates                 | Full refresh    |
+| team_templates             | Shared templates across your team                    | Incremental     |
+| users                      | Salesloft users in your organization                 | Full refresh    |
+
+## Sync modes
+
+Tables marked **Incremental** sync only new or updated records using the `updated_at` timestamp. This reduces sync times after the initial import.
+
+Tables marked **Full refresh** re-download all data on each sync. These are typically reference or configuration data that doesn't have reliable timestamp filtering.
+
+## Configuration
+
+<SourceParameters />
