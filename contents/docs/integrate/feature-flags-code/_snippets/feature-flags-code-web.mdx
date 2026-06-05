@@ -93,6 +93,12 @@ At any point, you can reset these properties by calling `resetPersonPropertiesFo
 posthog.resetPersonPropertiesForFlags()
 ```
 
+This also triggers a reload of feature flags by default. You can disable this by passing `false`:
+
+```js-web
+posthog.resetPersonPropertiesForFlags(false)
+```
+
 The same holds for [group](/manual/group-analytics) properties:
 
 ```js-web

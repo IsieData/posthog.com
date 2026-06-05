@@ -340,7 +340,27 @@ PostHog.resetPersonPropertiesForFlags()
 
 </MultiLanguage>
 
-On mobile SDKs, this automatically triggers a feature flag reload. Pass `false` to reset without reloading. On web, flags are not automatically reloaded. Call `reloadFeatureFlags()` manually if needed.
+This automatically triggers a feature flag reload. Pass `false` to reset without reloading:
+
+<MultiLanguage>
+
+```js file=Web
+posthog.resetPersonPropertiesForFlags(false)
+```
+
+```react-native
+posthog.resetPersonPropertiesForFlags(false)
+```
+
+```swift file=iOS
+PostHogSDK.shared.resetPersonPropertiesForFlags(reloadFeatureFlags: false)
+```
+
+```kotlin file=Android
+PostHog.resetPersonPropertiesForFlags(reloadFeatureFlags = false)
+```
+
+</MultiLanguage>
 
 ### Group property overrides
 
