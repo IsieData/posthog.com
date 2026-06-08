@@ -8,133 +8,148 @@ availability:
   enterprise: full
 ---
 
-The Custom REST source connects any REST API to PostHog's data warehouse. Configure endpoints, authentication, and pagination through a visual form builder – no JSON configuration required.
+The Custom REST source lets you connect any REST API to PostHog's Data Warehouse without waiting for a dedicated integration. You configure the connection using the source builder in the PostHog UI – setting the base URL, authentication, pagination, and the streams (endpoints) you want to sync – and PostHog handles the rest.
 
-Each stream you define becomes a table in PostHog. PostHog fetches data from the API, paginates through results, and writes rows to your data warehouse.
+This is useful when:
 
-## When to use Custom REST
+- The API you need isn't available as a [managed source](/docs/cdp/sources)
+- You want to prototype a connection quickly
+- You need to pull data from an internal or niche API
 
-Use the Custom REST source when:
+## Create a custom REST source
 
-- Your data source isn't available as a managed PostHog source
-- You need to connect to an internal API
-- You want to sync data from a SaaS tool's REST API
+1. In PostHog, go to the [Data pipeline sources tab](https://app.posthog.com/pipeline/new/source).
+2. Click **+ New source** and select **Custom REST source**.
+3. Configure your source using the builder (see [Configuration reference](#configuration-reference) below):
+   - Enter the **Base URL** for the API (e.g. `https://api.example.com/v1`)
+   - Select your **Authentication** type and enter your credentials
+   - Add any **Default headers** the API requires
+   - Add one or more **Streams** – each stream maps an API endpoint to a table in your Data Warehouse
+4. Click **Next**. PostHog validates the configuration, checks that the URLs are reachable, and probes the first few endpoints to confirm your credentials work.
+5. Configure sync settings (sync method, frequency) for each stream, then start syncing.
 
-For common data sources like Stripe, Hubspot, or Salesforce, use the pre-built managed sources instead. They handle authentication, pagination, and schema mapping automatically.
+## Configuration reference
 
-## Link a Custom REST source
+### Base URL
 
-1. Go to the [Data pipeline sources tab](https://app.posthog.com/data-management/sources) in PostHog
-2. Click **New source** and select **Custom**
-3. Enter a **Base URL** for the API (for example, `https://api.example.com`)
-4. Configure authentication
-5. Add streams for each endpoint you want to sync
-6. Click **Link**
+The root URL that all stream paths are resolved against (e.g. `https://api.example.com/v1`). On PostHog Cloud, all URLs must use `https://`.
 
-## Authentication
+### Authentication
 
-Choose the authentication method your API requires.
+Select an authentication type from the **Authentication** dropdown.
 
-### No auth
+| Type                | Fields                               | Description                                                         |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------- |
+| **No auth**         | –                                    | No authentication. Use for public APIs.                             |
+| **Bearer token**    | Token                                | Sends an `Authorization: Bearer <token>` header with every request. |
+| **API key**         | Location, Header/parameter name, Key | Sends the key as a header, query parameter, or cookie.              |
+| **HTTP basic auth** | Username, Password                   | Sends HTTP Basic credentials with every request.                    |
 
-Use for public APIs that don't require authentication.
+Credentials are stored encrypted and never exposed in API responses.
 
-### Bearer token
+### Default headers
 
-Sends an `Authorization: Bearer <token>` header with each request.
+Optional key-value pairs sent with every request. Auth headers are added automatically based on your authentication configuration – you don't need to duplicate them here.
 
-Enter your token in the **Bearer token** field.
+### Streams
 
-### API key
+Each stream maps an API endpoint to a table in your Data Warehouse. You can add up to 50 streams per source.
 
-Sends an API key as a header, query parameter, or cookie.
+Click **Add stream** to add a new stream. Each stream has the following fields:
 
-Configure:
+| Field                | Description                                                                                               |
+| -------------------- | --------------------------------------------------------------------------------------------------------- |
+| **Stream name**      | The table name in PostHog. Must be unique within the source.                                              |
+| **Primary key**      | Column(s) used for deduplication during incremental sync (e.g. `id`). Separate multiple keys with commas. |
+| **Path**             | URL path appended to the base URL (e.g. `/v1/users`).                                                     |
+| **HTTP method**      | `GET` (default) or `POST`.                                                                                |
+| **Records JSONPath** | Path to the array of rows in each API response (e.g. `data`, `items`, `results.data`).                    |
 
-- **Location** - Where to send the key: header, query parameter, or cookie
-- **Header/parameter name** - The name of the header or parameter (for example, `X-API-Key` or `api_key`)
-- **API key** - Your API key value
+#### Pagination
 
-### HTTP basic auth
+Select a **Paginator** type for each stream. This tells PostHog how to fetch all pages of data from the endpoint.
 
-Sends HTTP Basic authentication credentials.
+| Type                            | Fields                               | Description                                                            |
+| ------------------------------- | ------------------------------------ | ---------------------------------------------------------------------- |
+| **Single page**                 | –                                    | No pagination. The endpoint returns all data in one response.          |
+| **JSON body next-URL**          | Next-URL JSONPath                    | The response body contains a URL to the next page.                     |
+| **Cursor in JSON body**         | Cursor JSONPath, Cursor query param  | The response contains a cursor token passed back as a query parameter. |
+| **Offset / limit query params** | Page size, Offset param, Limit param | Classic offset/limit pagination.                                       |
+| **Page number query param**     | Page query param, Initial page       | Page-based pagination.                                                 |
+| **Link header (RFC 5988)**      | rel= key in Link header              | Follows the `Link` header to the next page.                            |
 
-Enter your **Username** and **Password**.
+#### Incremental sync
 
-## Default headers
+Enable **Incremental sync** on a stream to only fetch new or updated records on subsequent syncs instead of re-fetching everything.
 
-Add custom headers that are sent with every request. Use this for headers like `Content-Type`, `Accept`, or custom headers your API requires.
+| Field                  | Description                                                                                                                                                                                       |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Cursor JSONPath**    | The field in each record used as the sync cursor (e.g. `updated_at`). Required when incremental sync is enabled.                                                                                  |
+| **Cursor query param** | Query parameter name to send the cursor value (e.g. `since`).                                                                                                                                     |
+| **Cursor type**        | Type of the cursor field: Datetime (default), Date, Timestamp (epoch), or Integer.                                                                                                                |
+| **Upstream row order** | Whether the API returns rows in ascending (oldest first) or descending (newest first) order. Pick **Descending** when the API returns newest rows first – otherwise a resumed sync may skip rows. |
 
-Authentication headers are added automatically based on your auth configuration.
+## Example configurations
 
-## Streams
+### Paginated API with bearer token
 
-Each stream fetches data from one API endpoint and creates a table in PostHog.
+To sync users and orders from an API that uses cursor pagination:
 
-### Stream configuration
+1. Set **Base URL** to `https://api.myservice.com/v2`
+2. Set **Authentication** to **Bearer token** and enter your token
+3. Add a stream named `users` with path `/users` and **Cursor in JSON body** pagination (cursor JSONPath: `meta.next_cursor`, cursor query param: `cursor`)
+4. Add a second stream named `orders` with the same pagination. Enable **Incremental sync** with cursor JSONPath `updated_at` and cursor query param `updated_since`
 
-| Field | Description |
-|-------|-------------|
-| **Stream name** | The name of the table created in PostHog (for example, `users`) |
-| **Path** | The API endpoint path (for example, `/v1/users`) |
-| **HTTP method** | `GET` or `POST` |
-| **Primary key** | The field that uniquely identifies each row. For composite keys, enter comma-separated field names (for example, `user_id, page_url`) |
-| **Records JSONPath** | The path to the array of records in the API response (for example, `data`, `items`, or `results.data`) |
+### API key in query parameter
 
-### Pagination
+To sync contacts from an API that authenticates via a query parameter:
 
-Configure how PostHog fetches multiple pages of results.
+1. Set **Base URL** to `https://data.example.com/api`
+2. Set **Authentication** to **API key**, location to **Query parameter**, parameter name to `apikey`, and enter your key
+3. Add a stream named `contacts` with path `/contacts`, records JSONPath `results`, and **Offset / limit query params** pagination (page size: `200`)
 
-| Type | Description |
-|------|-------------|
-| **Single page** | No pagination. Use when the API returns all results in one response |
-| **JSON body next-URL** | The response contains a URL for the next page. Enter the JSONPath to the next URL (for example, `links.next`) |
-| **Cursor in JSON body** | The response contains a cursor for the next page. Enter the cursor JSONPath (for example, `meta.next_cursor`) and the query parameter name (for example, `cursor`) |
-| **Offset / limit** | Classic offset pagination. Enter the page size and parameter names (for example, `offset` and `limit`) |
-| **Page number** | Page-based pagination. Enter the parameter name (for example, `page`) and the starting page number |
-| **Link header (RFC 5988)** | The response uses Link headers for pagination. Enter the `rel` key (usually `next`) |
+### POST-based query endpoint
 
-### Incremental sync
+Some APIs require POST requests to query data. The builder supports this:
 
-Enable incremental sync to fetch only new or updated records after the first sync.
+1. Set **Base URL** to `https://analytics.example.com`
+2. Set **Authentication** to **Bearer token** and enter your token
+3. Add a stream named `events` with path `/query/events` and HTTP method **POST**
+4. Set the paginator to **JSON body next-URL** with next-URL JSONPath `next_page_url`
 
-| Field | Description |
-|-------|-------------|
-| **Cursor JSONPath** | The field in each record that tracks when it was last updated (for example, `updated_at`) |
-| **Cursor query param** | The query parameter the API uses to filter by this field (for example, `since` or `updated_after`) |
-| **Cursor type** | The data type: datetime, date, timestamp (epoch), or integer |
-| **Upstream row order** | Whether the API returns rows in ascending (oldest first) or descending (newest first) order. Choose descending if the API returns newest rows first – otherwise a resumed sync may skip rows |
+## Limitations
 
-## Generated manifest
-
-Expand **Show generated manifest** to see the JSON configuration PostHog generates from your form inputs. This is useful for debugging or if you need to understand the underlying configuration format.
-
-## Limits
-
-Custom REST sources have the following limits during alpha:
-
-- **5 custom sources per project** – You can create up to 5 Custom REST sources per project. Deleted sources don't count toward this limit.
-- **50 streams per source** – Each Custom REST source supports up to 50 streams (endpoints).
-
-If you need higher limits, [contact support](https://app.posthog.com/home#supportModal).
+- **Maximum 5 custom sources per team**
+- **Maximum 50 streams per source**
+- Only `GET` and `POST` HTTP methods are supported
+- All URLs must use `https://` on PostHog Cloud
+- URLs pointing to internal or private network hosts are blocked on PostHog Cloud
 
 ## Troubleshooting
 
-### No data syncing
+### Credential validation fails at creation
 
-Check that:
+PostHog probes the first few endpoints when you create a source. If the API returns HTTP 401 or 403, check that:
 
-- The base URL and path are correct
-- Authentication credentials are valid
-- The records JSONPath matches the structure of your API response
+- You selected the correct authentication type
+- The credentials you entered are valid and have the required permissions
+- For **API key** auth, the location and parameter name match what the API expects
 
-### Missing records
+Other status codes (404, 429, 5xx) don't block source creation – those errors surface on the first sync instead.
 
-If incremental sync is skipping records:
+### Validation errors
 
-- Verify the cursor field exists in all records
-- Check if the API returns rows in descending order and update the **Upstream row order** setting accordingly
+Common issues:
 
-### Pagination not working
+- **Missing base URL** – The base URL is required
+- **No streams** – You need at least one stream
+- **Duplicate stream names** – Each stream name must be unique
+- **Invalid HTTP method** – Only `GET` and `POST` are supported
 
-If pagination isn't fetching all results, double-check that you've selected the correct pagination type. Review your API documentation to find the correct pattern and parameters.
+### Incremental sync skips rows
+
+If using **Ascending** upstream row order (the default) and the API doesn't guarantee ascending order by the cursor field, rows can be skipped when a sync is interrupted and resumed. Set **Upstream row order** to **Descending** if the API returns newest records first.
+
+### Have a question? Ask PostHog AI
+
+<AskAIInput placeholder="Ask about custom REST sources..." />

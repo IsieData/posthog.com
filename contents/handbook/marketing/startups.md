@@ -48,6 +48,8 @@ You can find the copy for the latest deal on Bookface in this [doc](https://docs
 
 > This deal is not available to YC alumni, who started another company - if they're eligible, they can apply for PostHog for Startups instead
 
+> This deal is also not available if the YC company has been acquired by a non-YC parent. If an acquisition happens mid-term, existing credits can be honored until expiry but will not auto-renew. The acquiring company can apply for PostHog for Startups if eligible.
+
 > ✅ Credits **can** be used to claim a BAA under the Boost plan.
 
 YC teams must apply via [our secret YC page](https://app.posthog.com/startups/yc), where we ask for a screenshot from Bookface to prove their eligibility.
@@ -92,7 +94,7 @@ Issues? Reach out in [#merch Slack](https://posthog.slack.com/archives/C04DWKH7D
 
 ## Monthly Newsletter
 
-We send a short, founder-focused newsletter once per month to all program participants. This is handled as a Customer.io broadcast using [a prebuilt template](/handbook/brand/email-comms).
+We send a short, founder-focused newsletter once per month to all program participants. This is handled as a Customer.io broadcast using [a prebuilt template](/handbook/marketing/email-comms).
 
 ## Credit usage
 
