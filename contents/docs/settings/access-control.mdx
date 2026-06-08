@@ -48,11 +48,14 @@ The three access levels are: Member, Admin, and Owner. An organization must have
 | Managing RBAC Roles (creating, editing, deleting, changing members, etc.)    | <span className="text-red text-lg">✖</span>   | <span className="text-green text-lg">✔</span> | <span className="text-green text-lg">✔</span> |
 | Inviting new members (only for current level or below)\*                     | <span className="text-green text-lg">✔</span> | <span className="text-green text-lg">✔</span> | <span className="text-green text-lg">✔</span> |
 | Managing members (changing roles, removing, etc.)                            | <span className="text-red text-lg">✖</span>   | <span className="text-green text-lg">✔</span> | <span className="text-green text-lg">✔</span> |
+| Viewing personal API keys with organization access\*\*                       | <span className="text-red text-lg">✖</span>   | <span className="text-green text-lg">✔</span> | <span className="text-green text-lg">✔</span> |
 | Leaving an organization                                                      | <span className="text-green text-lg">✔</span> | <span className="text-green text-lg">✔</span> | <span className="text-red text-lg">✖</span>   |
 | Transferring organization ownership                                          | <span className="text-red text-lg">✖</span>   | <span className="text-red text-lg">✖</span>   | <span className="text-green text-lg">✔</span> |
 | Deleting an organization                                                     | <span className="text-red text-lg">✖</span>   | <span className="text-red text-lg">✖</span>   | <span className="text-green text-lg">✔</span> |
 
 \*This permission is configurable and can be disabled for members by organization admins and owners.
+
+\*\*Available with the organization security settings add-on. See [Auditing personal API keys](#auditing-personal-api-keys) below.
 
 Access levels can be viewed and changed in the [Members section](https://app.posthog.com/settings/organization-members) of organization settings.
 
@@ -426,3 +429,24 @@ When querying who has access to a resource, the API returns how each user obtain
 - `explicit_role` – Role-based assignment
 - `project_admin` – Project admin privileges
 - `default` – Default project access level
+
+## Auditing personal API keys
+
+Organization admins and owners can view a read-only list of all [personal API keys](/docs/api/personal-api-keys) that can access their organization or its projects. Use this to audit API access for security and compliance.
+
+To view personal API keys with organization access, go to **Settings** → **Organization** → **Security** → **Personal API key access**.
+
+The list includes keys that are:
+- Explicitly scoped to your organization
+- Scoped to specific projects within your organization
+- Unscoped (can access all projects the key owner has access to)
+
+For each key, you can see:
+- **Owner** – The organization member who created the key
+- **Masked value** – A partial key value for identification (the same value the owner sees)
+- **Scopes** – The API permissions granted to the key
+- **Access scope** – Whether the key applies to all projects, the whole organization, or specific projects
+- **Last used** – When the key was last used for authentication
+- **Created** – When the key was created
+
+This view never exposes the actual secret key value or the key's personal label.
