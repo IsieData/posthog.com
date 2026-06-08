@@ -87,6 +87,36 @@ export const extractMainContent = (html: string): string => {
     return html
 }
 
+// Pick the highest-resolution real URL from an `srcset`, ignoring base64 placeholders.
+const largestSrcsetUrl = (srcset?: string | null): string => {
+    if (!srcset) return ''
+    const candidates = srcset
+        .split(',')
+        .map((part) => {
+            const [url, descriptor] = part.trim().split(/\s+/)
+            const width = descriptor && descriptor.endsWith('w') ? parseInt(descriptor, 10) : 0
+            return { url, width: Number.isNaN(width) ? 0 : width }
+        })
+        .filter((c) => c.url && !c.url.startsWith('data:'))
+    if (candidates.length === 0) return ''
+    candidates.sort((a, b) => b.width - a.width)
+    return candidates[0].url
+}
+
+// Resolve the best usable image URL from an element, skipping base64 blur-up placeholders.
+const resolveImageUrl = (el: HTMLElement | null): string => {
+    if (!el) return ''
+    let src = el.getAttribute('src') || ''
+    if (!src || src.startsWith('data:')) {
+        src =
+            el.getAttribute('data-src') ||
+            largestSrcsetUrl(el.getAttribute('srcset')) ||
+            largestSrcsetUrl(el.getAttribute('data-srcset')) ||
+            ''
+    }
+    return !src || src.startsWith('data:') ? '' : src
+}
+
 export const createTurndownService = (title: string) => {
     const turndownService = new TurndownService({
         headingStyle: 'atx',
@@ -200,6 +230,35 @@ export const createTurndownService = (title: string) => {
             }
 
             return `\n${codeBlock}\n\n`
+        },
+    })
+
+    // gatsby-plugin-image (e.g. blog featured images) renders a base64 blur-up placeholder <img>
+    // alongside <picture>/srcset sources. Recover the real URL and drop the placeholder so the
+    // markdown gets a clean `![alt](url)` instead of a giant data: URI. Inline blog images are
+    // plain absolute Cloudinary <img> tags and pass straight through.
+    turndownService.addRule('cleanPicture', {
+        filter: 'picture',
+        replacement: (_content, node) => {
+            const el = node as unknown as HTMLElement
+            const img = el.querySelector('img') as HTMLElement | null
+            const alt = (img?.getAttribute('alt') || '').replace(/\s+/g, ' ').trim()
+            let src = resolveImageUrl(img)
+            if (!src) {
+                const source = el.querySelector('source') as HTMLElement | null
+                src = resolveImageUrl(source)
+            }
+            return src ? `![${alt}](${src})` : ''
+        },
+    })
+
+    turndownService.addRule('cleanImages', {
+        filter: 'img',
+        replacement: (_content, node) => {
+            const el = node as unknown as HTMLElement
+            const alt = (el.getAttribute('alt') || '').replace(/\s+/g, ' ').trim()
+            const src = resolveImageUrl(el)
+            return src ? `![${alt}](${src})` : ''
         },
     })
 
