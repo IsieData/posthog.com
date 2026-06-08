@@ -36,6 +36,19 @@ Like all PostHog products, you can set a [billing limit](https://us.posthog.com/
 
 The best way to reduce your bill is to reduce the number of `$exception` events you send to PostHog from the client-side. This means being more selective about which exceptions are captured.
 
+### Server-side rate limits
+
+If your application experiences runaway exception volume – from an infinite loop or sudden error spike – server-side rate limits cap how many exceptions are ingested per hour. Unlike [billing limits](#prevent-surprises-with-billing-limits), which stop ingestion when you hit a cost threshold, rate limits control the flow of exceptions to prevent overwhelming your project.
+
+Configure two types of rate limits in the [error tracking configuration](https://app.posthog.com/error_tracking/configuration#selectedSetting=error-tracking-rate-limits):
+
+| Rate limit | Description |
+|---|---|
+| **Project-wide rate limit** | Caps total exceptions ingested per hour across your entire project. |
+| **Per-issue rate limit** | Caps exceptions per hour for a single issue, preventing one noisy issue from dominating your ingestion. |
+
+Exceptions that exceed these limits are dropped before ingestion and aren't billed.
+
 ### Configure exception autocapture
 
 By default, we capture all unhandled errors and rejections. This can capture more than you need. To reduce which exceptions that are captured, you can configure which types of exceptions are autocaptured in the JS SDK config like this: 
