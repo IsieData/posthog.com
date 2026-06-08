@@ -17,7 +17,7 @@ const BlogCategory = ({
 }) => {
     return (
         <Layout parent={companyMenu} activeInternalMenu={companyMenu.children[5]}>
-            <SEO title={`All posts - PostHog`} />
+            <SEO title={`All posts - PostHog`} hasMarkdownVersion={false} />
 
             <PostLayout
                 breadcrumb={[{ name: 'Blog', url: '/blog' }, { name: 'All' }]}

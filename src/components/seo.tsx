@@ -17,6 +17,9 @@ interface SEOProps {
     updateWindowTitle?: boolean
     lang?: string
     languageAlternates?: LanguageAlternate[]
+    // Set false on listing/index pages (e.g. blog category/tag/pagination) that live under a
+    // markdown-content path but have no generated `.md` twin, to avoid a 404 alternate link.
+    hasMarkdownVersion?: boolean
 }
 
 export type LanguageAlternate = {
@@ -35,6 +38,7 @@ export const SEO = ({
     updateWindowTitle = true,
     lang,
     languageAlternates,
+    hasMarkdownVersion,
 }: SEOProps): JSX.Element => {
     const { appWindow } = useWindow()
     const { setWindowTitle } = useApp()
@@ -75,7 +79,7 @@ export const SEO = ({
                     href={href.startsWith('http') ? href : `${siteUrl}${href.startsWith('/') ? href : `/${href}`}`}
                 />
             ))}
-            {isMarkdownContentPath(pathname) && (
+            {isMarkdownContentPath(pathname) && hasMarkdownVersion !== false && (
                 <link rel="alternate" type="text/markdown" href={`${siteUrl}${pathname.replace(/\/$/, '')}.md`} />
             )}
 

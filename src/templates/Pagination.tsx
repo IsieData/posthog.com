@@ -18,7 +18,7 @@ const Pagination = ({
 }) => {
     return (
         <Layout parent={communityMenu} activeInternalMenu={communityMenu.children[0]}>
-            <SEO title={`All ${title} posts - PostHog`} />
+            <SEO title={`All ${title} posts - PostHog`} hasMarkdownVersion={false} />
 
             <PostLayout article={false} title={title} hideSidebar hideSurvey menu={menu}>
                 <Posts

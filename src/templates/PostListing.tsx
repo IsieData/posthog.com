@@ -201,7 +201,7 @@ export default function Posts({ pageContext }) {
 
     return (
         <PostsContext.Provider value={{ setLoginModalOpen }}>
-            <SEO title="Posts - PostHog" />
+            <SEO title="Posts - PostHog" hasMarkdownVersion={false} />
             <Modal open={loginModalOpen} setOpen={setLoginModalOpen}>
                 <div className="px-4">
                     <div className="p-4 max-w-[450px] mx-auto relative rounded-md dark:bg-dark bg-light mt-12 border border-input">

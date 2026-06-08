@@ -32,7 +32,7 @@ const BlogCategory = ({
 
     return (
         <Layout parent={companyMenu} activeInternalMenu={companyMenu.children[5]}>
-            <SEO title={`${category} - PostHog`} />
+            <SEO title={`${category} - PostHog`} hasMarkdownVersion={false} />
 
             <PostLayout article={false} title="Blog" hideSidebar hideSurvey>
                 {slug === 'startups' && <StartupsCTA />}

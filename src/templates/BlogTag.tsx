@@ -31,7 +31,7 @@ const BlogTag = ({
 
     return (
         <Layout parent={companyMenu} activeInternalMenu={companyMenu.children[5]}>
-            <SEO title={`${tag} - PostHog`} />
+            <SEO title={`${tag} - PostHog`} hasMarkdownVersion={false} />
 
             <PostLayout article={false} title="Blog" hideSidebar hideSurvey>
                 <Posts
