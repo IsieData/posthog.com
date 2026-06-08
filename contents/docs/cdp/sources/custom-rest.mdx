@@ -109,6 +109,15 @@ Enable incremental sync to fetch only new or updated records after the first syn
 
 Expand **Show generated manifest** to see the JSON configuration PostHog generates from your form inputs. This is useful for debugging or if you need to understand the underlying configuration format.
 
+## Limits
+
+Custom REST sources have the following limits during alpha:
+
+- **5 custom sources per project** – You can create up to 5 Custom REST sources per project. Deleted sources don't count toward this limit.
+- **50 streams per source** – Each Custom REST source supports up to 50 streams (endpoints).
+
+If you need higher limits, [contact support](https://app.posthog.com/home#supportModal).
+
 ## Troubleshooting
 
 ### No data syncing
