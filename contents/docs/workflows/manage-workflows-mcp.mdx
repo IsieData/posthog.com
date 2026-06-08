@@ -14,6 +14,7 @@ With MCP, your coding agent can:
 - **Test workflow execution** – Run test invocations with mock data to verify your workflow behaves correctly before enabling
 - **Update workflow configuration** – Modify triggers, actions, delays, and branching logic
 - **Run batch broadcasts** – Size an audience, confirm with the user, then trigger one-off or scheduled broadcasts
+- **Debug workflow failures** – Identify failing workflows, inspect per-user invocations, and trace errors to specific steps
 - **Manage workflow lifecycle** – Archive workflows you no longer need
 
 ## Workflow tools
@@ -26,7 +27,7 @@ The MCP server provides these tools for working with Workflows:
 | `workflows-get` | Get the full definition of a workflow, including trigger, actions, edges, and variables. |
 | `workflows-create` | Create a new workflow as a draft with triggers, actions, delays, and branching logic. |
 | `workflows-update` | Update a draft workflow's name, description, actions, or configuration. |
-| `workflows-run` | Test-run a workflow with mock event data to verify execution before enabling. |
+| `workflows-test-run` | Test-run a workflow with mock event data to verify execution before enabling. |
 
 ## Batch workflow tools
 
@@ -49,11 +50,25 @@ These tools manage workflow state transitions:
 | `workflows-enable` | Enable a draft workflow so it starts processing triggers. Prompts for confirmation. |
 | `workflows-archive` | Archive a workflow you no longer need. Cannot be undone via MCP. |
 
+## Debugging tools
+
+Use these tools to identify and fix workflow failures:
+
+| Tool | Description |
+|------|-------------|
+| `workflows-global-stats` | Get success and failure counts across all workflows in your project, sorted by most-failing first. Start here to identify which workflows need attention. |
+| `workflows-stats` | Get success and failure metrics for a single workflow over time, including trend data. |
+| `workflows-list-invocations` | List individual invocations (executions) for a workflow. Filter by status (`succeeded`, `failed`), user (`distinct_id`), or time range to find specific failures. |
+| `workflows-get-invocation` | Get full details for a single invocation, including the triggering event payload, person data, and timing information. |
+| `workflows-logs` | Retrieve execution logs for a workflow showing which steps ran and any error messages. |
+
+The debugging tools form a natural triage path: start with `workflows-global-stats` to see which workflows are failing, drill into a specific workflow with `workflows-stats`, find affected users with `workflows-list-invocations`, inspect the triggering payload with `workflows-get-invocation`, and trace the failure to a specific step with `workflows-logs`.
+
 ## MCP guardrails
 
 The MCP server enforces a create-test-enable workflow to prevent accidental changes to live automations:
 
-- **Workflows start as drafts** – You can't create an active workflow directly. Create it as a draft, test it with `workflows-run`, then enable it.
+- **Workflows start as drafts** – You can't create an active workflow directly. Create it as a draft, test it with `workflows-test-run`, then enable it.
 - **Active workflows are read-only** – You can't modify an enabled workflow's configuration via MCP. Create a new draft workflow for changes instead.
 - **Blast-radius confirmation for batch** – Before running a batch broadcast or creating a schedule, you must call `workflows-blast-radius` to size the audience, then confirm the count with the user. The MCP server rejects mismatched counts.
 - **Archive instead of delete** – Hard delete isn't available via MCP. Use `workflows-archive` to remove workflows from active use.
@@ -62,15 +77,28 @@ The MCP server enforces a create-test-enable workflow to prevent accidental chan
 
 Try these with your MCP-enabled agent:
 
+**Managing workflows:**
+
 - `List all my workflows and their status.`
 - `Create a workflow that sends a Slack message when a user signs up.`
 - `Show me the full configuration of my onboarding-email workflow.`
 - `Test my welcome-sequence workflow with a mock signup event.`
 - `Enable my welcome-sequence workflow now that testing passed.`
 - `Archive the old-drip-campaign workflow.`
+
+**Batch broadcasts:**
+
 - `How many users would receive the weekly-digest batch workflow?`
 - `Run the announcement workflow now – I've confirmed the audience.`
 - `Schedule my newsletter workflow to run every Monday at 9am.`
+
+**Debugging failures:**
+
+- `Which of my workflows are failing the most?`
+- `Show me the failure rate for my onboarding-email workflow this week.`
+- `List all failed invocations of my welcome-sequence workflow from the last 24 hours.`
+- `What event triggered the failed invocation for user abc123?`
+- `Show me the execution logs for my payment-confirmation workflow to find where it's failing.`
 
 ## Install the MCP server
 
