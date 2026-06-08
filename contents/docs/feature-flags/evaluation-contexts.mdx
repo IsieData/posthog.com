@@ -282,6 +282,19 @@ posthog.init('KEY', { evaluation_contexts: ['main-app', 'onboarding'] })
 posthog.init('KEY', { evaluation_contexts: ['admin-panel', 'web'] })
 ```
 
+## Managing evaluation context suggestions
+
+Your project may accumulate stale or mistyped evaluation context names in the suggestion dropdown over time. Project admins can hide these names from suggestions without deleting the underlying data or affecting flags that already use them.
+
+To manage evaluation context suggestions:
+
+1. Go to [**Settings** > **Feature Flags**](https://app.posthog.com/settings/project-feature-flags)
+2. Find the **Evaluation context suggestions** section
+3. Click the **X** on any context name to hide it from the suggestion list
+4. To restore a hidden name, click the restore icon next to it in the **Hidden from suggestions** list
+
+Hidden contexts can still be used by flags — they won't appear in the autocomplete dropdown when configuring new flags. If a hidden context name is used on a flag again, it doesn't automatically reappear in suggestions. Restoring is always done explicitly from settings.
+
 ## Troubleshooting
 
 ### Flags not evaluating
