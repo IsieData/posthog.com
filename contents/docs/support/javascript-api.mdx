@@ -51,11 +51,12 @@ const response = await posthog.conversations.sendMessage(
 **Response:**
 ```typescript
 interface SendMessageResponse {
-  ticket_id: string      // ID of the ticket
-  message_id: string     // ID of the created message
-  ticket_status: string  // 'new' | 'open' | 'pending' | 'on_hold' | 'resolved'
-  created_at: string     // ISO timestamp
-  unread_count: number   // Unread messages from team (0 after sending)
+  ticket_id: string       // UUID of the ticket
+  ticket_number?: number  // Human-readable ticket number (e.g. 1234)
+  message_id: string      // ID of the created message
+  ticket_status: string   // 'new' | 'open' | 'pending' | 'on_hold' | 'resolved'
+  created_at: string      // ISO timestamp
+  unread_count: number    // Unread messages from team (0 after sending)
 }
 ```
 
@@ -78,11 +79,12 @@ const response = await posthog.conversations.getMessages(
 **Response:**
 ```typescript
 interface GetMessagesResponse {
-  ticket_id: string
+  ticket_id: string       // UUID of the ticket
+  ticket_number?: number  // Human-readable ticket number (e.g. 1234)
   ticket_status: string
   messages: Message[]
-  has_more: boolean      // Whether more messages exist
-  unread_count: number   // Unread messages from team
+  has_more: boolean       // Whether more messages exist
+  unread_count: number    // Unread messages from team
 }
 
 interface Message {
@@ -144,7 +146,8 @@ interface GetTicketsResponse {
 }
 
 interface Ticket {
-  id: string
+  id: string              // UUID of the ticket
+  ticket_number?: number  // Human-readable ticket number (e.g. 1234)
   status: string
   last_message?: string
   last_message_at?: string
@@ -160,9 +163,14 @@ interface Ticket {
 // Get the current active ticket ID (null if no conversation started)
 const ticketId = posthog.conversations.getCurrentTicketId()
 
+// Get the human-readable ticket number (null if no conversation started)
+const ticketNumber = posthog.conversations.getCurrentTicketNumber()
+
 // Get the widget session ID (persistent browser identifier)
 const sessionId = posthog.conversations.getWidgetSessionId()
 ```
+
+The **ticket number** is a sequential number (like 1234) that matches what you see in the PostHog support UI. Unlike the ticket ID (a UUID), it's easier for users to reference.
 
 The **widget session ID** is a persistent UUID that:
 - Stays the same across page loads and browser sessions
@@ -362,6 +370,7 @@ try {
 | `markAsRead(ticketId?)` | Mark messages as read | `Promise<MarkAsReadResponse \| null>` |
 | `getTickets(options?)` | Fetch tickets list | `Promise<GetTicketsResponse \| null>` |
 | `getCurrentTicketId()` | Get current ticket ID | `string \| null` |
+| `getCurrentTicketNumber()` | Get current ticket number | `number \| null` |
 | `getWidgetSessionId()` | Get widget session ID | `string \| null` |
 | `requestRestoreLink(email)` | Send a recovery email to restore tickets | `Promise<void>` |
 | `restoreFromUrlToken()` | Restore tickets from URL recovery token | `Promise<RestoreResult \| null>` |
