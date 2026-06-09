@@ -2319,6 +2319,14 @@ export const docsMenu = {
                             ],
                         },
                         {
+                            name: 'Roblox',
+                            url: '/docs/libraries/roblox',
+                            badge: {
+                                title: 'Beta',
+                                className: '!bg-orange/10 !text-orange !dark:text-white !dark:bg-orange/50',
+                            },
+                        },
+                        {
                             name: 'Ruby',
                             url: '/docs/libraries/ruby',
                         },
@@ -4852,6 +4860,10 @@ export const docsMenu = {
                             url: '/docs/error-tracking/installation/unity',
                         },
                         {
+                            name: 'Roblox',
+                            url: '/docs/error-tracking/installation/roblox',
+                        },
+                        {
                             name: 'Elixir',
                             url: '/docs/error-tracking/installation/elixir',
                         },
@@ -5036,6 +5048,13 @@ export const docsMenu = {
                     url: '/docs/error-tracking/spikes',
                     icon: 'IconGraph',
                     color: 'yellow',
+                    featured: true,
+                },
+                {
+                    name: 'Rate limiting',
+                    url: '/docs/error-tracking/rate-limiting',
+                    icon: 'IconThrottle',
+                    color: 'orange',
                     featured: true,
                 },
                 {
