@@ -39,6 +39,7 @@ Try these with your MCP-enabled agent:
 - `Create a funnel from user_signed_up to project_created to insight_viewed.`
 - `What's the retention rate for users who completed onboarding?`
 - `Run a HogQL query to find the most active users by event count this month.`
+- `What dashboard templates are available? Create a dashboard using the website template.`
 
 ## Dashboard tools
 
@@ -46,12 +47,14 @@ You can also create and manage dashboards from your editor:
 
 | Tool | Description |
 |------|-------------|
-| `dashboard-create` | Create a new dashboard. |
+| `dashboard-create` | Create a new dashboard. Optionally pass `use_template` with a template key to start from a predefined template. |
 | `dashboard-get` | Get a dashboard and its tiles. |
 | `dashboards-get-all` | List all dashboards in the project. |
 | `add-insight-to-dashboard` | Add an existing insight to a dashboard. |
 | `dashboard-update` | Update a dashboard's name or description. |
 | `dashboard-delete` | Delete a dashboard. |
+| `dashboard-templates-list` | List available dashboard templates. Returns each template's key (`template_name`), description, tags, and scope. |
+| `dashboard-templates-retrieve` | Get a single template's tile summary to preview what it builds before creating a dashboard from it. |
 
 ## Install the MCP server
 
