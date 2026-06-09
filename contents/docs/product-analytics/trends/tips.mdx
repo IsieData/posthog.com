@@ -73,11 +73,11 @@ Also under the 'Options' dropdown is the ability to enable values on trends, and
 
 ## Hide weekend data
 
-You can hide Saturday and Sunday data points from time series charts. This is useful for B2B products where weekend traffic is noise and obscures weekday patterns.
+You can hide Saturday and Sunday data points from time series charts. This is useful for B2B products where weekend traffic is noise that obscures weekday patterns.
 
-To enable it, click the **Options** dropdown next to the chart type, then check **Hide weekend data** under the **Display** section. When enabled, weekend events are excluded from the query and the corresponding date buckets are removed from the chart's x-axis. A "Weekend data excluded" badge appears below the insight to confirm filtering is active.
+To enable this, click the **Options** dropdown next to the chart type, then check **Hide weekend data** under **Display**. Weekend date buckets are removed from the x-axis, but weekend events are still included in all calculations – so metrics like WAU, MAU, cumulative totals, and smoothing averages stay accurate. A "Weekends hidden" badge appears below the insight to confirm the filter is active.
 
-This works with day-level intervals. For hour, minute, week, or month intervals, weekend filtering is not applied since those buckets span multiple days or would lose all data on weekend days.
+This only works with day-level intervals. For hour, minute, week, or month intervals, weekend hiding isn't applied since those buckets span multiple days or would lose all data on weekend days.
 
 ## Set goal lines
 
