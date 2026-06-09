@@ -79,6 +79,17 @@ You can also run a scanner against a specific recording immediately:
 - **From the replay player** – open a recording and use the **Scan this recording** action to pick a scanner and run it against the session you're watching.
 - **Via MCP** – use the `vision-scanners-scan-session` [MCP tool](/docs/model-context-protocol) to scan a session programmatically.
 
+### Bulk scanning multiple recordings
+
+To run a scanner across several recordings at once:
+
+1. Go to **Session replay** and select the recordings you want to scan.
+2. Open the bulk actions menu (the three-dot menu).
+3. Hover over **Scan these recordings** to see available scanners.
+4. Select a scanner to start scanning all selected recordings.
+
+PostHog shows a toast notification with the number of scans started and a link to the scanner's page. The backend automatically skips duplicate (scanner, session) pairs, so re-running the same scanner on recordings it's already observed is safe.
+
 <CalloutBox type="caution" title="Some sessions are skipped">
 
 A scanner won't run on a recording that has no replay data, is too short, too inactive, too long, or has no events. These are marked **ineligible** rather than failed, and don't count against your quota.
