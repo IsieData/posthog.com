@@ -25,6 +25,8 @@ Custom properties help you:
 
 You can add custom properties to any LLM generation using the `posthogProperties` parameter (JavaScript) or `posthog_properties` parameter (Python). These properties will appear in the `$ai_generation` event alongside the automatically captured metrics in your PostHog dashboard.
 
+If you're using [LiteLLM](/docs/ai-observability/installation/litellm), you can also pass custom properties through its native `metadata` parameter. PostHog extracts these automatically and adds them to event properties, so standard LiteLLM workflows work without a PostHog-specific wrapper.
+
 ### Basic example
 
 <MultiLanguage>
@@ -82,6 +84,26 @@ response = client.responses.create(
 ```
 
 </MultiLanguage>
+
+### LiteLLM metadata
+
+When using [LiteLLM](/docs/ai-observability/installation/litellm), pass custom properties through the standard `metadata` parameter:
+
+```python
+import litellm
+
+response = litellm.completion(
+    model="gpt-5",
+    messages=[{"role": "user", "content": "Hello"}],
+    metadata={
+        "stage": "prod",
+        "conversation_id": "conv_abc123",
+        "subscription_tier": "premium"
+    }
+)
+```
+
+PostHog extracts these keys and adds them to the `$ai_generation` event properties. Internal properties (prefixed with `$ai_`) and `user_id` are protected and can't be overwritten through metadata.
 
 ## Common use cases
 
