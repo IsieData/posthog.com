@@ -9,6 +9,12 @@ availability:
 sourceId: Confluence
 ---
 
+<CalloutBox icon="IconInfo" title="Alpha release" type="fyi">
+
+This source is currently in **alpha**. The interface and available tables may change.
+
+</CalloutBox>
+
 The Confluence connector syncs your Confluence Cloud workspace data into PostHog, including spaces, pages, blog posts, attachments, tasks, labels, and comments.
 
 <CalloutBox icon="IconWarning" title="Confluence Cloud only" type="info">
