@@ -45,16 +45,29 @@ Every scanner also returns a **confidence** value and, in its reasoning, may inc
 
 ## Creating a scanner
 
-1. Go to **Replay Vision** in the PostHog app and select **New scanner** (or start from a template).
-2. Pick a [scanner type](#scanner-types). Templates are available for common cases – dead-end detection, session summary, user intent, frustration score, and session outcome.
-3. Write a prompt describing what the scanner should look for. Be concrete and avoid speculation – e.g. *"Return true if someone appears stuck on a page – scrolling without engaging, hovering over elements with no clear CTA, or abandoning shortly after arriving."*
-4. Configure the type-specific options:
-   - **Classifier** – define your tag vocabulary, and optionally allow multiple tags per session or freeform tags.
-   - **Scorer** – set the numeric scale (min, max, and an optional label).
-   - **Summarizer** – set the summary length.
-5. Set **recording filters** to choose which sessions the scanner applies to (by person properties, session properties, cohorts, or events) and a **sampling rate** to control how many matching sessions get scanned.
-6. Optionally enable [Signals](#signals) so notable findings can trigger alerts.
-7. Save. The scanner is enabled by default.
+Go to **Replay Vision** in the PostHog app and click **New scanner**. The wizard walks you through three steps:
+
+### 1. Choose a template
+
+Pick a pre-configured template to get started quickly, or select **Create from scratch** for a fully custom scanner. Templates cover common use cases like dead-end detection, session summary, user intent, frustration score, and session outcome. Each template pre-fills the scanner type, prompt, and configuration.
+
+### 2. Configure
+
+Give your scanner a name and write a prompt describing what to look for. Be concrete and avoid speculation – for example, *"Return true if someone appears stuck on a page – scrolling without engaging, hovering over elements with no clear CTA, or abandoning shortly after arriving."*
+
+Configure the type-specific options based on your [scanner type](#scanner-types):
+
+- **Classifier** – define your tag vocabulary, and optionally allow multiple tags per session or freeform tags
+- **Scorer** – set the numeric scale (min, max, and an optional label)
+- **Summarizer** – set the summary length
+
+### 3. Triggers
+
+Set **recording filters** to choose which sessions the scanner applies to (by person properties, session properties, cohorts, or events) and a **sampling rate** to control how many matching sessions get scanned.
+
+Optionally enable [Signals](#signals) so notable findings can trigger alerts.
+
+Click **Save** to create the scanner. It's enabled by default.
 
 <CalloutBox type="fyi" title="Estimate your usage first">
 
