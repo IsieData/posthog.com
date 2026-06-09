@@ -117,6 +117,17 @@ Some APIs require POST requests to query data. The builder supports this:
 3. Add a stream named `events` with path `/query/events` and HTTP method **POST**
 4. Set the paginator to **JSON body next-URL** with next-URL JSONPath `next_page_url`
 
+### Slack conversations
+
+To sync channels and users from Slack's Web API:
+
+1. Set **Base URL** to `https://slack.com/api`
+2. Set **Authentication** to **Bearer token** and enter your [Slack bot token](https://api.slack.com/authentication/token-types) (starts with `xoxb-`)
+3. Add a stream named `channels` with path `/conversations.list`, records JSONPath `channels`, and **Cursor in JSON body** pagination (cursor JSONPath: `response_metadata.next_cursor`, cursor query param: `cursor`)
+4. Add a second stream named `users` with path `/users.list`, records JSONPath `members`, and the same pagination settings
+
+> **Note:** For a managed Slack integration with webhook-based message syncing, see [Linking Slack as a source](/docs/cdp/sources/slack).
+
 ## Limitations
 
 - **Maximum 5 custom sources per team**
