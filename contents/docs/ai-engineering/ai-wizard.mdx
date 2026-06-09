@@ -4,7 +4,9 @@ title: AI wizard
 
 import WizardInstall from 'getting-started/_snippets/wizard.mdx'
 
-The PostHog wizard automatically installs and instruments PostHog into your application codebase using AI. It's an agentic CLI tool that handles the entire PostHog integration process on your behalf.
+The PostHog wizard is an agentic CLI tool that uses AI to set up and manage PostHog in your codebase. By default, it installs and instruments PostHog for you, the way an expert would.
+
+It does more than installation though. The wizard can also audit an existing integration, migrate you from another vendor, upload source maps, set up revenue analytics, and diagnose configuration issues – so it's just as useful after you're up and running as it is on day one.
 
 Set up the PostHog platform in minutes, with a single command.
 
@@ -43,6 +45,23 @@ Running the wizard automatically:
 <Caption>
 The AI wizard integrating both the JS Web SDK and Node SDK into a Next.js application
 </Caption>
+
+## More than installation
+
+The wizard isn't just for getting started. It bundles a growing set of agent skills you can run at any time – on a brand-new project or an existing PostHog integration – by passing a command. If you already have PostHog instrumented, these help you keep your setup healthy, complete, and cost-efficient.
+
+| Command | What it does |
+| --- | --- |
+| `npx @posthog/wizard` | Installs and instruments PostHog in your codebase (the default) |
+| `npx @posthog/wizard doctor` | Diagnoses your PostHog project for configuration issues and setup warnings |
+| `npx @posthog/wizard audit` | Audits an existing integration for correctness and best practices |
+| `npx @posthog/wizard events-audit` | Inventories every captured event, mapped to its file, area, and 30-day volume |
+| `npx @posthog/wizard migrate` | Migrates an existing analytics or feature flag vendor to PostHog |
+| `npx @posthog/wizard revenue` | Sets up [Stripe revenue analytics](/docs/revenue-analytics) |
+| `npx @posthog/wizard upload-source-maps` | Uploads [source maps](/docs/error-tracking/upload-source-maps) to PostHog error tracking |
+| `npx @posthog/wizard mcp add` | Installs the [PostHog MCP server](/docs/model-context-protocol) for your AI agent |
+
+Run `npx @posthog/wizard --help` to see every available command.
 
 ## AI wizard installation
 

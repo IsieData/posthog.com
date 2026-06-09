@@ -383,21 +383,29 @@ The entire experience uses Clack.cc for a polished CLI interface with clear prom
 
 ### Current capabilities
 
-Right now, the Wizard handles installation and basic setup across PostHog's supported SDKs. It's particularly good at:
+The Wizard handles installation and basic setup across PostHog's supported SDKs. It's particularly good at:
 - Detecting complex framework setups (like Next.js with app router vs pages router)
 - Handling different package managers (npm, yarn, pnpm)
 - Placing initialization code in the right location based on framework conventions
 - Configuring autocapture and basic options
 
+It's no longer just a one-time setup tool, though. The Wizard now bundles a growing set of agent skills (sourced from [context-mill](/handbook/docs-and-wizard/context-mill)) that work just as well on an existing PostHog integration as on a new project. Each is invoked as a command, for example:
+- `npx @posthog/wizard doctor` — diagnose a project for configuration issues and setup warnings
+- `npx @posthog/wizard audit` — audit an existing integration for correctness, best practices, and cost-optimization opportunities (with an `audit web-analytics` variant for web analytics misconfigurations)
+- `npx @posthog/wizard events-audit` — inventory every captured event, mapped to its file, area, and 30-day volume
+- `npx @posthog/wizard migrate` — migrate an existing analytics or feature flag vendor to PostHog
+- `npx @posthog/wizard revenue` — set up Stripe revenue analytics
+- `npx @posthog/wizard upload-source-maps` — upload source maps to PostHog error tracking
+- `npx @posthog/wizard mcp add` — install the PostHog MCP server
+
 ### Future direction
 
-The Wizard's long-term vision is much broader than one-time setup. Imagine:
+The Wizard's long-term vision is broader still. Imagine:
 - **Continuous instrumentation**: The Wizard could watch your codebase and suggest event tracking for new features. "I noticed you added a new checkout flow — want me to add tracking events?"
 - **Instrumentation improvements**: "Your signup flow isn't tracking all the steps — I can add events to fill the gaps."
-- **Best practices**: "You're tracking events in 5 different ways. I can standardize this for you."
 - **Integration with PostHog Code**: The Wizard is already integrated into PostHog Code, handling PostHog instrumentation automatically when generating code (feature flags, experiments, custom events).
 
-This would turn the Wizard from a one-time setup tool into an ongoing assistant that keeps your PostHog instrumentation clean and comprehensive.
+This turns the Wizard from a one-time setup tool into an ongoing assistant that keeps your PostHog instrumentation clean and comprehensive.
 
 ### Current status & ownership
 

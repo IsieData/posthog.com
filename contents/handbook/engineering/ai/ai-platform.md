@@ -73,7 +73,7 @@ These are the AI features users interact with directly:
 - **[Deep research](/handbook/engineering/ai/products#deep-research)**: Automated investigative research for complex, open-ended problems
 - **[Session summaries](/handbook/engineering/ai/products#session-summaries)**: Batch analysis of session recordings to find patterns
 - **[PostHog Code](/handbook/engineering/ai/products#posthog-code)**: Agent development environment that gives each task its own isolated workspace
-- **[Wizard](/handbook/engineering/ai/products#wizard)**: CLI tool for automated PostHog installation and setup
+- **[Wizard](/handbook/engineering/ai/products#wizard)**: CLI tool for automated PostHog installation, plus skills to audit, migrate, and manage an existing integration
 - **[MCP Server](/handbook/engineering/ai/products#mcp)**: Protocol integration for third-party AI tools like Claude Code
 
 ### 2. Core infrastructure
@@ -128,9 +128,9 @@ An agent development environment that solves the messy workflow problem of engin
 [Learn more →](/handbook/engineering/ai/products#posthog-code)
 
 ### Wizard [General availability]
-Get PostHog set up in minutes instead of hours. The Wizard detects your tech stack, generates integration code, verifies the installation, and gets you collecting data with minimal manual work.
+Get PostHog set up in minutes instead of hours. The Wizard detects your tech stack, generates integration code, verifies the installation, and gets you collecting data with minimal manual work. Beyond setup, it can audit an existing integration, migrate you from another vendor, and run other skills on demand.
 
-**Best for**: New PostHog users, setting up new projects, quick integration
+**Best for**: New PostHog users, setting up new projects, quick integration, and auditing or improving an existing integration
 **Status**: General availability | **Pricing**: Free
 
 [Learn more →](/handbook/engineering/ai/products#wizard)
