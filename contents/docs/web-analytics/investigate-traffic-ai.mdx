@@ -26,6 +26,21 @@ For example, PostHog AI might find that:
 
 This saves you from manually checking each dimension to isolate the cause.
 
+## Analyze heatmaps
+
+PostHog AI can assess [heatmap](/docs/web-analytics/heatmaps) data for a specific page and recommend concrete changes. Ask "what is my pricing page's heatmap telling me?" and it pulls the interaction data, analyzes it, and returns actionable findings.
+
+Given a page URL, PostHog AI:
+
+- Pulls **click** and **rageclick** hotspots with their coordinates
+- Reads the **above/below-the-fold** split and summarizes **scroll depth** (how far 75%, 50%, and 25% of visitors scroll)
+- **Cross-references autocapture** clicks to identify the elements under the hotspots – turning coordinates into "clicks on the Pricing link"
+- Highlights rage-click clusters, clicks on non-interactive elements, and important CTAs buried below the scroll cliff
+
+You can filter by viewport width to isolate desktop or mobile interactions, and adjust the date range (defaults to the last 7 days, up to 90 days of retained data).
+
+> **Note:** Heatmaps must be enabled in your [project settings](https://app.posthog.com/settings/project-heatmaps#heatmaps) or with the `enable_heatmaps` config in the [JavaScript Web SDK](/docs/libraries/js/config). The heatmap tool also requires [autocapture](/docs/product-analytics/autocapture) to identify clicked elements.
+
 ## Try it
 
 Select a prompt to try it out in the PostHog app:
@@ -36,6 +51,9 @@ Select a prompt to try it out in the PostHog app:
 - [`Show me traffic trends for the past 30 days broken down by country`](https://app.posthog.com/#panel=max:Show%20me%20traffic%20trends%20for%20the%20past%2030%20days%20broken%20down%20by%20country)
 - [`What's driving the traffic spike we saw yesterday?`](https://app.posthog.com/#panel=max:What%27s%20driving%20the%20traffic%20spike%20we%20saw%20yesterday%3F)
 - [`Compare organic vs paid traffic conversion rates`](https://app.posthog.com/#panel=max:Compare%20organic%20vs%20paid%20traffic%20conversion%20rates)
+- [`Assess the heatmap for my pricing page`](https://app.posthog.com/#panel=max:Assess%20the%20heatmap%20for%20my%20pricing%20page)
+- [`Where do users rage-click on my homepage?`](https://app.posthog.com/#panel=max:Where%20do%20users%20rage-click%20on%20my%20homepage%3F)
+- [`How far do visitors scroll on my landing page?`](https://app.posthog.com/#panel=max:How%20far%20do%20visitors%20scroll%20on%20my%20landing%20page%3F)
 
 ## Tips for better results
 
@@ -43,6 +61,8 @@ Select a prompt to try it out in the PostHog app:
 - **Ask about specific pages** – "bounce rate on `/pricing`" is more useful than "bounce rates"
 - **Compare time periods** – "this week vs last week" or "month over month" gives you trend context
 - **Describe the anomaly** – "Why did traffic drop on Tuesday?" prompts PostHog AI to investigate across dimensions
+- **Provide the full URL** – heatmap analysis needs an exact page URL including scheme and host (e.g. `https://yoursite.com/pricing`)
+- **Specify the device class** – desktop and mobile have different folds, so ask PostHog AI to filter by viewport width for more accurate results
 
 ## Get started
 
