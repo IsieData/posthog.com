@@ -43,7 +43,7 @@ The ticket inbox supports filtering by:
 - **Priority** – Filter by priority level
 - **Channel** – Filter by source: widget, Slack, email, or GitHub
 - **SLA state** – On track, at risk, or breached
-- **Tags** – Filter by tags attached to tickets
+- **Tags** – Filter by tags using match modes and exclusions (see [Tags](#tags))
 - **Assignee** – Unassigned, specific user, or specific role
 - **Date range** – Filter by creation date
 - **Search** – Search by ticket number, customer name, or email
@@ -101,6 +101,19 @@ Tickets support free-form tags for categorization and filtering.
 - Filter the ticket list by tags
 
 Tags can also be set automatically via [workflow automation](/docs/support/workflows#8-auto-tag-tickets-by-customer-email-domain).
+
+### Tag filtering options
+
+The tag filter dropdown gives you two ways to control which tickets appear:
+
+**Match mode** – Choose whether tickets must match any or all selected tags:
+
+- **Match any** (default) – Tickets with at least one selected tag
+- **Match all** – Tickets with every selected tag
+
+**Exclude tags** – Hide tickets that have specific tags. Tickets with any excluded tag won't appear.
+
+These options combine, so you can build views like "tickets tagged `billing` and `urgent` but not `escalated`" – useful for team-specific views or filtering out tickets handled by other groups.
 
 ## Messages
 
