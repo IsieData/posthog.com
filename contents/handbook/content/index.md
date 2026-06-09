@@ -27,6 +27,8 @@ Content is the main pillar of our marketing strategy. Our strategy is to go _dee
 
 Our latest goals can be found on the <SmallTeam slug="content" /> page. You can share ad-hoc ideas in our [#content-ideas Slack channel](https://posthog.slack.com/archives/C015CRUQR7Y).
 
+We use a shared [marketing calendar](https://calendar.google.com/calendar/u/0?cid=Y19hZTgzMWZjNGIxNDc4NjRiYzdlYWVjMjBiNDM0NzhjMmNjODdkYjZmZGUwOTZkMjUyMDFhZGUxZDA1Y2EzZWFhQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20) to coordinate newsletters, launches, and other comms. Check it before scheduling anything that goes out to users, and add your own sends to it.
+
 ## Who is our audience?
 
 It should be the same as [who we are building for](/handbook/who-we-are-building-for). Specifically:
