@@ -104,9 +104,9 @@ Wire up integrations from a single prompt instead of clicking through the UI.
   outcome="Sends a mock payload and returns execution logs."
 />
 
-### Manage cohorts, prompts, and support
+### Manage cohorts, prompts, and support tickets
 
-Day-to-day operations your team would otherwise do by hand.
+Day-to-day operations your team would otherwise do by hand. Support ticket tools let you list, triage, read conversation threads, and reply – public replies are delivered to the customer via the ticket's channel (email, Slack, Teams, or GitHub).
 
 <PromptExample
   prompt="Create a dynamic cohort power-users for users who completed the purchase event more than 5 times in the last 30 days."
@@ -123,6 +123,18 @@ Day-to-day operations your team would otherwise do by hand.
 <PromptExample
   prompt="Mark ticket #3 as resolved and set ticket #7 to high priority."
   outcome="Updates both tickets in a single call."
+/>
+<PromptExample
+  prompt="Show me the full conversation thread for ticket #42."
+  outcome="Returns all messages in chronological order, including customer messages, team replies, and internal notes."
+/>
+<PromptExample
+  prompt="Reply to ticket #42 with 'Thanks for reaching out! I've fixed the issue.'"
+  outcome="Posts a public reply that's delivered to the customer via the ticket's channel (email, Slack, or widget)."
+/>
+<PromptExample
+  prompt="Add an internal note to ticket #42 saying 'Customer is on enterprise plan, escalate if needed.'"
+  outcome="Creates a private note visible only to your team, not sent to the customer."
 />
 
 ## Multi-step recipes
