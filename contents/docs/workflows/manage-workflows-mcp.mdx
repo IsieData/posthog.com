@@ -72,6 +72,13 @@ The MCP server enforces a create-test-enable workflow to prevent accidental chan
 - **Active workflows are read-only** – You can't modify an enabled workflow's configuration via MCP. Create a new draft workflow for changes instead.
 - **Blast-radius confirmation for batch** – Before running a batch broadcast or creating a schedule, you must call `workflows-blast-radius` to size the audience, then confirm the count with the user. The MCP server rejects mismatched counts.
 - **Archive instead of delete** – Hard delete isn't available via MCP. Use `workflows-archive` to remove workflows from active use.
+- **Strict validation** – MCP and API drafts are validated fully at create time. Invalid configurations (like unsupported cohort filters) fail immediately rather than being silently stored.
+
+### Trigger limitations
+
+Event-triggered workflows fire on every matching event, but they can't express behavioral targeting like "fire when a user visits the pricing page at least 3 times this week."
+
+To limit how often a workflow fires for the same user, use `trigger_masking`. This dedup/throttle mechanism suppresses repeat firings. It doesn't decide who enters the workflow – only how often an already-qualifying trigger fires. For example, `{hash: '{person.id}', ttl: 86400}` fires at most once per person per day.
 
 ## Example prompts
 
