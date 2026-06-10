@@ -65,6 +65,29 @@ When you add columns to a schema using incremental, append, or CDC sync, PostHog
 
 </CalloutBox>
 
+## Row filters
+
+Row filters let you sync only rows that match specific conditions. For example, you can filter to sync only rows where `created_at > '2026-01-01'` or `status = 'active'`.
+
+To add row filters during source setup:
+
+1. In the table picker, click **Columns and row filters** next to a table
+2. In the **Row filters** section, click **Add filter**
+3. Select a column, choose an operator (`=`, `!=`, `>`, `>=`, `<`, `<=`), and enter a value
+4. Add more filters as needed – all filters are ANDed together
+5. Click **Save**
+
+To add row filters to an existing source:
+
+1. Go to the [sources tab](https://app.posthog.com/data-management/sources) and click your Postgres source
+2. Click **Configure** next to any schema
+3. Under **Row filters**, add your filter conditions
+4. Click **Save**
+
+Row filters support integer, numeric, string, boolean, date (`YYYY-MM-DD`), and timestamp (`YYYY-MM-DDTHH:MM:SS`) columns. Filters are applied on the next sync and don't remove rows that were already synced.
+
+See the [row filters documentation](/docs/cdp/sources#row-filters) for supported operators and value formats.
+
 <CalloutBox icon="IconWarning" title="SSL/TLS required for new sources" type="caution">
 
 PostgreSQL sources created after February 18, 2026 require SSL/TLS encryption for database connections. Ensure your PostgreSQL database supports SSL/TLS connections before linking. Existing sources created before this date are not affected. If you're connecting through an SSH tunnel, you can optionally disable TLS using the **Require TLS through tunnel?** toggle since the tunnel already encrypts the connection.

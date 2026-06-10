@@ -152,6 +152,63 @@ Webhook-synced tables have special behavior when enabling or disabling them:
 
 - **Enabling a new webhook table** - For sources with provider-side webhook subscriptions (like Stripe), PostHog automatically adds the required events to the webhook when you enable a new table. This requires the appropriate permissions – for example, **Write** on **Webhooks** for Stripe restricted API keys, or an OAuth connection. If automatic sync isn't possible (due to missing permissions or a manually created webhook), PostHog shows a warning banner in the **Webhook** tab listing the events you need to add in your provider's dashboard.
 
+## Row filters
+
+Row filters let you sync only the rows you need from SQL data warehouse sources. This reduces sync time and storage costs.
+
+Row filters are available for Postgres, MySQL, MSSQL, Snowflake, BigQuery, and Redshift sources.
+
+### Adding row filters
+
+To add row filters during source setup:
+
+1. In the table picker, click **Columns and row filters** next to a table
+2. In the **Row filters** section, click **Add filter**
+3. Select a column, operator, and value
+4. Add more filters as needed – all filters are ANDed together
+5. Click **Save**
+
+To add row filters to an existing source:
+
+1. Go to the [sources tab](https://app.posthog.com/data-management/sources) and click your source
+2. Click **Configure** next to a schema
+3. Under **Row filters**, add your filter conditions
+4. Click **Save**
+
+### Supported operators
+
+Row filters support six comparison operators:
+
+| Operator | Description |
+|----------|-------------|
+| `=` | Equals |
+| `!=` | Not equals |
+| `>` | Greater than |
+| `>=` | Greater than or equal |
+| `<` | Less than |
+| `<=` | Less than or equal |
+
+### Supported column types
+
+Row filters work with columns of the following types:
+
+| Type | Example value |
+|------|---------------|
+| Integer | `10` |
+| Numeric | `3.14` |
+| String | `active` |
+| Boolean | `true` or `false` |
+| Date | `2026-01-01` (ISO format) |
+| Timestamp | `2026-01-01T12:00:00` (ISO format) |
+
+The value you enter is validated against the column's type. For example, you can't filter an integer column with a text value like `banana`.
+
+### Behavior
+
+- **Filters are ANDed** – A row must match all conditions to sync.
+- **Applied on next sync** – Filters take effect on the next sync. They don't remove rows that were already synced.
+- **Maximum 20 filters per schema** – You can add up to 20 filter conditions per table.
+
 <ProductScreenshot
   imageLight={SettingsLight}
   imageDark={SettingsDark}
