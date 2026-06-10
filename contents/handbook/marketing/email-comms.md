@@ -58,6 +58,8 @@ The exceptions and other solutions are:
 
 >We specifically do not want emails we think people will reply to going into hey@posthog.com because it is sporadically monitored at best, and hard to collaborate through.
 
+If you're sending a launch email (alpha, beta, GA), it's helpful to add an annotation in [our PostHog project](https://us.posthog.com/project/2/data-management/annotations) on the send date, so we can see its impact on our metrics later.
+
 When we ask users to share feedback through email, it should either link to beta-feedback@posthog.com, the [support modal](http://app.posthog.com/home#supportModal), or to ourselves personally. Never hey@posthog.com.
 
 Doing this lets us filter out the noise for everyone else while still giving good visibility on meaningful feedback internally. If a user sends you feedback, you should share that with the relevant product team or in https://posthog.slack.com/archives/C011L071P8U 
@@ -107,8 +109,6 @@ This flow currently comprises a single, personal email from either Joe or the te
 When responses come in, Joe generally triages replies and directs feedback to the relevant team, as well as rewarding users with merch as thanks for their feedback. 
 
 > **Launching a beta?** It helps to let the Brand team know in [the team Slack](https://posthog.slack.com/archives/C083V7C6GKE). The team can then add your beta to the beta onboarding flow, and plan ahead for marketing announcements as needed.
-
-It's also helpful to add an annotation in [our PostHog project](https://us.posthog.com/project/2/data-management/annotations) on the send date, so we can see its impact on our metrics later.
 
 
 #### Onboarding - new hires
