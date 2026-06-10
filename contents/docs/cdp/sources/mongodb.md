@@ -15,8 +15,12 @@ To link MongoDB:
 
 1. Go to the [Data pipeline page](https://app.posthog.com/data-management/sources) and the sources tab in PostHog
 2. Click **New source** and select MongoDB
-3. Enter your MongoDB connection string
-4. Click **Next**, select the collections you want to sync, as well as the [sync method](/docs/cdp/sources#incremental-vs-full-table), and then press **Import**
+3. Enter your connection details:
+   - **Connection string** - Your MongoDB connection string, for example `mongodb://username:password@host:port/database?authSource=admin&tls=true` or `mongodb+srv://user:pass@cluster.mongodb.net/database`
+   - **Database name** - (Optional) The database to connect to. Only needed if your connection string doesn't include the database name.
+4. Click **Next**, select the collections you want to sync and the [sync method](/docs/cdp/sources#incremental-vs-full-table), then click **Import**
+
+> **Tip:** MongoDB Atlas SRV connection strings often omit the database name (they look like `mongodb+srv://user:pass@cluster.mongodb.net/?retryWrites=true`). If your connection string doesn't include a `/<database>` after the host, use the **Database name** field to specify which database to connect to.
 
 Once the syncs are complete, you can start using MongoDB data in PostHog.
 
