@@ -20,7 +20,7 @@ To link MongoDB:
    - **Database name** - (Optional) The database to connect to. Only needed if your connection string doesn't include the database name.
 4. Click **Next**, select the collections you want to sync and the [sync method](/docs/cdp/sources#incremental-vs-full-table), then click **Import**
 
-> **Tip:** MongoDB Atlas SRV connection strings often omit the database name (they look like `mongodb+srv://user:pass@cluster.mongodb.net/?retryWrites=true`). If your connection string doesn't include a `/<database>` after the host, use the **Database name** field to specify which database to connect to.
+> **Tip:** MongoDB Atlas SRV connection strings often omit the database name (they look like `mongodb+srv://user:pass@cluster.mongodb.net/?retryWrites=true`). If your connection string doesn't include a `/<database>` after the host, use the **Database name** field to specify which database to connect to. A database specified in the connection string takes precedence over this field.
 
 Once the syncs are complete, you can start using MongoDB data in PostHog.
 
@@ -43,6 +43,6 @@ MongoDB supports incremental and append-only sync methods. For a field to be ava
 
 PostHog infers field types from the first 10,000 documents in the collection, so fields with mixed types may resolve to an unsupported type.
 
-import InboundIpAddresses from '../_snippets/inbound-ip-addresses.mdx'
+import InboundIpAddresses from '../\_snippets/inbound-ip-addresses.mdx'
 
 <InboundIpAddresses />
