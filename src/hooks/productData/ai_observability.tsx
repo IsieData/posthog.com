@@ -103,10 +103,10 @@ export const aiObservability = {
     //   classes: 'absolute bottom-0 right-4 max-w-lg',
     // },
     customers: {
-        elevenlabs: {
-            headline: 'uses AI Observability with session replays (and everything else)',
+        kilocode: {
+            headline: 'keeps visibility into what its AI coding platform is actually doing',
             description:
-                'PostHog is amazing. It reins in the chaos to have everything in one place. Otherwise it’s quite overwhelming to try and understand what’s working and what’s not.',
+                'Everything we do is about speed. PostHog helps us move fast without losing visibility into what’s actually happening.',
         },
         lovable: {
             headline: 'compared us to every other observability tool, just to be sure',
