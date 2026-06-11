@@ -80,3 +80,18 @@ Use secure API keys to retrieve feature flag definitions for [local evaluation](
 4. **Use project-specific keys**: Each PostHog project should use its own secure API key
 
 The secure API key system enables you to safely rotate keys without downtime by maintaining both primary and backup keys during the transition period.
+
+## Evaluation context suggestions
+
+Over time, your team may accumulate stale or mistyped [evaluation context](/docs/feature-flags/evaluation-contexts) names in the suggestion dropdown. This setting lets admins hide these names from the suggestion list without affecting flags that already use them.
+
+To manage suggestions, go to [**Settings** > **Feature Flags** > **Evaluation context suggestions**](https://app.posthog.com/settings/project-feature-flags#feature-flag-evaluation-context-suggestions).
+
+### How it works
+
+- **Suggested contexts** – Appear as closable tags. Click the **X** to hide a context from suggestions.
+- **Hidden contexts** – Appear in a separate list with a restore button. Click **Restore** to bring a context back.
+- Hiding a context only removes it from the dropdown. Flags already using that context continue working normally.
+- Hidden contexts stay hidden until you restore them from this settings page.
+
+> **Note:** Managing evaluation context suggestions requires admin permissions.
