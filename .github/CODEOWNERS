@@ -1,16 +1,9 @@
-# Gatsby build pipeline
-/gatsby/ @smallbrownbike @corywatilo
-/gatsby-config.js @smallbrownbike @corywatilo
-/gatsby-node.ts @smallbrownbike @corywatilo
-/gatsby-browser.tsx @smallbrownbike @corywatilo
-/gatsby-ssr.js @smallbrownbike @corywatilo
+# Order matters: the last matching pattern wins. The catch-all below assigns
+# everything to team-website; the ownerless patterns after it remove ownership
+# for docs and handbook content.
+* @smallbrownbike @corywatilo
 
-# Gatsby plugins
-/plugins/ @smallbrownbike @corywatilo
+# No code owners for docs and handbook content
+/contents/docs/
+/contents/handbook/
 
-# Core app context and window management
-/src/context/App.tsx @smallbrownbike @corywatilo
-/src/components/AppWindow/ @smallbrownbike @corywatilo
-
-# Serverless API functions
-/api/ @smallbrownbike @corywatilo
