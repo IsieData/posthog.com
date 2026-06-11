@@ -285,8 +285,8 @@ export default function AIObservabilityLanding(): JSX.Element {
                             </ul>
 
                             <CloudinaryImage
-                                src="https://res.cloudinary.com/dmukukwp6/image/upload/slack_app_chat_1_c6573ce6da.png"
-                                alt="@PostHog answering questions about LLM data in a Slack thread"
+                                src="https://res.cloudinary.com/dmukukwp6/image/upload/q_auto,f_auto/slack_app_aio_81db83f84c.png"
+                                alt="PostHog Slack app showing AI observability alerts and answers"
                                 className="rounded-md shadow border border-primary overflow-hidden my-4"
                                 imgClassName="w-full"
                             />
@@ -298,13 +298,6 @@ export default function AIObservabilityLanding(): JSX.Element {
                                 codebase, writes the change, and opens a draft PR — from the same Slack thread where you
                                 spotted the issue. No editor required.
                             </p>
-
-                            <CloudinaryImage
-                                src="https://res.cloudinary.com/dmukukwp6/image/upload/slack_app_chat_2_e5993b2331.png"
-                                alt="@PostHog opening a draft PR from a Slack thread"
-                                className="rounded-md shadow border border-primary overflow-hidden my-4"
-                                imgClassName="w-full"
-                            />
 
                             <div className="flex flex-wrap gap-2 mt-4">
                                 <CallToAction
