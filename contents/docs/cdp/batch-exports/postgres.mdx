@@ -12,16 +12,21 @@ import PersonsModelNote from '../_snippets/persons-model-note.mdx'
 
 Batch exports can be used to export data to a Postgres table.
 
-## Setting up Postgres access
+## Requirements
 
-1. Make sure PostHog can access your Postgres database.
+To create a batch export to Postgres, you need:
 
-> **Notes:** 
-> -  We only support connections using SSL/TLS. This [provides protection against various types of attacks](https://www.postgresql.org/docs/current/libpq-ssl.html#LIBPQ-SSL-PROTECTION).
+- A Postgres database accessible from the internet (internal/private IPs are not allowed)
+- SSL/TLS enabled on your Postgres instance. This [provides protection against various types of attacks](https://www.postgresql.org/docs/current/libpq-ssl.html#LIBPQ-SSL-PROTECTION)
+- A Postgres user with the appropriate permissions (see below)
 
-2. Create a Postgres user with table creation privileges.
+## Setup instructions
 
-When executing a batch export, if the destination table doesn't exist, it will be created. `CREATE TABLE` and `USAGE` permissions are required for this reason. The other permissions that are required on the destination table are `INSERT`, `SELECT`, and `UPDATE`. You can and should block PostHog from doing anything else on any other tables. In particular, we recommend creating a new schema and only granting PostHog `CREATE TABLE` and `USAGE` access limited to that schema:
+### 1. Create a Postgres user
+
+Create a user with table creation privileges. If the destination table doesn't exist when a batch export runs, PostHog creates it. This requires `CREATE TABLE` and `USAGE` permissions. The destination table also requires `INSERT`, `SELECT`, and `UPDATE` permissions.
+
+Block PostHog from accessing other tables by creating a dedicated schema and granting access only to that schema:
 
 ```sql runInPostHog=false
 CREATE USER posthog WITH PASSWORD 'insert-a-strong-password-here';
@@ -29,6 +34,47 @@ CREATE SCHEMA posthog_exports;
 GRANT CREATE ON SCHEMA posthog_exports TO posthog;
 GRANT USAGE ON SCHEMA posthog_exports TO posthog;
 ```
+
+### 2. Gather connection details
+
+You need the following information:
+
+- **Host** - The hostname or IP address of your Postgres server
+- **Port** - The TCP port (default is 5432)
+- **User** - The username created in step 1
+- **Password** - The password for the user
+
+## Creating the batch export
+
+1. In PostHog, go to [Data management > Destinations](https://app.posthog.com/data-management/destinations).
+2. Click **+ New destination**.
+3. Select **Postgres** as the batch export destination.
+4. Create a Postgres integration (if you haven't already):
+   - Click **Configure new PostgreSQL connection**
+   - Enter your **Host** (from [step 2](#2-gather-connection-details))
+   - Enter your **Port** (default 5432)
+   - Enter your **User** (from [step 1](#1-create-a-postgres-user))
+   - Enter your **Password** (from [step 1](#1-create-a-postgres-user))
+   - Configure SSL verification (see [SSL configuration](#ssl-configuration))
+   - Click **Connect**
+5. Fill in the destination settings:
+   - **Database** - The name of the Postgres database
+   - **Schema** - The schema name (e.g., `posthog_exports`)
+   - **Table name** - The name of the table where data will be exported
+6. Configure any additional export settings (interval, model, etc.).
+7. Click **Create**.
+
+The batch export schedules its first run at the start of the next period.
+
+### SSL configuration
+
+When creating a Postgres integration, you can configure how PostHog verifies the server's SSL certificate:
+
+- **No** - Skip certificate verification. Use this for development or when your server uses a self-signed certificate you don't want to verify.
+- **Verify certificate authority** - Verify the server's certificate is signed by a trusted CA. You can either:
+  - Check **Use the system certificate authorities** to use standard trusted CAs
+  - Upload a **Root certificate** file (.crt, .pem, .cer, or .ca-bundle) for custom or self-signed CAs
+- **Verify certificate authority and server hostname** - Same as above, but also verifies the server's hostname matches the certificate. This is the most secure option.
 
 ## Models
 
@@ -73,24 +119,3 @@ The Postgres table will contain one row per `(team_id, distinct_id)` pair, and e
 ### Sessions model
 
 You can view the schema for the sessions model in the configuration form when creating a batch export (there are a few too many fields to display here!).
-
-## Creating the batch export
-
-1. Click [Data management > Destinations](https://app.posthog.com/data-management/destinations) in the left sidebar.
-2. Click **+ New destination** in the top-right corner.
-3. Select **Postgres** as the batch export destination.
-4. Fill in the necessary [configuration details](#postgres-configuration).
-5. Finalize the creation by clicking on **Create**.
-6. Done! The batch export will schedule its first run on the start of the next period.
-
-## Postgres configuration
-
-Configuring a batch export targeting Postgres requires the following Postgres-specific configuration values:
-* **User:** User for your Postgres database with CREATE TABLE access used by PostHog to login to your database.
-* **Password:** The password of the username provided.
-* **Host:** The host name of the server on which your Postgres database is running. Must resolve to a publicly accessible address (internal/private IPs are not allowed).
-* **Port:** The TCP port on which the Postgres database server is listening for connections.
-* **Table name:** The name of a Postgres table where to export the data.
-* **Database:** The name of the Postgres database where the table provided to insert data is located.
-* **Schema:** The name of the Postgres database schema where the table provided to insert data is located.
-* **Does your Postgres instance have a self-signed SSL certificate?**: In most cases, Heroku and RDS users should check this box.
