@@ -9,29 +9,27 @@ availability:
 sourceId: BigQuery
 ---
 
-You can connect your BigQuery tables to PostHog by configuring it as a source. You must grant a limited set of permissions so the connector can create, query, and delete temporary tables without exposing your entire BigQuery environment.
+Connect your BigQuery tables to PostHog by configuring BigQuery as a source. You need to grant permissions so the connector can create, query, and delete temporary tables without exposing your entire BigQuery environment.
 
 ## Requirements
 
-- [A Google Cloud Service Account](https://cloud.google.com/iam/docs/service-account-overview) with the permissions described below
-- Google Cloud JSON Key file for that account's Dataset ID
-- (Optional) A Dataset ID for temporary tables
+- A Google Cloud service account with the permissions described below
+- A BigQuery dataset to import
 
-## Configuring BigQuery
+PostHog supports two authentication methods for connecting to your service account:
 
-To securely connect your BigQuery account to PostHog, create a dedicated service account with the minimum required permissions:
+- **Service account impersonation** – Provide a service account email and project ID, and PostHog impersonates your service account using its own credentials. No key file needed.
+- **JSON key file** – Generate a service account JSON key file and upload it to PostHog.
 
-1. **Create a service account:**
+## Service account permissions
 
-- Go to the [**Google Cloud Console.**](https://console.cloud.google.com/)
-- Navigate to **IAM & Admin > Service Accounts.**
-- Click **Create Service Account.**
-- Provide a descriptive name (e.g., `bigquery-posthog-service-account`) and a brief description.
+Both authentication methods require a service account with permissions to read data from BigQuery and manage temporary tables.
 
-2. **Assign required permissions:**
+1. Go to the [**Google Cloud Console**](https://console.cloud.google.com/) and navigate to **IAM & Admin** > **Service Accounts**.
 
-- For simplicity, you can assign the **BigQuery Data Editor**, **BigQuery Job User**, and **BigQuery Read Session User** roles if it meets your security requirements.
-- Alternatively, create a custom role that includes only these permissions:
+2. Click **Create Service Account** and provide a descriptive name (e.g., `bigquery-posthog-source`).
+
+3. Assign the required permissions. You can assign the **BigQuery Data Editor**, **BigQuery Job User**, and **BigQuery Read Session User** roles if that meets your security requirements. Alternatively, create a custom role with these permissions:
 
     ```
     bigquery.readsessions.create
@@ -46,26 +44,61 @@ To securely connect your BigQuery account to PostHog, create a dedicated service
     bigquery.tables.delete
     ```
 
-3. **Generate and download the service account key:**
+## Option 1: Service account impersonation
 
-- Once the service account is created, click on it and select the **Keys** tab.
-- Click **Add Key > Create new key**, choose **JSON**, and download the key file.
-- **Important:** Store the JSON key securely, as it contains sensitive credentials.
+With this method, you don't need to create, store, or share a JSON key file for your service account. Instead, you grant PostHog permission to impersonate your service account.
 
-## Configuring PostHog
+1. Add `posthog:{organization_id}` to your service account's **description** in Google Cloud. Replace `{organization_id}` with your PostHog organization ID from your [PostHog organization settings](https://app.posthog.com/settings/organization).
 
-1. In PostHog, go to the **[Data pipelines](https://app.posthog.com/data-management/sources)** tab, then choose **sources**
-2. Click **New source** and select BigQuery
-3. Drag and drop the **Google Cloud JSON Key file** to upload
-4. Enter the **Dataset ID** you want to import
-5. (Optional) If you're limiting permissions to the service account provided, enter a Dataset ID for temporary tables
-6. (Optional) Add a prefix for the table name
+   This verifies your PostHog organization. Skipping this step causes errors when syncing data.
 
-> In some rare instances BigQuery is unable to auto-locate your dataset unless you specify a region. If you see an error message that looks something like:
->
-> `Dataset xxx:xxx was not found in region`
->
-> then you may need to toggle the switch for manually specifying your region. Regions typically look like `us-east1` or similar.
+2. Assign PostHog's service account the **Service Account Token Creator** role (`roles/iam.serviceAccountTokenCreator`) and any role containing the `iam.serviceAccounts.get` permission on your service account.
+
+   Navigate to **IAM & Admin** > **Service Accounts** in the Google Cloud Console. Select your service account with BigQuery access and click the **Principals with access** tab. Click **Grant access** and enter PostHog's service account email as the principal:
+
+   ```
+   posthog-batch-exports@posthog-external.iam.gserviceaccount.com
+   ```
+
+   Then assign the required roles. This allows PostHog to impersonate your service account and read its description to verify ownership.
+
+3. In PostHog, go to **[Data pipelines](https://app.posthog.com/data-management/sources)** > **Sources** and click **New source**.
+
+4. Select **BigQuery**, then connect to a new Google Cloud service account.
+
+5. Select **Impersonate service account** and provide your service account email and Google Cloud project ID.
+
+6. Enter the **Dataset ID** you want to import and complete the setup.
+
+## Option 2: JSON key file
+
+With this method, you generate a JSON key file for your service account and upload it to PostHog.
+
+<CalloutBox icon="IconWarning" title="Prefer service account impersonation" type="caution">
+
+The generated JSON key file contains long-lived credentials, which pose a security risk. We recommend [service account impersonation](#option-1-service-account-impersonation), which eliminates this risk.
+
+</CalloutBox>
+
+1. In the Google Cloud Console, go to **IAM & Admin** > **Service Accounts** and select your service account.
+
+2. Click the **Keys** tab, then click **Add Key** > **Create new key**.
+
+3. Choose **JSON** and download the key file. Store it securely.
+
+4. In PostHog, go to **[Data pipelines](https://app.posthog.com/data-management/sources)** > **Sources** and click **New source**.
+
+5. Select **BigQuery**, then connect to a new Google Cloud service account.
+
+6. Select **Upload service account JSON key file** and upload your key file.
+
+7. Enter the **Dataset ID** you want to import and complete the setup.
+
+## Additional configuration options
+
+- **Dataset ID for temporary tables** – If you're limiting permissions to the service account, specify a separate dataset for temporary tables.
+- **Table prefix** – Add a prefix to the synced table names in PostHog.
+- **Region** – In rare cases, BigQuery can't auto-locate your dataset. If you see an error like `Dataset xxx:xxx was not found in region`, toggle the switch to manually specify your region (e.g., `us-east1`).
 
 ## Configuration
 
