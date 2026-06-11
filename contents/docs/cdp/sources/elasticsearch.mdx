@@ -1,0 +1,59 @@
+---
+title: Linking Elasticsearch as a source
+sidebar: Docs
+showTitle: true
+availability:
+  free: full
+  selfServe: full
+  enterprise: full
+sourceId: Elasticsearch
+---
+
+import { CalloutBox } from "components/Docs/CalloutBox";
+
+<CalloutBox icon="IconFlask" title="Alpha feature" type="info">
+
+The Elasticsearch source is in alpha. We'd love your feedback as we continue developing it.
+
+</CalloutBox>
+
+The Elasticsearch connector links index documents from your cluster to the PostHog Data Warehouse. Each non-system index appears as a separate table.
+
+To link Elasticsearch:
+
+1. Go to the [Data pipeline page](https://app.posthog.com/data-management/sources) and the sources tab in PostHog
+2. Click **New source** and select Elasticsearch
+3. Enter your cluster connection details:
+   - **Cluster URL:** The full URL of your Elasticsearch cluster (e.g. `https://my-deployment.es.us-east-1.aws.found.io:9243`). If you omit the scheme, PostHog defaults to HTTPS.
+   - **Authentication method:** Choose how to authenticate:
+     - **Username and password:** Enter your Elasticsearch username and password for Basic authentication.
+     - **API key:** Enter an Elasticsearch API key. PostHog sends this as `Authorization: ApiKey <your-key>`.
+4. Click **Next**
+
+PostHog validates your credentials against the cluster's root info endpoint, then lists all non-system indices. System indices (those starting with `.`) are filtered out automatically.
+
+Select the indices you want to sync, then click **Link**.
+
+## Configuration
+
+<SourceParameters />
+
+## How syncing works
+
+Elasticsearch syncs use **full table refresh only**. Elasticsearch indices don't have a predictable timestamp field PostHog can use as an incremental cursor, so each sync reloads the entire index.
+
+PostHog uses the [scroll API](https://www.elastic.co/guide/en/elasticsearch/reference/current/scroll-api.html) to walk each index in batches of 1,000 documents. The `_id` field is the primary key, and all fields from `_source` sync as columns.
+
+## Permissions
+
+The credentials you provide need read access to:
+
+- The root info endpoint (`/`) for validation
+- The cat indices API (`/_cat/indices`) for schema discovery
+- The search and scroll APIs (`/{index}/_search`, `/_search/scroll`) for data extraction
+
+On Elastic Cloud, a user with the `viewer` role typically has sufficient permissions. For self-managed clusters, make sure your user or API key can read the indices you want to sync.
+
+import InboundIpAddresses from '../_snippets/inbound-ip-addresses.mdx'
+
+<InboundIpAddresses />
