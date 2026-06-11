@@ -87,3 +87,28 @@ These aren’t rules, just things that have worked well in the past. They provid
 - We publish the newsletter on Substack and then add it to `posthog.com/newsletter` via GitHub. 
 
 - Make sure links in the newsletter point to `posthog.com` and include UTMs like `?utm_source=posthog-newsletter&utm_medium=post&utm_campaign=enter_name_here`.
+
+## Image style guide
+
+### Hero images
+
+- The hedgehog is still the main character, but potentially experiment with other art styles (origami, clay, riso printing).
+- Solid, bright backgrounds. 
+- Substack is 1456x1048.
+- X/Twitter is 5:2. Add author + build mode logo.
+- PostHog.com is 1920x1080. Add build mode logo.
+
+### Memes
+
+- If relevant, and has potential to be hero image, hedgehog-ify. Otherwise, just got with normal meme. 
+- Use Open Runde. Semi-bold or bold.
+- Background is `#F9F7EF`. Light mode only because Substack.
+- Include the build mode logo.
+
+### Graphics
+
+- Use Open Runde. Semi-bold or bold.
+- Tangerine `#FF5C1C` is primary color. 
+- Background is `#F9F7EF`. Light mode only because Substack.
+- Other <PrivateLink url="https://www.figma.com/design/3wxLXDQ87KfHoEl1lBx4OW/Newsletter-Graphics?node-id=1128-76690&t=ND2wzTRswNX3UKZi-4">colors here</PrivateLink>.
+- Include the build mode logo.
