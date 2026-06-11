@@ -19,7 +19,7 @@ Start by going to the [Data pipeline page](https://app.posthog.com/data-manageme
 - **User**: Your username like `IANVPH`
 - **Password**: The password for your user
 - **Role (optional)**: The role with necessary privileges to access your context like `accountadmin`.
-- **Schema**: The schema for your database like `RAW_POS`. If it isn't working, trying using all caps.
+- **Schema:** (Optional) The schema where your tables are located. Leave blank to import tables from all schemas, or specify a single schema like `RAW_POS` to import only from that schema. If it isn't working, try using all caps.
 - **Table Prefix:** The optional prefix for your tables in PostHog. For example, if your table name ended up being `menu`, a prefix of `snow_prod_` would create a table in PostHog called `snow_prod_menu`.
 
 <ProductScreenshot
@@ -39,6 +39,14 @@ Once done, you can now [query](/docs/data-warehouse/query) your new table using 
   alt="Snowflake details" 
   classes="rounded"
 />
+
+## Multi-schema import
+
+Leave the **Schema** field blank to import tables from all non-system schemas in your database. Tables appear with qualified names like `schema.table` (for example, `RAW_POS.menu` or `ANALYTICS.customers`), so tables with the same name in different schemas don't conflict.
+
+PostHog automatically excludes system schemas like `INFORMATION_SCHEMA`.
+
+To import from a single schema, enter it in the **Schema** field.
 
 ## Configuration
 
