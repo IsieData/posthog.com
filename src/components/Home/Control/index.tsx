@@ -167,7 +167,6 @@ const productCategories = [
         name: 'Analytics',
         handles: [
             'web_analytics',
-            'revenue_analytics',
             'trenationaldesignstudio',
             'funnels',
             'user_paths',
@@ -408,7 +407,7 @@ const CompanyStageTabs = () => {
                             'feature_flags',
                             'error_tracking',
                             'surveys',
-                            'llm_analytics',
+                            'ai_observability',
                         ]}
                     />
                 </div>
