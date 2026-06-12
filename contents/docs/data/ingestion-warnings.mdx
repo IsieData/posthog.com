@@ -34,6 +34,9 @@ List of ingestion warnings:
 - [Event ingestion has overflowed capacity](#event-ingestion-has-overflowed-capacity)
 - [Replay event timestamp is invalid](#replay-event-timestamp-is-invalid)
 - [Replay event timestamp was too far in the future](#replay-event-timestamp-was-too-far-in-the-future)
+- [Replay data was dropped because it was too large to ingest](#replay-data-was-dropped-because-it-was-too-large-to-ingest)
+- [Replay data was rejected at capture because the payload was invalid](#replay-data-was-rejected-at-capture-because-the-payload-was-invalid)
+- [Replay data was dropped because a session exceeded the event rate limit](#replay-data-was-dropped-because-a-session-exceeded-the-event-rate-limit)
 - [$set or $set_once is ignored on exception events and should not be sent](#set-or-set_once-is-ignored-on-exception-events-and-should-not-be-sent)
 
 ## Refused to merge with an illegal distinct ID
@@ -81,6 +84,27 @@ The replay event timestamp is not valid and the session replay event is dropped.
 ## Replay event timestamp was too far in the future
 
 The replay event timestamp is more than 7 days in the future and the session replay event is dropped.
+
+## Replay data was dropped because it was too large to ingest
+
+A session replay snapshot exceeded the maximum allowed size. The recording is missing data for the affected time window. Very long sessions or pages with complex DOM structures are most likely to trigger this.
+
+## Replay data was rejected at capture because the payload was invalid
+
+PostHog rejected replay data during capture because it failed validation. The warning includes the rejection reason:
+
+- **missing_distinct_id** - The event had no distinct ID
+- **missing_session_id** - The event had no session ID
+- **invalid_session_id** - The session ID contained invalid characters or exceeded the length limit
+- **missing_snapshot_data** - The event had no snapshot payload
+
+This typically indicates an SDK integration issue. Make sure you're using a supported version of `posthog-js` and that the SDK initializes before capturing events.
+
+## Replay data was dropped because a session exceeded the event rate limit
+
+A session produced replay events faster than PostHog can ingest them, so some data was dropped. The recording may be incomplete.
+
+This usually happens when a page performs heavy DOM manipulation (for example, rapid animations or frequent content updates). Consider reducing replay's capture rate for affected pages or excluding them from recording.
 
 ## Invalid set operations on exception events
 

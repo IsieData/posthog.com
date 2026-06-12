@@ -203,6 +203,20 @@ Session Replay relies on the `$session_id` property added to events by the web S
 
 To workaround this, you can use the `posthog.onSessionId` method in the web SDK to register a callback that will be called each time the session ID changes. You can send this to your backend and add the `$session_id` property to your backend events. 
 
+## Recording is missing data
+
+If a recording exists but some data was dropped during ingestion, you'll see a warning banner at the top of the player explaining what happened. The banner links to **Data Management > Ingestion warnings** where you can see more details.
+
+Common reasons for missing data:
+
+- **Data was too large to ingest** - A snapshot exceeded the maximum size. Very long sessions or pages with complex DOM structures are most likely to trigger this.
+- **Session exceeded the event rate limit** - The page produced replay events faster than PostHog can ingest. Pages with heavy DOM manipulation (rapid animations, frequent content updates) are most likely to trigger this.
+- **Data was rejected as invalid** - The payload failed validation, usually due to an SDK integration issue.
+
+When data is missing, the recording may skip sections, show incomplete playback, or appear shorter than the actual session.
+
+See [ingestion warnings](/docs/data/ingestion-warnings) for more details on each warning type.
+
 ## Recording not found
 
 There are several valid reasons why recordings aren't captured. To keep the site fast we don't actively confirm a recording has been captured before showing the "view recording" button. 
