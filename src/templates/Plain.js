@@ -57,7 +57,7 @@ export default function Plain({ data }) {
     }, [])
 
     return (
-        <ReaderView hideLeftSidebar showQuestions={!isInFrame}>
+        <ReaderView hideLeftSidebar>
             <SEO
                 title={seo?.metaTitle || title + ' - PostHog'}
                 description={seo?.metaDescription || excerpt}

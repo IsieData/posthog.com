@@ -414,7 +414,7 @@ export default function ReaderView({
     onSearch,
     showSurvey = false,
     parent,
-    showQuestions = true,
+    showQuestions = false,
     showAbout = false,
     sourceInstanceName,
 }: ReaderViewProps) {
@@ -615,7 +615,7 @@ function ReaderViewContent({
     onSearch,
     showSurvey = false,
     parent,
-    showQuestions = true,
+    showQuestions = false,
     showAbout = false,
     sourceInstanceName,
 }) {
