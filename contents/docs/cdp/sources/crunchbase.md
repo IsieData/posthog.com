@@ -11,6 +11,12 @@ sourceId: Crunchbase
 
 import { CalloutBox } from "components/Docs/CalloutBox";
 
+<CalloutBox icon="IconInfo" title="Alpha release" type="fyi">
+
+This source is currently in **alpha**. The interface and available tables may change.
+
+</CalloutBox>
+
 The Crunchbase connector syncs company and funding data from Crunchbase into PostHog, including organizations, people, funding rounds, acquisitions, investments, IPOs, and funds.
 
 <CalloutBox icon="IconWarning" title="Enterprise or Applications license required" type="caution">
@@ -25,7 +31,7 @@ To link Crunchbase:
 
 2. Click **+ New source** and then click **Link** next to Crunchbase.
 
-3. Get your Crunchbase API user key. In your Crunchbase account, go to your API settings to find or generate a user key. This key must be from an Enterprise or Applications license – Basic-plan keys won't work.
+3. Get your Crunchbase API user key. In your Crunchbase account, go to [Integrations → Crunchbase API](https://www.crunchbase.com/account/integrations/crunchbase-api) to find or generate a user key. This key must be from an Enterprise or Applications license – Basic-plan keys won't work.
 
 4. Back in PostHog, paste the API key in the **User key** field.
 
