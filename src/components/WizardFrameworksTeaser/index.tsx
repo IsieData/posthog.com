@@ -38,7 +38,7 @@ export default function WizardFrameworksTeaser({ className }: { className?: stri
                         onOpenChange={setTooltipOpen}
                         delay={200}
                         side="bottom"
-                        contentClassName="max-w-sm min-w-[240px] max-h-[min(70vh,420px)] overflow-y-auto px-1 py-0 text-[13px] leading-snug"
+                        contentClassName="max-w-sm min-w-[240px] max-h-[min(420px,var(--radix-tooltip-content-available-height))] overflow-y-auto px-1 py-0 text-[13px] leading-snug"
                         trigger={
                             <button
                                 type="button"

@@ -1,10 +1,19 @@
 import React, { useEffect, useMemo, useState } from 'react'
+import { IconQuestion } from '@posthog/icons'
 import Link from 'components/Link'
+import Tooltip from 'components/RadixUI/Tooltip'
 import { cn } from '../../utils'
 import ZoomHover from 'components/ZoomHover'
 import IconButton from './IconButton'
 import { CopyableCommand } from './CopyableCommand'
-import { mcpInstallSchema, type InstallMethod, type InstallSchema, type Platform, type PlatformOption } from './schema'
+import {
+    mcpInstallSchema,
+    wizardInstallSchema,
+    type InstallMethod,
+    type InstallSchema,
+    type Platform,
+    type PlatformOption,
+} from './schema'
 
 type SubTabProps = {
     label: string
@@ -23,7 +32,7 @@ function SubTab({ label, selected, onClick }: SubTabProps): JSX.Element {
                     'inline-flex items-center px-2 py-1 rounded text-sm font-semibold cursor-pointer border border-b-2',
                     selected
                         ? 'border-primary bg-primary text-primary'
-                        : 'border-transparent text-secondary hover:text-primary hover:border-primary'
+                        : 'border-transparent text-secondary hover:text-primary hover:border-primary hover:bg-primary'
                 )}
             >
                 {label}
@@ -127,6 +136,7 @@ export default function PlatformInstall({
 }: PlatformInstallProps): JSX.Element {
     const [selectedId, setSelectedId] = useState<string | null>(null)
     const [lastSelected, setLastSelected] = useState<Platform | null>(null)
+    const [titleTooltipOpen, setTitleTooltipOpen] = useState(false)
 
     const editors = useMemo(() => schema.platforms.filter((p) => p.group === 'editors'), [schema])
     const platforms = useMemo(() => schema.platforms.filter((p) => p.group === 'platforms'), [schema])
@@ -147,67 +157,101 @@ export default function PlatformInstall({
 
     return (
         <div
-            className={cn(
-                'not-prose min-w-96 max-w-md inline-block border border-primary rounded bg-accent/40 p-3 space-y-2 mb-4',
-                className
-            )}
+            className={`not-prose min-w-96 max-w-md inline-block border border-primary rounded bg-accent/40 shadow-2xl mb-2 ${className}`}
         >
-            <div className="flex items-start justify-between gap-2">
-                <h3 className="!text-base font-bold text-primary m-0">{schema.title}</h3>
-                <Link
-                    to={schema.learnMoreHref}
-                    state={{ newWindow: true }}
-                    className="text-sm text-secondary hover:text-primary"
-                >
-                    Learn more
-                </Link>
-            </div>
-
-            <CopyableCommand command={schema.defaultCommand} animate />
-
-            <div className="flex items-center justify-between gap-2">
-                <div className="flex items-center gap-px flex-wrap">
-                    {editors.map((p) => (
-                        <IconButton
-                            key={p.id}
-                            label={p.label}
-                            icon={p.icon}
-                            selected={selected?.id === p.id}
-                            onClick={() => handleToggle(p.id)}
-                        />
-                    ))}
-                </div>
-                <div className="flex items-center gap-px flex-wrap justify-end">
-                    {platforms.map((p) => (
-                        <IconButton
-                            key={p.id}
-                            label={p.label}
-                            icon={p.icon}
-                            selected={selected?.id === p.id}
-                            onClick={() => handleToggle(p.id)}
-                        />
-                    ))}
-                </div>
-            </div>
-
-            <div
-                className={cn(
-                    'grid transition-[grid-template-rows] duration-300 ease-in-out',
-                    selected ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
-                )}
-            >
-                <div className="overflow-hidden min-h-0">
-                    {lastSelected ? (
-                        <div className="pt-2 border-t border-primary">
-                            <PlatformOptionContent key={lastSelected.id} option={lastSelected} />
-                        </div>
+            <div className="p-3 space-y-2">
+                <div className="flex items-start justify-between gap-2">
+                    <div className="flex items-center gap-1.5">
+                        <h3 className="!text-base font-bold text-primary m-0">{schema.title}</h3>
+                        {schema.titleTooltip ? (
+                            <Tooltip
+                                delay={0}
+                                open={titleTooltipOpen}
+                                onOpenChange={setTitleTooltipOpen}
+                                trigger={
+                                    <IconQuestion className="size-4 text-secondary inline-block relative -top-px" />
+                                }
+                            >
+                                {/* Dismiss when anything inside is clicked (e.g. the "Learn more" link) */}
+                                <div
+                                    className="max-w-xs text-sm leading-normal font-normal"
+                                    onClick={() => setTitleTooltipOpen(false)}
+                                >
+                                    {schema.titleTooltip}
+                                </div>
+                            </Tooltip>
+                        ) : null}
+                    </div>
+                    {schema.secondaryAction ? (
+                        <Link
+                            to={schema.secondaryAction.to}
+                            state={schema.secondaryAction.state}
+                            className="inline-flex items-center gap-0.5 text-sm text-secondary hover:text-primary whitespace-nowrap"
+                        >
+                            {schema.secondaryAction.label}
+                            {schema.secondaryAction.icon}
+                        </Link>
                     ) : null}
                 </div>
+
+                <CopyableCommand command={schema.defaultCommand} animate />
+
+                {schema.supports ? <div className="text-sm text-secondary">{schema.supports}</div> : null}
             </div>
+
+            {/* Install-methods row + expandable panel. Hidden when the schema has no
+               platforms (e.g. the homepage wizard flow). Restore by re-adding platforms. */}
+            {schema.platforms.length > 0 ? (
+                <>
+                    <div
+                        className={`flex items-center justify-between gap-2 bg-accent border-t border-primary px-3 py-2 ${
+                            selected ? '' : 'rounded-b'
+                        }`}
+                    >
+                        <div className="flex items-center gap-px flex-wrap">
+                            {editors.map((p) => (
+                                <IconButton
+                                    key={p.id}
+                                    label={p.label}
+                                    icon={p.icon}
+                                    selected={selected?.id === p.id}
+                                    onClick={() => handleToggle(p.id)}
+                                />
+                            ))}
+                        </div>
+                        <div className="flex items-center gap-px flex-wrap justify-end">
+                            {platforms.map((p) => (
+                                <IconButton
+                                    key={p.id}
+                                    label={p.label}
+                                    icon={p.icon}
+                                    selected={selected?.id === p.id}
+                                    onClick={() => handleToggle(p.id)}
+                                />
+                            ))}
+                        </div>
+                    </div>
+
+                    <div
+                        className={cn(
+                            'grid transition-[grid-template-rows] duration-300 ease-in-out',
+                            selected ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
+                        )}
+                    >
+                        <div className="overflow-hidden min-h-0">
+                            {lastSelected ? (
+                                <div className="pt-2 border-t border-primary p-3">
+                                    <PlatformOptionContent key={lastSelected.id} option={lastSelected} />
+                                </div>
+                            ) : null}
+                        </div>
+                    </div>
+                </>
+            ) : null}
         </div>
     )
 }
 
 export { CopyableCommand } from './CopyableCommand'
-export { mcpInstallSchema }
+export { mcpInstallSchema, wizardInstallSchema }
 export type { InstallSchema, Platform, PlatformOption, InstallMethod } from './schema'
