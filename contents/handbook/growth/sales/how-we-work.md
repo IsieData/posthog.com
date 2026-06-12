@@ -211,6 +211,8 @@ In this example, this customer increases your attainment towards your Q2 quota b
   - Getting people in who fit our ICP, ie. are easier for us to sell to
 - We aim for a 70/30 split between base/commission when calculating OTE by default.
 
+In your first 3 months, you'll be paid 100% OTE fixed. You can find more info on how quotas work in your ramp period [in the new hire FAQ](/handbook/growth/sales/new-hire-onboarding#new-hire-frequently-asked-questions)
+
 > This plan will almost certainly change as we scale up the size and complexity of our sales machine! This is completely normal - we will ensure everyone is always treated fairly, but you need to be comfortable with this. For now we are generally trying to optimize for something straightforward here so it’s easy for PostHog (and you) to calculate commission. Fraser runs this process, so if you have any questions, ask him in the first instance.
 
 **Variables**
@@ -239,6 +241,14 @@ Example: With a flat quota of $250,000 and 3 fully ramped people, and 1 ramping,
 ## Travel to see customers
 
 You are likely to need to travel a lot more than the typical PostHog team member in order to meet customers. Please make sure that you follow our company [travel policy](/handbook/people/spending-money) and act in PostHog's best interests. We trust you to do the right thing here and won't pre-approve your travel plans, but we do keep track of what people are spending and the Ops team will follow up with you if it looks like you are wasting money here. We are not a giant company that pays for fancy flights, accommodation, and meals so please be sensible.
+
+As a TAM, we want you to get in front of customers in person on a regular cadence. As a baseline:
+
+- **Visit local customers (those near you) once a quarter.** If a customer is within easy travelling distance, it's a great opportunity to see them regularly. Even if they aren't directly your customer, showing up with donuts helps develop strong relationships.
+- **Visit your big customers twice a year.** Your largest accounts warrant more face time, so plan to see them at least twice a year even if they aren't local to you.
+- **Visit your closest tech hub (SF, London, etc.) once a year.** A lot of customers and prospects cluster around major tech hubs, so make a point of getting to the one nearest you at least annually and stacking up meetings while you're there.
+
+These are guidelines, not limits — if it makes sense to see a customer more often, do it. Use your judgement, be sensible with spend, and prioritize the trips that will have the biggest impact on retention and expansion. As a general rule, larger customers justify more regular visits.
 
 ## Working with engineering teams
 

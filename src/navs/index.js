@@ -739,8 +739,12 @@ export const handbookSidebar = [
                         url: '/handbook/engineering/customer-comms',
                     },
                     {
-                        name: 'Writing docs (as an engineer)',
+                        name: 'Writing docs as an engineer',
                         url: '/handbook/engineering/writing-docs',
+                    },
+                    {
+                        name: 'Writing blogs as an engineer',
+                        url: '/handbook/engineering/writing-blogs',
                     },
                     {
                         name: 'Working with Data Warehouse',
@@ -1088,27 +1092,35 @@ export const handbookSidebar = [
                     },
                     {
                         name: 'Email marketing',
-                        url: '/handbook/brand/email-comms',
+                        url: '/handbook/marketing/email-comms',
+                    },
+                    {
+                        name: 'Onboarding & lifecycle emails',
+                        url: '/handbook/marketing/onboarding-and-lifecycle-emails',
                     },
                     {
                         name: 'In-app messaging',
-                        url: '/handbook/brand/in-app',
+                        url: '/handbook/marketing/in-app',
+                    },
+                    {
+                        name: 'Slack messaging',
+                        url: '/handbook/marketing/slack-messaging',
                     },
                     {
                         name: 'Partnerships',
-                        url: '/handbook/brand/partners',
+                        url: '/handbook/marketing/partners',
                     },
                     {
                         name: 'Press & PR',
-                        url: '/handbook/brand/press',
+                        url: '/handbook/marketing/press',
                     },
                     {
                         name: 'Startups & YC Programs',
-                        url: '/handbook/brand/startups',
+                        url: '/handbook/marketing/startups',
                     },
                     {
                         name: 'Testimonials & G2',
-                        url: '/handbook/brand/testimonials',
+                        url: '/handbook/marketing/testimonials',
                     },
                     {
                         name: 'Campaigns & coupons',
@@ -1237,6 +1249,10 @@ export const handbookSidebar = [
             {
                 name: 'Product manager role',
                 url: '/handbook/product/product-manager-role',
+            },
+            {
+                name: 'Product manager onboarding',
+                url: '/handbook/product/product-manager-onboarding',
             },
             {
                 name: 'Product manager hiring',
@@ -2313,6 +2329,14 @@ export const docsMenu = {
                                     url: '/docs/references/posthog-react-native',
                                 },
                             ],
+                        },
+                        {
+                            name: 'Roblox',
+                            url: '/docs/libraries/roblox',
+                            badge: {
+                                title: 'Beta',
+                                className: '!bg-orange/10 !text-orange !dark:text-white !dark:bg-orange/50',
+                            },
                         },
                         {
                             name: 'Ruby',
@@ -4100,7 +4124,6 @@ export const docsMenu = {
             color: 'yellow',
             icon: 'IconEye',
             description: 'Use AI to automatically watch your session recordings and turn what it sees into queryable data',
-            featureFlag: 'replay-vision-docs',
             children: [
                 {
                     name: 'Replay Vision',
@@ -4109,7 +4132,55 @@ export const docsMenu = {
                     name: 'Overview',
                     url: '/docs/replay-vision',
                     icon: 'IconEye',
-                    color: 'seagreen',
+                    color: 'yellow',
+                },
+                {
+                    name: 'Getting started',
+                    url: '/docs/replay-vision/start-here',
+                    icon: 'IconRocket',
+                    color: 'yellow',
+                },
+                {
+                    name: 'Scanner types',
+                    url: '/docs/replay-vision/scanner-types',
+                    icon: 'IconShuffle',
+                    color: 'yellow',
+                },
+                {
+                    name: 'Creating scanners',
+                    url: '/docs/replay-vision/creating-scanners',
+                    icon: 'IconPencil',
+                    color: 'yellow',
+                },
+                {
+                    name: 'Running scanners',
+                    url: '/docs/replay-vision/running-scanners',
+                    icon: 'IconPlay',
+                    color: 'yellow',
+                },
+                {
+                    name: 'Observations',
+                    url: '/docs/replay-vision/observations',
+                    icon: 'IconList',
+                    color: 'yellow',
+                },
+                {
+                    name: 'Quota and limits',
+                    url: '/docs/replay-vision/quota-and-limits',
+                    icon: 'IconPercentage',
+                    color: 'yellow',
+                },
+                {
+                    name: 'MCP',
+                    url: '/docs/replay-vision/mcp',
+                    icon: 'IconTerminal',
+                    color: 'yellow',
+                },
+                {
+                    name: 'Troubleshooting',
+                    url: '/docs/replay-vision/troubleshooting',
+                    icon: 'IconQuestion',
+                    color: 'yellow',
                 },
             ],
         },
@@ -4848,6 +4919,10 @@ export const docsMenu = {
                             url: '/docs/error-tracking/installation/unity',
                         },
                         {
+                            name: 'Roblox',
+                            url: '/docs/error-tracking/installation/roblox',
+                        },
+                        {
                             name: 'Elixir',
                             url: '/docs/error-tracking/installation/elixir',
                         },
@@ -5035,6 +5110,13 @@ export const docsMenu = {
                     featured: true,
                 },
                 {
+                    name: 'Rate limiting',
+                    url: '/docs/error-tracking/rate-limiting',
+                    icon: 'IconThrottle',
+                    color: 'orange',
+                    featured: true,
+                },
+                {
                     name: 'Code variables',
                     url: '/docs/error-tracking/code-variables',
                     icon: 'IconBrackets',
@@ -5151,6 +5233,7 @@ export const docsMenu = {
                     featured: true,
                     children: [
                         { name: 'Overview', url: '/docs/surveys/installation' },
+                        { name: 'Android', url: '/docs/surveys/installation/android' },
                         { name: 'Angular', url: '/docs/surveys/installation/angular' },
                         { name: 'Astro', url: '/docs/surveys/installation/astro' },
                         { name: 'Bubble', url: '/docs/surveys/installation/bubble' },
@@ -6001,6 +6084,110 @@ export const docsMenu = {
             ],
         },
         {
+            name: 'MCP Analytics',
+            url: '/docs/mcp-analytics',
+            color: '[#681291]',
+            colorDark: '[#C170E8]',
+            icon: 'IconPlug',
+            description: 'Analytics for the MCP servers you ship to AI agents',
+            badge: {
+                title: 'Alpha',
+                className: 'uppercase !bg-yellow/10 !text-yellow !dark:text-white !dark:bg-yellow/50',
+            },
+            children: [
+                {
+                    name: 'MCP Analytics',
+                },
+                {
+                    name: 'Overview',
+                    url: '/docs/mcp-analytics',
+                    icon: 'IconHome',
+                    color: 'seagreen',
+                },
+                {
+                    name: 'Getting started',
+                },
+                {
+                    name: 'Start here',
+                    url: '/docs/mcp-analytics/start-here',
+                    icon: 'IconListCheck',
+                    color: 'orange',
+                    featured: true,
+                },
+                {
+                    name: 'Installation',
+                    url: '/docs/mcp-analytics/installation',
+                    icon: 'IconBook',
+                    color: 'blue',
+                    featured: true,
+                },
+                {
+                    name: 'Custom servers',
+                    url: '/docs/mcp-analytics/custom-servers',
+                    icon: 'IconServer',
+                    color: 'teal',
+                },
+                {
+                    name: 'Concepts',
+                },
+                {
+                    name: 'Capturing agent intent',
+                    url: '/docs/mcp-analytics/intent',
+                    icon: 'IconAIText',
+                    color: 'orange',
+                    featured: true,
+                },
+                {
+                    name: 'Conversation IDs',
+                    url: '/docs/mcp-analytics/conversation-id',
+                    icon: 'IconMessage',
+                    color: 'salmon',
+                },
+                {
+                    name: 'Identifying users',
+                    url: '/docs/mcp-analytics/identifying-users',
+                    icon: 'IconPerson',
+                    color: 'seagreen',
+                },
+                {
+                    name: 'Missing capabilities',
+                    url: '/docs/mcp-analytics/missing-capability',
+                    icon: 'IconWrench',
+                    color: 'orange',
+                },
+                {
+                    name: 'Custom events & metadata',
+                    url: '/docs/mcp-analytics/custom-events',
+                    icon: 'IconBrackets',
+                    color: 'blue',
+                },
+                {
+                    name: 'Privacy & redaction',
+                    url: '/docs/mcp-analytics/privacy',
+                    icon: 'IconLock',
+                    color: 'purple',
+                    featured: true,
+                },
+                {
+                    name: 'Reference',
+                },
+                {
+                    name: 'Event & property reference',
+                    url: '/docs/mcp-analytics/events',
+                    icon: 'IconList',
+                    color: 'red',
+                    featured: true,
+                },
+                {
+                    name: 'Sample queries',
+                    url: '/docs/mcp-analytics/queries',
+                    icon: 'IconGraph',
+                    color: 'green',
+                    featured: true,
+                },
+            ],
+        },
+        {
             name: 'Evaluations',
             url: '/docs/ai-evals',
             color: '[#681291]',
@@ -6625,7 +6812,7 @@ export const docsMenu = {
             name: 'Slack app',
             icon: 'IconAtSign',
             color: 'purple',
-            url: '/docs/slack-app',
+            url: '/docs/slack',
             description: 'Run PostHog from any Slack channel — agent tasks, analytics, and notifications.',
             children: [
                 {
@@ -6633,25 +6820,25 @@ export const docsMenu = {
                 },
                 {
                     name: 'Overview',
-                    url: '/docs/slack-app',
+                    url: '/docs/slack',
                     icon: 'IconHome',
                     color: 'seagreen',
                 },
                 {
                     name: 'Setup',
-                    url: '/docs/slack-app/setup',
+                    url: '/docs/slack/setup',
                     icon: 'IconWrench',
                     color: 'blue',
                 },
                 {
                     name: 'Commands',
-                    url: '/docs/slack-app/commands',
+                    url: '/docs/slack/commands',
                     icon: 'IconTerminal',
                     color: 'purple',
                 },
                 {
                     name: 'Pricing',
-                    url: '/docs/slack-app/pricing',
+                    url: '/docs/slack/pricing',
                     icon: 'IconShield',
                     color: 'red',
                 },
@@ -6815,6 +7002,7 @@ export const docsMenu = {
                         { name: 'React Native', url: '/docs/logs/installation/react-native' },
                         { name: 'iOS', url: '/docs/logs/installation/ios' },
                         { name: 'Android', url: '/docs/logs/installation/android' },
+                        { name: 'Flutter', url: '/docs/logs/installation/flutter' },
                         { name: 'Datadog', url: '/docs/logs/installation/datadog' },
                         { name: 'Other', url: '/docs/logs/installation/other' },
                     ],
@@ -6845,6 +7033,12 @@ export const docsMenu = {
                     name: 'Link Session Replay',
                     url: '/docs/logs/link-session-replay',
                     icon: 'IconRewindPlay',
+                    color: 'blue',
+                },
+                {
+                    name: 'Link logs to a person',
+                    url: '/docs/logs/link-person',
+                    icon: 'IconPerson',
                     color: 'blue',
                 },
                 {
@@ -6893,18 +7087,18 @@ export const docsMenu = {
             ],
         },
         {
-            name: 'Tracing',
+            name: 'Distributed tracing',
             icon: 'IconListTree',
             color: 'purple',
-            url: '/docs/tracing',
+            url: '/docs/distributed-tracing',
             description: 'Capture and explore distributed traces with OpenTelemetry.',
             children: [
                 {
-                    name: 'Tracing',
+                    name: 'Distributed tracing',
                 },
                 {
                     name: 'Overview',
-                    url: '/docs/tracing',
+                    url: '/docs/distributed-tracing',
                     icon: 'IconHome',
                     color: 'seagreen',
                 },
@@ -6913,14 +7107,31 @@ export const docsMenu = {
                 },
                 {
                     name: 'Start here',
-                    url: '/docs/tracing/start-here',
+                    url: '/docs/distributed-tracing/start-here',
                     icon: 'IconListCheck',
                     color: 'orange',
                     featured: true,
                 },
                 {
-                    name: 'Why you need tracing',
-                    url: '/docs/tracing/basics',
+                    name: 'Install OpenTelemetry tracing',
+                    url: '/docs/distributed-tracing/installation',
+                    icon: 'IconCode',
+                    color: 'blue',
+                    featured: true,
+                    children: [
+                        { name: 'Overview', url: '/docs/distributed-tracing/installation' },
+                        { name: 'Node.js', url: '/docs/distributed-tracing/installation/nodejs' },
+                        { name: 'Python', url: '/docs/distributed-tracing/installation/python' },
+                        { name: 'Go', url: '/docs/distributed-tracing/installation/go' },
+                        { name: 'Java', url: '/docs/distributed-tracing/installation/java' },
+                        { name: '.NET', url: '/docs/distributed-tracing/installation/dotnet' },
+                        { name: 'PHP', url: '/docs/distributed-tracing/installation/php' },
+                        { name: 'Ruby', url: '/docs/distributed-tracing/installation/ruby' },
+                    ],
+                },
+                {
+                    name: 'Why you need distributed tracing',
+                    url: '/docs/distributed-tracing/basics',
                     icon: 'IconBook',
                     color: 'seagreen',
                 },
