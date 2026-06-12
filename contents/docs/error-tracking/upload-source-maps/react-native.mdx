@@ -109,6 +109,7 @@ The plugin accepts the following options:
 | Option | Type | Default | Description |
 | --- | --- | --- | --- |
 | `disableSandboxing` | `boolean` | `true` | iOS only. When `true`, sets `ENABLE_USER_SCRIPT_SANDBOXING=NO` on your main app target's Xcode build configurations during `expo prebuild`. This lets the source map upload script read `.git/` (for release metadata) and lets stock Expo projects build without manually declaring input/output files on every script phase. |
+| `uploadNativeSymbols` | `boolean` or `{ includeSource?: boolean }` | `false` | Uploads native debug symbols so native crashes can be symbolicated. iOS: adds a dSYM upload build phase. Android: applies the `com.posthog.android` Gradle plugin for R8/ProGuard mapping uploads. Pass `{ includeSource: true }` to also upload native source files for crash context (iOS only). |
 
 Example opting out of the sandbox change:
 
@@ -173,13 +174,50 @@ If you are not using the Expo plugin (step 1), you will need to also disable Use
 
 When `nativeCrashes` is enabled in your `errorTracking.autocapture` config, native iOS and Android crashes are captured automatically. To get readable stack traces, upload platform-specific debug symbols.
 
-### iOS
+### Expo (recommended)
 
-Upload dSYM files to symbolicate native iOS crashes. Follow the [iOS dSYMs guide](/docs/error-tracking/upload-source-maps/ios) to set up a build phase script in Xcode that uploads dSYMs automatically.
+Add the `uploadNativeSymbols` option to the Expo plugin in your `app.json`:
 
-### Android
+```json
+{
+  "expo": {
+    "plugins": [
+      ["posthog-react-native/expo", { "uploadNativeSymbols": true }]
+    ]
+  }
+}
+```
 
-If your app uses ProGuard or R8 minification, upload mapping files to deobfuscate native Android stack traces. Follow the [Android mappings guide](/docs/error-tracking/upload-mappings/android) to set up the PostHog Gradle plugin for automatic uploads.
+This wires automatic symbol upload for both platforms during `expo prebuild`:
+
+- **iOS**: Adds a build phase that uploads dSYM files using posthog-ios's `upload-symbols.sh`
+- **Android**: Applies the `com.posthog.android` Gradle plugin to upload ProGuard/R8 mapping files
+
+To also upload native source files for source-code context around crashes (iOS only), pass an object:
+
+```json
+{
+  "expo": {
+    "plugins": [
+      ["posthog-react-native/expo", { "uploadNativeSymbols": { "includeSource": true } }]
+    ]
+  }
+}
+```
+
+<CalloutBox icon="IconInfo" type="fyi">
+
+`includeSource` uploads your native iOS source code to PostHog so stack traces display surrounding code lines. This is opt-in because it sends source files. Android has no equivalent — the ProGuard/R8 plugin only uploads mapping files.
+
+</CalloutBox>
+
+### Bare React Native
+
+For apps without Expo config plugins, configure symbol upload manually:
+
+**iOS**: Follow the [iOS dSYMs guide](/docs/error-tracking/upload-source-maps/ios) to add a build phase script that uploads dSYMs.
+
+**Android**: Follow the [Android mappings guide](/docs/error-tracking/upload-mappings/android) to add the PostHog Gradle plugin.
 
 ## Troubleshooting
 
