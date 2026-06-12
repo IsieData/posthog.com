@@ -9,41 +9,54 @@ availability:
 sourceId: Pingdom
 ---
 
+The Pingdom connector syncs your uptime monitoring data into PostHog, including checks, probes, maintenance windows, and alerts.
+
 <CalloutBox icon="IconInfo" title="Alpha release" type="fyi">
 
-This source is currently in **alpha**. The interface and available tables may change.
+This source is currently in alpha. Endpoint behavior was verified against Pingdom's public API 3.1 documentation but hasn't been tested against every edge case in production. If you run into issues, please let us know.
 
 </CalloutBox>
 
-The Pingdom connector syncs your uptime and performance monitoring data into PostHog, including checks, probes, maintenance windows, and alerts.
+## Creating a Pingdom API token
 
-## Adding a data source
+Pingdom uses Bearer token authentication. A read-only token is sufficient for syncing data into PostHog.
 
-1. Go to the [sources tab](https://app.posthog.com/data-management/sources) of the data pipeline section in PostHog.
+1. Log in to [My Pingdom](https://my.pingdom.com/app/api-tokens).
+2. Go to **Settings** > **Pingdom API**.
+3. Click **Add API token**, give it a name, and select read access.
+4. Copy the token.
+
+For more details, see [Pingdom's API documentation](https://docs.pingdom.com/api/).
+
+## Linking Pingdom
+
+1. Go to the [Data pipeline sources page](https://app.posthog.com/data-management/sources) in PostHog.
 2. Click **+ New source** and then click **Link** next to Pingdom.
-3. Get your API token from [My Pingdom](https://my.pingdom.com/app/api-tokens) under Settings > Pingdom API. A read-only token is sufficient.
-4. Enter your API token in PostHog and click **Next**.
-5. Select the tables you want to sync, set the sync method and frequency, then click **Import**.
+3. Paste your Pingdom **API token**.
+4. Click **Next**, choose the tables you want to sync, and then click **Import**.
 
-## Available tables
-
-| Table | Description | Sync method |
-| ----- | ----------- | ----------- |
-| `checks` | Uptime checks configured in Pingdom | Full refresh |
-| `probes` | Pingdom probe servers used for monitoring | Full refresh |
-| `maintenance` | Scheduled maintenance windows | Full refresh |
-| `alerts` | Alert history from your checks | Incremental |
-
-**Incremental** tables sync only new or updated records on each run. **Full refresh** tables reload all data on each sync.
-
-The `alerts` table supports incremental sync using the alert timestamp. Checks, probes, and maintenance don't support server-side date filtering, so they use full refresh only.
-
-## Sync limitations
-
-Per-check endpoints like raw results and performance summaries aren't available yet. They require additional pagination handling and would multiply request volume against Pingdom's rate limits.
-
-Pingdom enforces two-tier rate limits. The connector backs off and retries automatically when it hits them.
+Once the sync completes, you can query your Pingdom data directly in PostHog.
 
 ## Configuration
 
 <SourceParameters />
+
+## Sync modes
+
+Pingdom tables use different sync strategies depending on whether the Pingdom API supports filtering by time:
+
+- **Full refresh** - The `checks`, `probes`, and `maintenance` tables are re-downloaded on every sync. These are small dimension tables and the Pingdom API doesn't expose an "updated since" filter for them.
+- **Incremental** - The `alerts` table supports incremental syncing. PostHog uses the `from` UNIX timestamp filter on the `/actions` endpoint to only fetch alerts newer than the last sync.
+
+## Available datasets and endpoints
+
+| Dataset       | Endpoint path  | Sync mode    | Primary key                        |
+| ------------- | -------------- | ------------ | ---------------------------------- |
+| `checks`      | `/checks`      | Full refresh | `id`                               |
+| `probes`      | `/probes`      | Full refresh | `id`                               |
+| `maintenance` | `/maintenance` | Full refresh | `id`                               |
+| `alerts`      | `/actions`     | Incremental  | `checkid`, `time`, `userid`, `via` |
+
+All endpoints use the Pingdom API 3.1 (`api.pingdom.com/api/3.1`).
+
+The `alerts` table uses a composite primary key because individual alert rows don't have a unique identifier. Duplicate rows with the same key combination are tolerated by the pipeline.
