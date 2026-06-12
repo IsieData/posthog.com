@@ -81,6 +81,36 @@ posthog.init("${process.env.GATSBY_POSTHOG_API_KEY}", {
     error_tracking: {
         __capturePostHogExceptions: true,
     },
+    before_send: function (event) {
+        // Drop uncatchable third-party Wistia runtime errors before they're
+        // captured (e.g. "ReferenceError: wistia is not defined" thrown from
+        // Wistia's CDN media scripts at /embed/medias/<id>.js). These originate
+        // in Wistia's own code, not ours, so they're noise we can't action.
+        if (event && event.event === '$exception') {
+            var exceptions = (event.properties && event.properties.$exception_list) || []
+            var isThirdPartyWistiaNoise = exceptions.some(function (ex) {
+                var value = (ex && ex.value) || ''
+                // The specific symptom: Wistia's runtime global isn't defined yet.
+                if (/\\b[Ww]istia is not defined\\b/.test(value)) {
+                    return true
+                }
+                // Or any exception whose every frame lives on Wistia's CDN, i.e.
+                // purely third-party. Errors with even one frame in our own code
+                // are kept so we still see genuinely broken embeds.
+                var frames = (ex && ex.stacktrace && ex.stacktrace.frames) || []
+                return (
+                    frames.length > 0 &&
+                    frames.every(function (frame) {
+                        return /\\bwistia\\.(com|net)\\b/.test((frame && frame.filename) || '')
+                    })
+                )
+            })
+            if (isThirdPartyWistiaNoise) {
+                return null
+            }
+        }
+        return event
+    },
     person_profiles: 'identified_only',
     __preview_heatmaps: true,
     opt_in_site_apps: true,
