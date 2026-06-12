@@ -38,6 +38,7 @@ These tools give you direct access to OpenTelemetry span data for APM-style inve
 | `apm-spans-count` | Count spans matching a filter set without fetching rows. Use as a pre-flight before `query-apm-spans` to size results before pulling data. |
 | `query-apm-spans` | Query individual spans with full attribute data. Supports filtering by service, status code, time range, and custom attributes. |
 | `apm-spans-aggregate` | Aggregate span statistics by operation. Returns counts, durations, and error rates per operation. |
+| `apm-attribute-breakdown` | Group spans by one attribute's value and return counts, error counts, and duration quantiles per value. Use to answer "what is different about the bad spans?" |
 | `apm-spans-tree` | Aggregate spans as a call tree showing parent-child relationships. Useful for understanding request flow and identifying slow operations. |
 | `apm-trace-get` | Get all spans for a specific trace ID. Use when you know the exact trace you want to inspect. |
 
@@ -70,6 +71,8 @@ Try these with your MCP-enabled agent:
 - `What does the request flow look like for POST /api/orders?`
 - `Find spans with HTTP 500 errors from the last 6 hours.`
 - `Compare latency for the payment service between today and last week.`
+- `Which server.address values are the errored spans hitting?`
+- `What's different about the slow spans? Break them down by pod name.`
 
 ## Install the MCP server
 
