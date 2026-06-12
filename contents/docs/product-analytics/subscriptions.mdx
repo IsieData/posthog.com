@@ -91,6 +91,8 @@ Once saved, any emails not already subscribed receives a notification email info
 
 ## Slack subscriptions
 
+Slack subscriptions deliver insight and dashboard snapshots directly to your channels. You can explore that data with the [@PostHog bot](/docs/slack) right in the thread.
+
 There are three steps to setting up a Slack subscription:
 
 1. Adding the PostHog Slack app to your workspace
@@ -124,6 +126,14 @@ You can then select any channel the app has access to and set a frequency. **Pri
   classes="rounded"
   alt="Slack channel selection"
 />
+
+### Explore data from subscriptions
+
+Each Slack subscription message includes a **Dive into the data** button that lets anyone in the channel ask questions about the report. Click the button to open a modal where you type your question – for example, "Why did signups drop last Tuesday?" or "Which countries drove the most growth?" PostHog posts the question to the subscription's thread and the [@PostHog bot](/docs/slack) answers it.
+
+This works for both insight/dashboard subscriptions and [prompt subscriptions](#prompt-subscriptions).
+
+If the PostHog bot isn't fully set up in your workspace (not invited to the channel or missing scopes), the button links to the [setup docs](/docs/slack/setup) instead.
 
 ## Scheduling options
 
