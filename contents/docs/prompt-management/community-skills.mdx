@@ -1,0 +1,77 @@
+---
+title: Community skills marketplace
+sidebar: Docs
+showTitle: true
+---
+
+The community skills marketplace lets you discover and install agent skills shared by other PostHog users. Browse skills built by the community, install them with one click, and upvote the ones you find useful.
+
+> **Note:** This feature is in beta and gated behind a feature flag. Contact support to enable it for your organization.
+
+## What are community skills?
+
+Community skills are reusable agent instruction packs – the same [skills](/docs/prompt-management/skills-store) you can create for your team, but shared publicly for anyone to use. They follow the [Agent Skills specification](https://agentskills.io/specification) and work with any MCP-connected agent.
+
+Each community skill includes:
+
+- **Instructions** – The skill body that teaches agents how to perform a task
+- **Bundled files** – Optional scripts, references, or assets
+- **Allowed tools** – The MCP tools the skill declares it may use
+- **Trust tier** – A badge indicating how the skill has been reviewed
+
+## Trust tiers
+
+Community skills carry one of three trust tiers:
+
+| Tier | Badge | Meaning |
+|------|-------|---------|
+| **Official** | Green | Created and maintained by PostHog |
+| **Verified** | Blue | Reviewed and approved by PostHog |
+| **Community** | Gray | Contributed by community members, not yet verified |
+
+Review the `allowed_tools` list before installing any skill to understand what tools it may use.
+
+## Browse and search skills
+
+Go to **[Community skills](https://app.posthog.com/community-skills)** in the PostHog app to browse the marketplace.
+
+You can:
+
+- **Search** – Filter by name, description, or tags
+- **Filter by trust tier** – Show only Official, Verified, or Community skills
+- **Sort** – Order by most installed, top rated, newest, or alphabetically
+
+Each skill card shows the name, description, install count, author, and trust tier badge.
+
+## Install a community skill
+
+1. Find a skill you want to use
+2. Click **Install**
+
+The skill is copied into your project as a regular skill. View and edit it in your [skills store](https://app.posthog.com/skills).
+
+When you install a community skill:
+
+- The skill body and any bundled files are copied to your project
+- Metadata tracks the original community skill for reference
+- The community skill's install counter increments
+
+If a skill with the same name already exists in your project, you'll see an error. Rename or delete the existing skill first, or rename the community skill during installation.
+
+## Upvote skills
+
+Click the thumbs-up button on any skill to upvote it. Upvotes help surface the most useful skills to other users. Click again to remove your vote.
+
+Vote counts appear on each skill card and influence the "Top rated" sort order.
+
+## Contribute skills
+
+Community skills are sourced from the [PostHog/community-skills](https://github.com/PostHog/community-skills) GitHub repository. To contribute:
+
+1. Fork the repository
+2. Add your skill following the `SKILL.md` specification
+3. Open a pull request
+
+New skills start at the Community trust tier. The PostHog team reviews contributions and may promote them to Verified or Official status.
+
+See the repository README for contribution guidelines and the skill specification.

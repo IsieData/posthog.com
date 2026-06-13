@@ -6283,6 +6283,17 @@ export const docsMenu = {
                     featured: true,
                 },
                 {
+                    name: 'Community skills',
+                    url: '/docs/prompt-management/community-skills',
+                    icon: 'IconPeople',
+                    color: 'purple',
+                    featured: true,
+                    badge: {
+                        title: 'Beta',
+                        className: 'uppercase !bg-blue/10 !text-blue !dark:text-white !dark:bg-blue/50',
+                    },
+                },
+                {
                     name: 'A/B testing prompts',
                     url: '/docs/prompt-management/prompt-experiments',
                     icon: 'IconFlask',
