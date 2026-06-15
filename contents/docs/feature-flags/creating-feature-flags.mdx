@@ -352,6 +352,24 @@ For feature flags linked to an [experiment](/docs/experiments), inline editing i
 
 After creating Feature Flags, you may need to manage or delete them to keep your project organized. PostHog provides tools to help you clean up flags at scale.
 
+### Archiving feature flags
+
+Archiving marks a flag as permanently done. Unlike disabling – which pauses a flag you might turn back on – archiving signals that you're finished with a flag but want to keep it around, usually because a linked experiment or survey still needs its historical data and deletion is blocked.
+
+Archived flags:
+
+- Are hidden from the feature flags list by default. To see them, choose the **Archived** option in the **Status** filter.
+- Never serve traffic. An archived flag must be disabled, so you can't archive an enabled flag without disabling it in the same step, and you can't re-enable a flag while it's archived.
+- Keep their configuration, history, and links to any experiments and surveys.
+
+To archive a flag, open the flag's page (or use the row menu in the flag list) and click **Archive feature flag**. If the flag is enabled, PostHog warns you that archiving disables it and immediately rolls it back from users matching its release conditions. Archived flags show an **Archived** tag in the list and a banner on their detail page with an **Unarchive** button.
+
+To bring an archived flag back, click **Unarchive feature flag**. The flag stays disabled after unarchiving, so you can review its configuration before re-enabling it.
+
+#### Auto-archiving experiment flags
+
+When you archive an [experiment](/docs/experiments), PostHog also archives its linked feature flag – but only when the flag is already disabled and no other live experiment uses it. Ending an experiment leaves its flag serving the winning variant, so a flag that's still rolling out isn't archived automatically. Unarchiving the experiment unarchives the flag, and it stays disabled.
+
 ### Deleting Feature Flags in bulk
 
 To delete multiple Feature Flags at once:
