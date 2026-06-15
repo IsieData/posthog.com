@@ -15,9 +15,7 @@ This source is currently in **alpha**. The interface and available tables may ch
 
 </CalloutBox>
 
-The AppsFlyer connector syncs aggregate attribution reports into PostHog. It pulls performance data from AppsFlyer's aggregate Pull API using your API token (V2).
-
-Each source connects to one app. To sync multiple apps, create a separate source for each.
+The AppsFlyer connector syncs aggregate mobile attribution reports into the PostHog data warehouse. It pulls performance data from AppsFlyer's aggregate Pull API using your API token (V2). Each source connects to a single AppsFlyer app—to sync multiple apps, create a separate source for each.
 
 ## Requirements
 
@@ -38,19 +36,19 @@ Once the syncs are complete, you can start using AppsFlyer data in PostHog.
 
 ## Available tables
 
-| Table | Description | Sync method |
-| ----- | ----------- | ----------- |
-| `daily_report` | Daily aggregate performance metrics | Incremental |
-| `geo_report` | Performance metrics broken down by country | Incremental |
-| `partners_report` | Performance metrics by partner | Incremental |
+| Table             | Description                              | Sync method |
+| ----------------- | ---------------------------------------- | ----------- |
+| `daily_report`    | Daily aggregate performance metrics      | Incremental |
+| `geo_report`      | Performance metrics broken down by country | Incremental |
+| `partners_report` | Performance metrics by partner           | Incremental |
 
-**Incremental** tables sync only new or updated records on each run. All tables use the `date` field as the incremental cursor.
+All tables sync incrementally on the `date` field, fetching only new or updated records on each run.
 
 ## Sync behavior
 
-Incremental syncs use a 2-day lookback window because AppsFlyer doesn't finalize attribution data until roughly 48 hours after the UTC day ends. The connector re-fetches and merges the most recent two days on each sync to capture late-arriving attributions.
-
-Full syncs pull up to 1000 days of historical data (the maximum window AppsFlyer's API supports).
+- **Incremental sync with lookback** - AppsFlyer doesn't finalize attribution data until roughly 48 hours after the UTC day ends. Each incremental sync re-fetches the trailing two days to capture late-arriving attributions. Duplicates are merged on the dimension key.
+- **Initial sync** - The first sync can pull up to approximately 1,000 days of historical data, the maximum window supported by the AppsFlyer aggregate Pull API.
+- **One app per source** - Each source connects to a single AppsFlyer app. To import data from multiple apps, create a separate source for each one.
 
 ## Configuration
 
