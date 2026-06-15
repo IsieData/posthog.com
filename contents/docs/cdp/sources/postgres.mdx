@@ -337,8 +337,8 @@ Changes that occur while CDC is disabled are not captured. If you re-enable CDC 
 While CDC is enabled, you can edit the following settings from the Configuration tab without disabling CDC:
 
 - **Automatic slot protection** - Toggle whether PostHog drops the replication slot when WAL lag exceeds the critical threshold.
-- **WAL lag warning threshold** - The lag level (in MB) that triggers a warning. Default is `1024 MB`.
-- **WAL lag critical threshold** - The lag level (in MB) that triggers slot protection. Default is `10240 MB`. Must be greater than the warning threshold.
+- **WAL lag warning threshold** - The lag level (in MB) that triggers a warning. Default is `512 MB`.
+- **WAL lag critical threshold** - The lag level (in MB) that triggers slot protection. Default is `2048 MB`. Must be greater than the warning threshold.
 
 To change the management mode (PostHog-managed vs. self-managed) or slot/publication names, disable CDC and re-enable it with the new settings.
 
@@ -348,12 +348,26 @@ Replication slots retain WAL until the consumer advances the slot. If PostHog st
 
 PostHog stores two lag thresholds on CDC sources:
 
-- Warning threshold: `1024 MB` by default
-- Critical threshold: `10240 MB` by default
+- Warning threshold: `512 MB` by default
+- Critical threshold: `2048 MB` by default
 
 For PostHog-managed sources, **automatic slot protection** is enabled by default. If lag exceeds the critical threshold, PostHog attempts to drop the replication slot and publication, then marks the source as errored. This protects your source database from unbounded WAL growth, but it means you must re-enable CDC or resync after fixing the issue. You can [adjust both thresholds](#updating-cdc-settings) from the Configuration tab.
 
 For self-managed sources, PostHog does not drop the slot or publication. It marks the source as errored at the critical threshold, but you remain responsible for cleanup.
+
+PostHog also detects when PostgreSQL has invalidated a slot due to `max_slot_wal_keep_size`. When this happens, PostHog automatically recreates the replication slot (and publication, if PostHog-managed and missing), resets all CDC schemas to snapshot mode, and resumes streaming. Tables re-sync from their current state without manual intervention.
+
+<CalloutBox icon="IconInfo" title="Proactive slot protection" type="fyi">
+
+The hourly slot sweeper reads your database's `max_slot_wal_keep_size` setting and clamps the critical threshold to 80% of that value. This means PostHog drops and recovers the slot before PostgreSQL invalidates it, when possible.
+
+</CalloutBox>
+
+<CalloutBox icon="IconWarning" title="Data gap during auto-recovery" type="caution">
+
+When a slot is invalidated and recreated, changes between the last confirmed LSN and the new slot's consistent point are unrecoverable. The re-snapshot restores current row state, but the `_cdc` history table has a gap for that window.
+
+</CalloutBox>
 
 You can monitor a Postgres slot yourself:
 
@@ -379,6 +393,7 @@ CDC is powerful, but it changes how your production database retains WAL. Keep t
 - Disabling a table removes it from the publication in PostHog-managed mode. Changes made while disabled are not recoverable from the slot. [Disabling CDC entirely](#disabling-cdc) drops the slot and requires a full resync if re-enabled.
 - If a publication does not include a selected table, PostHog won't receive changes for that table.
 - If a table is truncated, PostHog triggers a new snapshot instead of replaying the truncate as individual deletes.
+- If PostHog stops consuming changes long enough for PostgreSQL to invalidate the slot (via `max_slot_wal_keep_size`), PostHog auto-recovers by recreating the slot and re-syncing tables. The `_cdc` history has a gap for changes during the outage.
 
 For production databases, we recommend enabling CDC on one or two representative tables first so your team can validate database permissions, WAL settings, monitoring, and internal rollout steps before adding more tables.
 
@@ -404,5 +419,11 @@ This happens in self-managed mode when PostHog can't find the publication name y
 ### Source is errored because of WAL lag
 
 Check the slot lag query above. If PostHog-managed slot protection dropped the slot, [disable and re-enable CDC](#managing-cdc-after-source-creation) or run a full resync after fixing the underlying issue. If you're in self-managed mode, your DBA must decide whether to keep, advance, or drop the slot.
+
+### Slot invalidated by `max_slot_wal_keep_size`
+
+When PostgreSQL invalidates a replication slot due to `max_slot_wal_keep_size`, PostHog automatically recovers by recreating the slot and triggering a full re-sync of all CDC tables. You'll see an error message explaining that the slot was invalidated and CDC will resume automatically.
+
+No manual intervention is required. Tables re-sync from their current state and streaming resumes once the snapshot completes. The `_cdc` history table has a gap for the window between the last confirmed position and the new slot.
 
 > **Looking for an example of the Postgres source?** Check out our tutorial where we [connect and query Supabase data](/tutorials/supabase-query).
