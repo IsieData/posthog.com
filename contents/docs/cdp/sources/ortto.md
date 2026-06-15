@@ -9,43 +9,43 @@ availability:
 sourceId: Ortto
 ---
 
-The Ortto connector can link people, accounts, audiences, tags, and custom field definitions to PostHog.
+The Ortto connector syncs your marketing data into PostHog, including people, accounts, audiences, tags, and custom field definitions.
 
-To link Ortto:
+> **Note:** This source is currently in **alpha**. Behavior may change as it matures.
 
-1. Go to the [Data pipeline page](https://app.posthog.com/data-management/sources) and the sources tab in PostHog
-2. Click **New source** and select Ortto
-3. Select the region where your Ortto account was created:
-   - **Global** - For accounts at `ortto.app`
-   - **Australia** - For accounts at `ortto.au`
-   - **Europe** - For accounts at `ortto.eu`
-4. Enter your Ortto API key. Create one in Ortto under **Settings** > **API keys**
-5. *Optional:* Add a prefix to your table names
-6. Click **Next**
+## Adding a data source
 
-The data warehouse then starts syncing your Ortto data. You can see details and progress in the [data pipeline sources tab](https://app.posthog.com/data-management/sources).
+1. Go to the [Data pipeline page](https://app.posthog.com/data-management/sources) and the **Sources** tab in PostHog.
+2. Click **+ New source** and select **Ortto**.
+3. Enter your Ortto API key. You can create one in Ortto under **Settings** > **API keys**.
+4. Select the **region** your Ortto instance lives in: **Global** (`ortto.app`), **Australia** (`ortto.au`), or **Europe** (`ortto.eu`). Your API key only works with its associated region.
+5. _Optional:_ Add a prefix to your table names.
+6. Select the tables you want to import.
+7. Click **Import**.
+
+The data warehouse then starts syncing your Ortto data. You can see details, progress, and rows synced in the [data pipeline sources tab](https://app.posthog.com/data-management/sources).
+
+## Available tables
+
+| Table                 | Sync mode    | Description                                     |
+| --------------------- | ------------ | ----------------------------------------------- |
+| people                | Full refresh | Contact records with built-in and custom fields |
+| accounts              | Full refresh | Organization and account records                |
+| audiences             | Full refresh | Audience segments                               |
+| tags                  | Full refresh | Tags                                            |
+| person_custom_fields  | Full refresh | Custom field definitions for people             |
+| account_custom_fields | Full refresh | Custom field definitions for accounts           |
+
+## Sync modes
+
+All Ortto tables use **full refresh** syncing. Ortto's API doesn't support server-side filtering by timestamp, so every table is fully re-imported on each sync.
+
+If a sync is interrupted, it resumes from where it left off rather than restarting from the beginning.
+
+## Custom fields
+
+Custom fields for people and accounts are automatically discovered at runtime. The connector fetches custom field definitions from Ortto and includes them alongside built-in fields without any additional configuration.
 
 ## Configuration
 
 <SourceParameters />
-
-## Available data
-
-Ortto syncs the following tables:
-
-| Table | Description |
-|-------|-------------|
-| `people` | Contact records with built-in fields (name, email, phone, location) and custom fields |
-| `accounts` | Company/organization records with built-in fields (name, website, industry) and custom fields |
-| `audiences` | Audience segment definitions |
-| `tags` | Tag definitions used to categorize contacts |
-| `person_custom_fields` | Schema definitions for custom person fields |
-| `account_custom_fields` | Schema definitions for custom account fields |
-
-Custom fields you've defined in Ortto are included in the `people` and `accounts` tables.
-
-## Sync behavior
-
-All Ortto tables use full refresh syncing. Ortto's API doesn't support filtering by modification date, so PostHog reimports all data on each sync. This matches how other Ortto connectors (like Fivetran) work.
-
-If a sync is interrupted, it resumes from where it left off rather than restarting.
