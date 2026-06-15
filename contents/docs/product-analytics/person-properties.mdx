@@ -105,6 +105,15 @@ posthog.capture("distinct_id", "event_name", new HashMap<String, Object>() {
 
 </MultiLanguage>
 
+The JavaScript Web and React Native SDKs also provide a dedicated `unsetPersonProperties` method as the counterpart to `setPersonProperties`. Pass it the property name (or an array of names) you want to remove, and PostHog captures a `$set` event with the matching `$unset` array.
+
+```js-web
+// Remove a single property
+posthog.unsetPersonProperties('email')
+
+// Remove multiple properties
+posthog.unsetPersonProperties(['email', 'plan'])
+```
 
 ## `last_seen_at` field
 

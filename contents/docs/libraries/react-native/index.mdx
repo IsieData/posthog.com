@@ -164,6 +164,18 @@ posthog.capture('some_event', { $set: { userProperty: 'value' } })
 posthog.capture('some_event', { $set_once: { userProperty: 'value' } })
 ```
 
+### Removing person properties
+
+To remove person properties, call `unsetPersonProperties` with the property name, or an array of names, you want to remove. This captures a `$set` event with a `$unset` array, which removes those properties from the person's profile.
+
+```js
+// Remove a single property
+posthog.unsetPersonProperties('name')
+
+// Remove multiple properties
+posthog.unsetPersonProperties(['name', 'email'])
+```
+
 ## Super properties
 
 Super properties are properties associated with events that are set once and then sent with every `capture` call, be it a `$screen`, an autocaptured touch, or anything else.
