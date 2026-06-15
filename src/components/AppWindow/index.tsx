@@ -745,7 +745,7 @@ export default function AppWindow({ item, chrome = true }: { item: AppWindowType
                                           }),
                                 }}
                                 initial={
-                                    item.expanded
+                                    item.expanded && !item.fromOrigin
                                         ? false
                                         : {
                                               scale: 0.08,
@@ -753,12 +753,16 @@ export default function AppWindow({ item, chrome = true }: { item: AppWindowType
                                                   ? siteSettings.experience === 'boring' || !windowPosition
                                                       ? 0
                                                       : windowPosition.x
-                                                  : item.fromOrigin?.x || windowPosition?.x || Math.round(position.x),
+                                                  : item.fromOrigin?.x ||
+                                                    windowPosition?.x ||
+                                                    (item.expanded ? 0 : Math.round(position.x)),
                                               y: rendered
                                                   ? siteSettings.experience === 'boring' || !windowPosition
                                                       ? 0
                                                       : windowPosition.y
-                                                  : item.fromOrigin?.y || windowPosition?.y || Math.round(position.y),
+                                                  : item.fromOrigin?.y ||
+                                                    windowPosition?.y ||
+                                                    (item.expanded ? 0 : Math.round(position.y)),
                                               ...(siteSettings.experience === 'boring'
                                                   ? { width: '100%', height: '100%' }
                                                   : {}),
