@@ -1177,6 +1177,10 @@ export const handbookSidebar = [
                         url: '/handbook/marketing/positioning/data-pipelines',
                     },
                     {
+                        name: 'Endpoints',
+                        url: '/handbook/marketing/positioning/endpoints',
+                    },
+                    {
                         name: 'LLM analytics',
                         url: '/handbook/marketing/positioning/llm-analytics',
                     },
