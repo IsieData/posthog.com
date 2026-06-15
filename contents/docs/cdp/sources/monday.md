@@ -42,7 +42,7 @@ The `items` table includes a `_board_id` column linking each item back to its pa
 
 ## Sync limitations
 
-All monday.com tables are **full refresh only**. monday.com's API doesn't support server-side filtering by modification date, so each sync reloads all data from the source.
+All monday.com tables are **full refresh only**. monday.com's GraphQL API doesn't expose timestamp-based filtering for list queries, so each sync reloads all data from the source.
 
 ## Configuration
 
