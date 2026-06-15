@@ -33,17 +33,21 @@ Once syncing completes, you can start using Apollo data in PostHog.
 
 ## Available tables
 
-| Table           | Description                      | Sync method |
-| --------------- | -------------------------------- | ----------- |
-| `contacts`      | Your saved contacts in Apollo    | Incremental |
-| `accounts`      | Your saved accounts in Apollo    | Incremental |
+| Table           | Description                      | Sync method  |
+| --------------- | -------------------------------- | ------------ |
+| `contacts`      | Your saved contacts in Apollo    | Incremental  |
+| `accounts`      | Your saved accounts in Apollo    | Incremental  |
 | `opportunities` | Your opportunities (deals)       | Full refresh |
 
 **Incremental** tables sync only records modified since the last sync, based on the `updated_at` field. **Full refresh** tables reload all data on each sync because Apollo's API doesn't support sorting opportunities by update time.
 
 ## Sync limitations
 
-Apollo search results are capped at 50,000 records per table. If a table exceeds this limit, older records won't sync. PostHog logs an error when this happens.
+Apollo caps search results at 50,000 records per table (100 records × 500 pages). If a table exceeds this limit, older records beyond it won't sync.
+
+For contacts and accounts using incremental sync, this cap is unlikely to cause issues because only new or changed records are fetched on subsequent syncs. It's most relevant on the very first full sync of a large dataset.
+
+If the cap is reached during a sync, PostHog logs an error so the truncation is never silent.
 
 ## Configuration
 
