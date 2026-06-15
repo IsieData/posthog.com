@@ -6,55 +6,49 @@ availability:
   free: full
   selfServe: full
   enterprise: full
+beta: true
 sourceId: AdRoll
 ---
 
-<CalloutBox icon="IconInfo" title="Alpha release" type="fyi">
+You can sync advertising entity data from AdRoll (NextRoll) by configuring it as a source in PostHog. The supported entities that can be synced include:
 
-This source is currently in **alpha**. The interface and available tables may change.
+| Entity                                                                        | Description                               |
+| ----------------------------------------------------------------------------- | ----------------------------------------- |
+| [Advertisables](https://developers.nextroll.com/docs/native-api/advertisable) | Your organization's advertisable entities |
+| [Campaigns](https://developers.nextroll.com/docs/native-api/campaign)         | Campaigns for each advertisable           |
+| [Ads](https://developers.nextroll.com/docs/native-api/ad)                     | Ads for each advertisable                 |
 
-</CalloutBox>
+Campaigns and ads include an `_advertisable_eid` field that links each row back to its parent advertisable. All entities use `eid` as their primary key and sync via full refresh.
 
-The AdRoll (NextRoll) connector syncs your advertising entity data into PostHog. It authenticates against the NextRoll API using a personal access token and your app's Client ID.
-
-<CalloutBox icon="IconWarning" title="API quota limits" type="caution">
-
-NextRoll's default quota is **100 API requests per day**. A full sync costs 1 + 2×(number of advertisables) requests, so accounts with many advertisables may hit this limit. Contact NextRoll support to request a higher quota if needed.
-
-</CalloutBox>
+Additional entities and performance reports will be added based on user feedback we receive via our [in-app support form](https://app.posthog.com/#panel=support%3Afeedback%3Adata_warehouse%3Alow%3Atrue).
 
 ## Requirements
 
-- A personal access token from the [NextRoll developer console](https://developers.nextroll.com/)
-- An app registered in the NextRoll developer console (you need the app's **Client ID**)
+- An AdRoll account with access to the organization data you want to sync.
+- A **personal access token** and an **app Client ID** from the [NextRoll developer console](https://developers.nextroll.com/).
 
-## Adding a data source
+To get your credentials:
 
-1. Go to the [sources tab](https://app.posthog.com/data-management/sources) of the data pipeline section in PostHog.
-2. Click **+ New source** and then click **Link** next to AdRoll.
-3. In the [NextRoll developer console](https://developers.nextroll.com/), create a personal access token and register an app if you haven't already. Copy the **Client ID** from your app and the **personal access token**.
-4. Back in PostHog, enter the `Client ID (apikey)` and `Personal access token`, then click **Next**.
-5. Select the tables you want to sync, set the sync frequency, then click **Import**.
+1. Go to the [NextRoll developer console](https://developers.nextroll.com/).
+2. Create a personal access token.
+3. Create an app — the app's **Client ID** is sent as the `apikey` on every API request.
 
-Once the syncs are complete, you can start using AdRoll data in PostHog.
+<CalloutBox icon="IconWarning" title="AdRoll API quota limit" type="caution">
 
-## Available tables
+NextRoll's default API quota is **100 requests per day**. A full sync costs 1 + 2× the number of advertisables in your organization. If you have a large number of advertisables, contact [NextRoll support](https://developers.nextroll.com/) to raise your quota before setting up the source.
 
-| Table | Description | Sync method |
-| ----- | ----------- | ----------- |
-| `advertisables` | Advertisable accounts in your organization | Full refresh |
-| `campaigns` | Campaigns for each advertisable (includes `_advertisable_eid` for linking) | Full refresh |
-| `ads` | Ads for each advertisable (includes `_advertisable_eid` for linking) | Full refresh |
+</CalloutBox>
 
-All tables use **full refresh** sync, which reloads all data on each sync. The AdRoll entity API endpoints don't support incremental sync.
+## Configuring PostHog
 
-## Linking campaigns and ads to advertisables
+Connect PostHog to your AdRoll account using your API credentials.
 
-Campaigns and ads are fetched per advertisable and include an `_advertisable_eid` column that links each row to its parent advertisable. Use this column to join these tables with the `advertisables` table.
-
-## Sync limitations
-
-- **Performance metrics not included**: Metrics like spend, impressions, and clicks are only available through NextRoll's GraphQL Reporting API and aren't yet supported.
+1. In PostHog, go to the **[Data pipelines](https://app.posthog.com/data-management/sources)** tab.
+2. Open the **+ New** drop-down menu in the top-right and select **Source**.
+3. Find AdRoll in the sources list and click **Link**.
+4. Enter the **Client ID** from your NextRoll app.
+5. Enter your **Personal access token**.
+6. (Optional) Add a prefix for the table name.
 
 ## Configuration
 
