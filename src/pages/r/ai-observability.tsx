@@ -102,7 +102,7 @@ export default function AIObservabilityLanding(): JSX.Element {
                 contentMaxWidthClass="max-w-5xl"
                 showQuestions={false}
             >
-                <div className="grid grid-cols-1 @lg:grid-cols-[1.2fr_1fr] gap-10 items-center mb-4 max-w-7xl mx-auto">
+                <div className="grid grid-cols-1 @lg:grid-cols-[1fr_1.5fr] gap-10 items-center mb-4 max-w-7xl mx-auto">
                     <div>
                         <h1 className="text-3xl md:text-5xl !mb-4">X-ray vision for your AI product</h1>
                         <p className="text-lg md:text-xl mb-6 text-secondary">
@@ -138,7 +138,7 @@ export default function AIObservabilityLanding(): JSX.Element {
                         <CloudinaryImage
                             src="https://res.cloudinary.com/dmukukwp6/image/upload/q_auto,f_auto/doctor_and_paitent_cf06d6a5df.png"
                             alt="X-ray vision for your AI product"
-                            className="w-full max-w-[450px] mx-auto"
+                            className="w-full mx-auto"
                         />
                     </div>
                 </div>
