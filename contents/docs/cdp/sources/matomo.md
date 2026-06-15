@@ -11,17 +11,25 @@ sourceId: Matomo
 
 import { CalloutBox } from "components/Docs/CalloutBox";
 
+<CalloutBox icon="IconInfo" title="Alpha release" type="fyi">
+
+This source is currently in **alpha**. The interface and available tables may change.
+
+</CalloutBox>
+
 The Matomo connector syncs web analytics data from Matomo Cloud or self-hosted instances into PostHog. Combine your historical Matomo data with PostHog's product analytics for deeper analysis.
 
 ## Available tables
 
-| Table | Description |
-|---|---|
-| visits | Raw visit log with individual visitor sessions and their actions |
-| visits_summary | Daily aggregate metrics like total visits, unique visitors, and bounce rate |
-| actions_summary | Daily aggregate metrics for page views, downloads, and outlinks |
-| referrers | Daily breakdown of traffic sources by referrer type and name |
-| countries | Daily breakdown of visits by country |
+| Table             | Description                                               | Sync method |
+| ----------------- | --------------------------------------------------------- | ----------- |
+| `visits`          | Raw visit log with visitor details, actions, and metadata | Incremental |
+| `visits_summary`  | Per-day aggregate visit statistics                        | Incremental |
+| `actions_summary` | Per-day aggregate action statistics                       | Incremental |
+| `referrers`       | Per-day referrer breakdown                                | Incremental |
+| `countries`       | Per-day visitor country breakdown                         | Incremental |
+
+**Incremental** tables sync only new or updated records on each run.
 
 ## Linking Matomo
 
@@ -32,7 +40,7 @@ The Matomo connector syncs web analytics data from Matomo Cloud or self-hosted i
    - **Site ID:** The numeric ID of the site you want to sync (found in Matomo under Administration > Measurables > Manage)
    - **API token:** A personal API token with read access to the site
 4. *Optional:* Add a prefix to your table names
-5. Select the tables you want to sync
+5. Select the tables you want to sync, set the sync method and frequency
 6. Click **Next**
 
 The data warehouse starts syncing your Matomo data. You can see details and progress in the [data pipeline sources tab](https://app.posthog.com/data-management/sources).
@@ -54,6 +62,8 @@ The token needs read access to the site you're syncing. Admin or Super User toke
 <SourceParameters />
 
 ## Sync behavior
+
+- The first sync backfills up to 365 days of history for all tables.
 
 ### Visits table
 
