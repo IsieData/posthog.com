@@ -9,6 +9,12 @@ availability:
 sourceId: Airtable
 ---
 
+<CalloutBox icon="IconInfo" title="Alpha release" type="fyi">
+
+This source is currently in **alpha**. The interface and available tables may change.
+
+</CalloutBox>
+
 The Airtable connector syncs your Airtable bases to PostHog, including base metadata, table schemas, and records from every table the token can access.
 
 ## Adding a data source
@@ -33,11 +39,11 @@ The data warehouse then starts syncing your Airtable data. You can see details a
 
 The Airtable source syncs the following tables:
 
-| Table   | Description                                         |
-| ------- | --------------------------------------------------- |
-| bases   | Metadata for each base the token can access         |
-| tables  | Schema metadata for every table within synced bases |
-| records | All records from every table within synced bases    |
+| Table   | Description                                         | Sync method  |
+| ------- | --------------------------------------------------- | ------------ |
+| bases   | Metadata for each base the token can access         | Full refresh |
+| tables  | Schema metadata for every table within synced bases | Full refresh |
+| records | All records from every table within synced bases    | Incremental  |
 
 ### Additional columns
 
