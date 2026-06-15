@@ -23,7 +23,8 @@ The Ortto connector syncs your marketing automation data – people, accounts, a
 2. Click **+ New source** and then click **Link** next to Ortto.
 3. Next, you need an API key from Ortto. In your Ortto account, go to **Settings → API keys** and create a new custom API key. Copy its value.
 4. Back in PostHog, paste the API key and select the **Region** that matches your Ortto instance – Global, Australia, or Europe. Your API key only works with the region where your Ortto account is hosted. Click **Next**.
-5. Select the tables you want to sync, set the sync frequency, then click **Import**.
+5. _Optional:_ Add a prefix to your table names.
+6. Select the tables you want to sync, set the sync frequency, then click **Import**.
 
 Once the syncs are complete, you can start using Ortto data in PostHog.
 
@@ -39,6 +40,10 @@ Once the syncs are complete, you can start using Ortto data in PostHog.
 | `account_custom_fields` | Custom field definitions for accounts | Full refresh |
 
 **Full refresh** tables reload all data on each sync. Ortto's API doesn't support incremental syncing, so all tables fully refresh on each sync.
+
+## Custom fields
+
+Custom fields for people and accounts are automatically discovered at runtime. The connector fetches custom field definitions from Ortto and includes them alongside built-in fields without any additional configuration.
 
 ## Configuration
 
