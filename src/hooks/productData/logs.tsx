@@ -20,11 +20,13 @@ export const logs = {
     volume: 50,
     seo: {
         title: 'Logs that sync with customer data',
-        description: 'Full backend context, with events, requests, and state changes in one place',
+        description:
+            'Logs tied to the user who hit them, linked to replays and errors – the context agents use to find a bug and ship the fix that makes your product self-driving.',
     },
     overview: {
         title: 'Logs that sync with customer data',
-        description: 'Full backend context, with events, requests, and state changes in one place',
+        description:
+            'Full backend context, with events, requests, and state changes in one place – one of the apps that makes your product self-driving by giving agents the backend signal to find a bug and ship the fix, tied to the user who hit it.',
         textColor: 'text-white',
         layout: 'overlay',
     },
@@ -124,7 +126,7 @@ export const logs = {
             title: 'Full stack context',
             template: 'splitImage',
             headline: 'Front end and back end context together',
-            description: 'Follow an issue from the browser to the backend in a single tool',
+            description: 'Follow an issue from the browser to the backend so agents can find the bug and ship the fix',
             images: [
                 {
                     src: 'https://res.cloudinary.com/dmukukwp6/image/upload/logs_3_light_4a3138862f.png',
@@ -152,7 +154,7 @@ export const logs = {
     ],
     ai: {
         imageAlt: 'PostHog AI and logs',
-        description: 'search, summarize, and debug your logs using natural language',
+        description: 'find the bug in your logs and ship the fix',
         skills: [
             'Finds the exact log lines you need with natural language – no query syntax required',
             'Summarizes patterns, surfaces anomalies, and explains likely causes from a sea of log entries',
@@ -196,6 +198,9 @@ export const logs = {
                 },
             ],
             us: [
+                {
+                    title: 'Agents can act on your logs to find a bug and ship the fix – the context that powers self-driving',
+                },
                 {
                     title: 'You want debugging context to stay connected automatically',
                 },
