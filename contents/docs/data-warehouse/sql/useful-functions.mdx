@@ -220,6 +220,42 @@ SELECT
     languageCodeToName('zh') AS chinese -- Chinese
 ```
 
+### Bot and traffic detection
+
+PostHog includes SQL functions for classifying traffic based on its user agent. These use the same heuristics PostHog applies to detect and filter bots and crawlers in web analytics, exposed so you can use them anywhere you write SQL, like the SQL editor, insights, and breakdowns. Each function takes a user agent string, such as `properties.$raw_user_agent`.
+
+| Function | Definition |
+| --- | --- |
+| `isLikelyBot(user_agent)` | Returns `true` if the user agent matches a bot or automation pattern, `false` otherwise. A null or empty user agent is treated as a bot. |
+| `getTrafficType(user_agent)` | Returns the high-level traffic type: `AI Agent`, `Bot`, `Automation`, or `Regular`. |
+| `getTrafficCategory(user_agent)` | Returns a more granular subcategory, such as `ai_crawler`, `ai_search`, `ai_assistant`, `search_crawler`, `seo_crawler`, or `regular`. |
+| `getBotType(user_agent)` | Returns the bot category (same values as `getTrafficCategory`) or an empty string for regular traffic. |
+| `getBotName(user_agent)` | Returns the bot name, such as `Googlebot`, `ChatGPT`, or `Claude`. Empty string for regular traffic. |
+| `getBotOperator(user_agent)` | Returns the operator or company behind the bot, such as `Google`, `OpenAI`, or `Anthropic`. Empty string for regular traffic. |
+
+For example, to exclude bot traffic from a pageview count:
+
+```sql
+SELECT count()
+FROM events
+WHERE event = '$pageview'
+  AND NOT isLikelyBot(properties.$raw_user_agent)
+```
+
+Or to break down traffic by type:
+
+```sql
+SELECT getTrafficType(properties.$raw_user_agent) AS traffic_type, count()
+FROM events
+WHERE event = '$pageview'
+GROUP BY traffic_type
+ORDER BY count() DESC
+```
+
+These functions match against user agent patterns, so they can't confirm a bot with certainty—hence the name `isLikelyBot`. The patterns are maintained alongside PostHog's web analytics bot detection.
+
+> **Note:** These functions were previously available under experimental `__preview_`-prefixed names (for example, `__preview_isBot`). Those names still work as deprecated aliases, but you should use the names above going forward.
+
 ### HTML tags and links
 
 These HTML tags are currently supported, but for security reasons, none of them support attributes right now: 
