@@ -1390,19 +1390,34 @@ export interface SiteSettings {
 
 const isLabel = (item: any) => !item?.url && item?.name
 
-const getInitialSiteSettings = (isMobile: boolean, compact: boolean) => {
-    const lastReset = typeof window !== 'undefined' ? localStorage.getItem('lastReset') : null
-    const siteSettings = {
-        experience: 'posthog',
-        colorMode: (typeof window !== 'undefined' && (window as any).__theme) || 'light',
-        theme: (typeof window !== 'undefined' && (window as any).__theme) || 'light',
-        skinMode: 'modern',
-        cursor: 'default',
-        wallpaper: 'keyboard-garden',
-        clickBehavior: 'double',
-        performanceBoost: false,
-        screensaverDisabled: true,
-        ...(typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('siteSettings') || '{}') : {}),
+// The settings the server renders with. The initial client render MUST use these
+// exact values so the hydrated markup matches the server output. Reading
+// window.__theme, localStorage, or the viewport during the first render would
+// diverge from SSR and trigger React hydration mismatch errors (#418) for every
+// dark-mode, mobile, or iframe-embedded visitor. The real browser-derived values
+// are applied in a post-mount effect instead (see `getClientSiteSettings`).
+const SERVER_SITE_SETTINGS: SiteSettings = {
+    experience: 'posthog',
+    colorMode: 'light',
+    theme: 'light',
+    skinMode: 'modern',
+    cursor: 'default',
+    wallpaper: 'keyboard-garden',
+    clickBehavior: 'double',
+    performanceBoost: false,
+    screensaverDisabled: true,
+}
+
+// Resolves the real site settings from browser state. Only call this after the
+// component has mounted (i.e. once hydration is complete) — never during the
+// initial render.
+const getClientSiteSettings = (isMobile: boolean, compact: boolean): SiteSettings => {
+    const lastReset = localStorage.getItem('lastReset')
+    const siteSettings: SiteSettings = {
+        ...SERVER_SITE_SETTINGS,
+        colorMode: (window as any).__theme || 'light',
+        theme: (window as any).__theme || 'light',
+        ...JSON.parse(localStorage.getItem('siteSettings') || '{}'),
         ...(!lastReset ? { experience: 'posthog' } : {}),
     }
 
@@ -1410,7 +1425,7 @@ const getInitialSiteSettings = (isMobile: boolean, compact: boolean) => {
         siteSettings.experience = 'boring'
     }
 
-    if (siteSettings.wallpaper === 'action-figure') {
+    if ((siteSettings.wallpaper as string) === 'action-figure') {
         siteSettings.wallpaper = 'keyboard-garden'
     }
 
@@ -1419,11 +1434,15 @@ const getInitialSiteSettings = (isMobile: boolean, compact: boolean) => {
 
 export const Provider = ({ children, element, location }: AppProviderProps) => {
     const isSSR = typeof window === 'undefined'
-    const compact = typeof window !== 'undefined' && window !== window.parent
     const constraintsRef = useRef<HTMLDivElement>(null)
     const taskbarRef = useRef<HTMLDivElement>(null)
-    const [isMobile, setIsMobile] = useState(!isSSR && window.innerWidth < 768)
-    const [siteSettings, setSiteSettings] = useState<SiteSettings>(getInitialSiteSettings(isMobile, compact))
+    // `compact`, `isMobile`, and `siteSettings` all start from their server-rendered
+    // values so the first client render matches the SSR markup. The real
+    // browser-derived values are applied in a post-mount effect (see below),
+    // which avoids React hydration mismatch errors (#418).
+    const [compact, setCompact] = useState(false)
+    const [isMobile, setIsMobile] = useState(false)
+    const [siteSettings, setSiteSettings] = useState<SiteSettings>(SERVER_SITE_SETTINGS)
     const websiteMode = siteSettings.experience === 'boring'
     const [taskbarHeight, setTaskbarHeight] = useState(38)
     const [lastClickedElementRect, setLastClickedElementRect] = useState<{ x: number; y: number } | null>(null)
@@ -2345,6 +2364,20 @@ export const Provider = ({ children, element, location }: AppProviderProps) => {
             document.body.setAttribute('data-wallpaper', siteSettings.wallpaper)
         }
     }, [siteSettings])
+
+    // After hydration, replace the server-rendered defaults with the real values
+    // derived from the browser (theme, localStorage, viewport, iframe embedding).
+    // Doing this in an effect rather than during the initial render keeps the
+    // first client render identical to the server output, eliminating the React
+    // hydration mismatch (#418) that previously fired for dark-mode, mobile, and
+    // embedded visitors.
+    useEffect(() => {
+        const realCompact = window !== window.parent
+        const realIsMobile = window.innerWidth < 768
+        setCompact(realCompact)
+        setIsMobile(realIsMobile)
+        setSiteSettings(getClientSiteSettings(realIsMobile, realCompact))
+    }, [])
 
     useEffect(() => {
         const handleResize = () => {
