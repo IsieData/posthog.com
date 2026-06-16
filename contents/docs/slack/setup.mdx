@@ -17,7 +17,7 @@ You need two integrations to use `@PostHog` in Slack: one workspace-wide Slack c
 
 <Step title="Connect Slack to your project" badge="required">
 
-Head to [**Settings → Integrations**](https://app.posthog.com/settings/project-integrations #selectedSetting=integration-slack&setting=integration-slack) in your PostHog project and click **Add to Slack** in the Slack integration section. Approve the requested scopes – you'll need to be a project admin to install.
+Head to the [**Slack integration page**](https://app.posthog.com/integrations/slack) in PostHog and click **Add to Slack**. Approve the requested scopes – you'll need to be a project admin to install.
 
 <ProductScreenshot
 imageLight="https://res.cloudinary.com/dmukukwp6/image/upload/q_auto,f_auto,w_800/slack_integration_settings_3396ec1b7d.png"
@@ -49,7 +49,7 @@ A personal GitHub integration is **required** for the coding agent to run. Witho
 
 > I can't start this task yet – you haven't connected your personal GitHub. Connect it so I can open the pull request as you, then mention me again.
 
-This is a hard block on the whole task, not just the PR step – the agent doesn't plan, edit, or run anything until you've connected GitHub. Each teammate who wants to ship code connects their own account at [**Settings → Personal integrations**](https://app.posthog.com/settings/user-personal-integrations) and clicks **Connect GitHub**. You can connect multiple accounts or organizations – the agent uses them for repo access, commit attribution, and pull request authorship.
+This is a hard block on the whole task, not just the PR step – the agent doesn't plan, edit, or run anything until you've connected GitHub. Each teammate who wants to ship code connects their own account on the [**GitHub integration page**](https://app.posthog.com/integrations/github) and clicks **Connect GitHub**. You can connect multiple accounts or organizations – the agent uses them for repo access, commit attribution, and pull request authorship.
 
 PRs can't be authored under the bot itself – the agent always commits and opens PRs as whichever teammate triggered the task.
 

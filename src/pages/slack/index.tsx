@@ -32,7 +32,7 @@ import {
     IconWrench,
 } from '@posthog/icons'
 
-const CONNECT_SLACK_URL = 'https://app.posthog.com/settings/project-integrations#integration-slack'
+const CONNECT_SLACK_URL = 'https://app.posthog.com/integrations/slack'
 
 type IconComponent = React.ComponentType<{ className?: string }>
 
@@ -578,7 +578,7 @@ const faqItems = [
                 <code>Generated-By: PostHog Code</code> line plus a <code>Task-Id</code> so you can trace it back. PRs
                 are authored under your name via your{' '}
                 <Link
-                    to="https://app.posthog.com/settings/user-personal-integrations"
+                    to="https://app.posthog.com/integrations/github"
                     external
                     className="text-red dark:text-yellow font-semibold hover:underline"
                 >
