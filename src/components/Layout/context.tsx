@@ -40,6 +40,15 @@ export const LayoutProvider = ({ children, ...other }: IProps) => {
     const [fullWidthContent, setFullWidthContent] = useState<boolean>(
         compact || (typeof window !== 'undefined' && localStorage.getItem('full-width-content') === 'true')
     )
+    // The server renders with these client-only values defaulted to `false` (no window, no
+    // localStorage). To avoid a hydration mismatch (#418) and the resulting full client re-render
+    // (#423), keep the first client render identical to the server by exposing the SSR defaults until
+    // after mount, then flip to the real values. The effects below still read the live `compact`
+    // const directly, so the docs-embed postMessage handshake is unaffected.
+    const [hydrated, setHydrated] = useState(false)
+    useEffect(() => {
+        setHydrated(true)
+    }, [])
 
     const hedgehogModeLocalStorage = useMemo(() => {
         // Only default it to be on if it's April 1st but still respect if they turned it off
@@ -184,15 +193,15 @@ export const LayoutProvider = ({ children, ...other }: IProps) => {
                 parent,
                 internalMenu,
                 activeInternalMenu,
-                fullWidthContent,
+                fullWidthContent: hydrated && fullWidthContent,
                 setFullWidthContent,
-                compact,
+                compact: hydrated && compact,
                 enterpriseMode,
                 setEnterpriseMode,
                 theoMode,
                 setTheoMode,
                 post,
-                hedgehogModeEnabled,
+                hedgehogModeEnabled: hydrated && hedgehogModeEnabled,
                 setHedgehogModeEnabled,
             }}
         >

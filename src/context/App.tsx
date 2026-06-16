@@ -1390,19 +1390,35 @@ export interface SiteSettings {
 
 const isLabel = (item: any) => !item?.url && item?.name
 
-const getInitialSiteSettings = (isMobile: boolean, compact: boolean) => {
-    const lastReset = typeof window !== 'undefined' ? localStorage.getItem('lastReset') : null
-    const siteSettings = {
-        experience: 'posthog',
-        colorMode: (typeof window !== 'undefined' && (window as any).__theme) || 'light',
-        theme: (typeof window !== 'undefined' && (window as any).__theme) || 'light',
-        skinMode: 'modern',
-        cursor: 'default',
-        wallpaper: 'keyboard-garden',
-        clickBehavior: 'double',
-        performanceBoost: false,
-        screensaverDisabled: true,
-        ...(typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('siteSettings') || '{}') : {}),
+// Static defaults used for server-side rendering and the very first client render. These must
+// match the HTML produced on the server so React can hydrate without a mismatch (#418/#423). The
+// real values, which depend on client-only sources (localStorage, window.innerWidth, window.__theme),
+// are reconciled in a useEffect after mount — see the reconciliation effect in Provider.
+const DEFAULT_SITE_SETTINGS: SiteSettings = {
+    experience: 'posthog',
+    colorMode: 'light',
+    theme: 'light',
+    skinMode: 'modern',
+    cursor: 'default',
+    wallpaper: 'keyboard-garden',
+    clickBehavior: 'double',
+    performanceBoost: false,
+    screensaverDisabled: true,
+}
+
+const getInitialSiteSettings = (isMobile: boolean, compact: boolean): SiteSettings => {
+    // On the server (and during the first client render, before reconciliation) fall back to the
+    // static defaults so the rendered tree is identical on both sides.
+    if (typeof window === 'undefined') {
+        return { ...DEFAULT_SITE_SETTINGS }
+    }
+
+    const lastReset = localStorage.getItem('lastReset')
+    const siteSettings: SiteSettings = {
+        ...DEFAULT_SITE_SETTINGS,
+        colorMode: (window as any).__theme || 'light',
+        theme: (window as any).__theme || 'light',
+        ...JSON.parse(localStorage.getItem('siteSettings') || '{}'),
         ...(!lastReset ? { experience: 'posthog' } : {}),
     }
 
@@ -1410,7 +1426,7 @@ const getInitialSiteSettings = (isMobile: boolean, compact: boolean) => {
         siteSettings.experience = 'boring'
     }
 
-    if (siteSettings.wallpaper === 'action-figure') {
+    if ((siteSettings.wallpaper as string) === 'action-figure') {
         siteSettings.wallpaper = 'keyboard-garden'
     }
 
@@ -1422,8 +1438,12 @@ export const Provider = ({ children, element, location }: AppProviderProps) => {
     const compact = typeof window !== 'undefined' && window !== window.parent
     const constraintsRef = useRef<HTMLDivElement>(null)
     const taskbarRef = useRef<HTMLDivElement>(null)
-    const [isMobile, setIsMobile] = useState(!isSSR && window.innerWidth < 768)
-    const [siteSettings, setSiteSettings] = useState<SiteSettings>(getInitialSiteSettings(isMobile, compact))
+    // Initialize to the static SSR defaults so the first client render matches the server-rendered
+    // HTML. The real values (which depend on localStorage, window.innerWidth and window.__theme) are
+    // reconciled in a useEffect after mount — see below. This avoids the hydration mismatch (#418) and
+    // the resulting full client re-render recovery (#423).
+    const [isMobile, setIsMobile] = useState(false)
+    const [siteSettings, setSiteSettings] = useState<SiteSettings>({ ...DEFAULT_SITE_SETTINGS })
     const websiteMode = siteSettings.experience === 'boring'
     const [taskbarHeight, setTaskbarHeight] = useState(38)
     const [lastClickedElementRect, setLastClickedElementRect] = useState<{ x: number; y: number } | null>(null)
@@ -2345,6 +2365,21 @@ export const Provider = ({ children, element, location }: AppProviderProps) => {
             document.body.setAttribute('data-wallpaper', siteSettings.wallpaper)
         }
     }, [siteSettings])
+
+    // Reconcile client-only state once after mount. The initial render uses the static SSR defaults
+    // so hydration matches the server HTML; here we pull in the real values from localStorage,
+    // window.innerWidth and window.__theme. Flipping `experience` to 'boring' triggers the
+    // websiteMode effect below, which reduces the open windows for website/mobile mode.
+    useEffect(() => {
+        const mobile = window.innerWidth < 768
+        setIsMobile(mobile)
+        setSiteSettings(getInitialSiteSettings(mobile, compact))
+
+        // Preserve the original behavior of starting with no open windows on the mobile homepage.
+        if (location.key === 'initial' && location.pathname === '/' && mobile && !paramsWindows) {
+            setWindows([])
+        }
+    }, [])
 
     useEffect(() => {
         const handleResize = () => {
