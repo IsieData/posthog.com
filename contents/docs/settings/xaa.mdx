@@ -51,7 +51,6 @@ While you do **not** need SAML configured to use XAA, we recommend it. This ensu
 
 | Field | Required? | Description |
 |---|---|---|
-| **Token endpoint** | — | Read-only. The URL your IdP/app exchanges tokens at (`<yourdomain>/id-jag/token`). Copy this into your IdP configuration. |
 | **IdP issuer URL** | ✅ Yes | Your IdP's issuer URL (e.g. `https://idp.example.com`). Must exactly match the `iss` claim on ID-JAG tokens for users on this domain. **XAA is not active until this is set.** |
 | **JWKS URL** | ❌ Optional | Override key discovery. Leave empty and PostHog discovers keys via OIDC at `<issuer>/.well-known/openid-configuration`. |
 | **Allowed client IDs** | ❌ Optional | Restrict which `client_id` values are accepted. Leave empty to allow any client. Useful if you only want to allow XAA in specific tools. |
@@ -92,18 +91,6 @@ Please read these before enabling XAA.
 2. **The user must be an active member of the organization** that owns the domain configuration. A valid token for a user who isn't in your org is rejected.
 3. **Issued access tokens are short-lived** (2 hours by default) and bound to your organization, the granted scopes, and your PostHog URL. Replayed tokens are rejected via the `jti` claim.
 4. **Enabling XAA does not disable Personal API keys or other auth.** XAA access tokens are accepted alongside existing credentials.
-
-## Example: Okta
-
-> Okta's Cross-App Access is an evolving feature. Confirm the exact admin steps against [Okta's current cross-app access documentation](https://www.okta.com/) — the values PostHog needs are below.
-
-1. In Okta, create (or open) the app that represents your client/agent, and enable cross-app access (ID-JAG) for it with PostHog as a resource app.
-2. Configure the resource so the issued ID-JAG carries:
-   - `aud` and `resource` = your PostHog URL (`https://us.posthog.com`, `https://eu.posthog.com`, or your self-hosted URL).
-   - `scope` = the PostHog API scopes the app should receive.
-3. In PostHog's **Configure XAA** modal, set **IdP issuer URL** to your Okta org's issuer (e.g. `https://<your-org>.okta.com`). Leave **JWKS URL** empty to use OIDC discovery.
-4. (Optional) Add the app's `client_id` to **Allowed client IDs**.
-5. Point the client app's token exchange at the **Token endpoint** shown in the modal.
 
 ## Troubleshooting
 
