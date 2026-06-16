@@ -186,6 +186,18 @@ When creating a button tile, you can configure:
 - **Style** – Choose between primary (filled) or secondary (outlined) button styles.
 - **Transparent background** – Toggle to remove the tile's background for a cleaner look.
 
+### Adding activity widgets
+
+Click the dropdown on the **Add...** button and select **Recent events** under the **Activity** group to add a live events feed to your dashboard. This widget displays recent events captured in your project, mirroring the [Activity > Explore](https://app.posthog.com/activity/explore) page.
+
+Each row shows the event name, person, timestamp, library, and URL. Click any row to open the event's detail page in a new tab. The tile title links to **Activity > Explore** for the full events view.
+
+You can configure the widget with:
+
+- **Date range** – Filter events by time period (default: last 24 hours).
+- **Limit** – Number of events to display (default: 25, max 50).
+- **Filter test accounts** – Toggle to exclude internal and test users.
+
 ### Toggling labels and values on insights
 
 You can toggle the visibility of labels or values on insight charts directly from the dashboard without editing the insight. Click the **...** icon on an insight card and select the toggle option. For pie charts, the option is **Show/Hide labels on series**. For other supported chart types (trends, lifecycle, stickiness, and funnel trends), the option is **Show/Hide values on series**. This change is saved to the insight.
