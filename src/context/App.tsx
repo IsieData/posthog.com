@@ -1390,19 +1390,35 @@ export interface SiteSettings {
 
 const isLabel = (item: any) => !item?.url && item?.name
 
-const getInitialSiteSettings = (isMobile: boolean, compact: boolean) => {
-    const lastReset = typeof window !== 'undefined' ? localStorage.getItem('lastReset') : null
+// Pure defaults that exactly match Gatsby's SSR output. The initial client render MUST use
+// these so React hydration does not mismatch — the user's saved theme/skin/wallpaper/experience
+// live in localStorage and window.__theme (set by static/scripts/theme-init.js before hydration),
+// neither of which exist during SSR. Those are applied after mount via getStoredSiteSettings.
+const getInitialSiteSettings = (): SiteSettings => ({
+    experience: 'posthog',
+    colorMode: 'light',
+    theme: 'light',
+    skinMode: 'modern',
+    cursor: 'default',
+    wallpaper: 'keyboard-garden',
+    clickBehavior: 'double',
+    performanceBoost: false,
+    screensaverDisabled: true,
+})
+
+// Client-only: reads the user's persisted settings. Called from a post-mount effect, never
+// during the initial render, so the first paint stays identical to the server-rendered HTML.
+const getStoredSiteSettings = (isMobile: boolean, compact: boolean): SiteSettings => {
+    if (typeof window === 'undefined') {
+        return getInitialSiteSettings()
+    }
+
+    const lastReset = localStorage.getItem('lastReset')
     const siteSettings = {
-        experience: 'posthog',
-        colorMode: (typeof window !== 'undefined' && (window as any).__theme) || 'light',
-        theme: (typeof window !== 'undefined' && (window as any).__theme) || 'light',
-        skinMode: 'modern',
-        cursor: 'default',
-        wallpaper: 'keyboard-garden',
-        clickBehavior: 'double',
-        performanceBoost: false,
-        screensaverDisabled: true,
-        ...(typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('siteSettings') || '{}') : {}),
+        ...getInitialSiteSettings(),
+        colorMode: (window as any).__theme || 'light',
+        theme: (window as any).__theme || 'light',
+        ...JSON.parse(localStorage.getItem('siteSettings') || '{}'),
         ...(!lastReset ? { experience: 'posthog' } : {}),
     }
 
@@ -1423,7 +1439,7 @@ export const Provider = ({ children, element, location }: AppProviderProps) => {
     const constraintsRef = useRef<HTMLDivElement>(null)
     const taskbarRef = useRef<HTMLDivElement>(null)
     const [isMobile, setIsMobile] = useState(!isSSR && window.innerWidth < 768)
-    const [siteSettings, setSiteSettings] = useState<SiteSettings>(getInitialSiteSettings(isMobile, compact))
+    const [siteSettings, setSiteSettings] = useState<SiteSettings>(getInitialSiteSettings())
     const websiteMode = siteSettings.experience === 'boring'
     const [taskbarHeight, setTaskbarHeight] = useState(38)
     const [lastClickedElementRect, setLastClickedElementRect] = useState<{ x: number; y: number } | null>(null)
@@ -2333,6 +2349,17 @@ export const Provider = ({ children, element, location }: AppProviderProps) => {
         setConfetti,
         confetti,
     ])
+
+    // Apply the user's persisted settings after the first paint. Reading localStorage /
+    // window.__theme during the initial render would diverge from the SSR HTML and trigger a
+    // recoverable React hydration mismatch (React #418) on every page load for anyone whose
+    // saved theme/skin/experience differs from the defaults. Deferring to a mount effect keeps
+    // hydration clean; theme-init.js has already set the body class/data attributes pre-paint,
+    // so there is no visual flicker.
+    useEffect(() => {
+        setSiteSettings(getStoredSiteSettings(isMobile, compact))
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     useEffect(() => {
         if (siteSettings.skinMode) {
