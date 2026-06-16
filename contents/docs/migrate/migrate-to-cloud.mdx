@@ -110,7 +110,18 @@ python3 ./migrate.py \
 
 ### Migrating events between Cloud instances (e.g. US -> EU Cloud)
 
-You must raise a [support ticket in-app](https://us.posthog.com/home#supportModal) with the **Data pipelines** topic for the PostHog team to do this migration for you. This option is **only available to customers on the Scale or Enterprise package** as it requires significant engineering time.  
+You can self-serve a migration between Cloud regions using an [HTTP batch export](/docs/cdp/batch-exports) that points from your source project at the destination region.
+
+Before you start, make sure you're a member of both the source and destination projects, and create a project in your destination region if you don't have one already.
+
+1. Log into your **source** project (the one you're migrating away from).
+2. Create a new **HTTP batch export** (in [Data pipelines](https://us.posthog.com/pipeline/destinations) -> **Destinations** -> **New destination**).
+3. Set the destination region to the **US** or **EU** PostHog instance you're migrating to, and set the API key to your **destination** project's [Project API key](https://us.posthog.com/settings/project#variables).
+4. Set the interval to **hourly** if you have large event volumes, or **daily** otherwise.
+5. To migrate your historical data, click **Backfill batch export** and choose the time range. Check your data for the earliest ingested event so you don't miss anything, unless you only want a specific period.
+6. If you want to keep both regions in sync during the cutover, **enable** the batch export so it continuously exports new events. Once you've [switched tracking in your product](#switching-tracking-in-your-product) to the new region, you can disable it.
+
+> **Transferring billing credits between regions?** Credits (for example from a YC or startup deal) don't move automatically when you migrate. If you have credit on your source account that you want moved to your destination region, [contact support](https://us.posthog.com/home#supportModal) and our billing team will transfer it for you. This is the one part of a region migration that isn't yet self-serve.
 
 ## Switching tracking in your product
 
