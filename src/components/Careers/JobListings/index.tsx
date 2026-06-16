@@ -197,13 +197,6 @@ const getTeamLeadInfo = (team: any) => {
     return `${firstName} joined in ${formatDate(startDate)} and lives in ${location}, ${country}.`
 }
 
-const getQueryString = (): string => {
-    if (typeof window !== 'undefined' && window.location.search) {
-        return window.location.search
-    }
-    return ''
-}
-
 export const JobListings = ({ embedded = false }: { embedded?: boolean }) => {
     const {
         allAshbyJobPosting: { departments, jobs: originalJobs },
@@ -211,12 +204,17 @@ export const JobListings = ({ embedded = false }: { embedded?: boolean }) => {
     } = useStaticQuery(query)
 
     const { appWindow } = useWindow()
+    const [queryString, setQueryString] = useState('')
     const [searchQuery, setSearchQuery] = useState('')
     const [leftColHeight, setLeftColHeight] = useState<string | number>('auto')
     const jobListRef = useRef<HTMLDivElement>(null)
     const markedRef = useRef<Mark | null>(null)
     const leftColRef = useRef<HTMLDivElement>(null)
     const rightColRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        if (window.location.search) setQueryString(window.location.search)
+    }, [])
     const jobGroups = useMemo(() => {
         // Group jobs by "Role grouping" custom field
         const groups: { [key: string]: any[] } = {}
@@ -738,7 +736,7 @@ export const JobListings = ({ embedded = false }: { embedded?: boolean }) => {
                                 )}
                                 <OSButton
                                     asLink
-                                    to={`${selectedJob.fields.slug}${getQueryString()}`}
+                                    to={`${selectedJob.fields.slug}${queryString}`}
                                     size="md"
                                     variant="primary"
                                     state={{ newWindow: true }}

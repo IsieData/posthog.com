@@ -98,14 +98,10 @@ const SidebarContent = ({
 }
 
 export const getIsMobile = (siteSettings: any, appWindow: any) => {
-    const width =
-        typeof window !== 'undefined' && siteSettings.experience === 'boring'
-            ? window.innerWidth
-            : appWindow?.size?.width
+    const width = appWindow?.size?.width ?? 0
     return width < 672
 }
 
-// Extract query param reading logic - DRY principle
 const getPanelStateFromURL = (param: string, configDefault?: boolean): boolean => {
     if (typeof window === 'undefined') return configDefault ?? true
     const params = new URLSearchParams(window.location.search)
@@ -113,7 +109,6 @@ const getPanelStateFromURL = (param: string, configDefault?: boolean): boolean =
     return value !== null ? value === 'true' : configDefault ?? true
 }
 
-// Get team slug from URL query param, with mapping for less conspicuous URLs
 const getTeamSlugFromURL = (configDefault?: string): string | undefined => {
     if (typeof window === 'undefined') return configDefault
     const params = new URLSearchParams(window.location.search)
@@ -138,23 +133,26 @@ export default function Presentation({
 }: PresentationProps) {
     const { siteSettings, websiteMode } = useApp()
     const { appWindow } = useWindow()
-    const [isMobile, setIsMobile] = useState<boolean>(getIsMobile(siteSettings, appWindow))
+    const [isMobile, setIsMobile] = useState<boolean>(false)
 
-    // Lazy initializers read state once on mount - prevents flash of wrong state
-    const [isNavVisible, setIsNavVisible] = useState<boolean>(() =>
-        getPanelStateFromURL('thumbnails', config?.thumbnails)
-    )
+    const [isNavVisible, setIsNavVisible] = useState<boolean>(config?.thumbnails ?? true)
     const [isPresentationMode, setIsPresentationMode] = useState<boolean>(false)
     const [currentSlideIndex, setCurrentSlideIndex] = useState<number>(0)
     const [activeSlideIndex, setActiveSlideIndex] = useState<number>(0)
-    const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(() => getPanelStateFromURL('notes', config?.notes))
-    const [isFormVisible, setIsFormVisible] = useState<boolean>(() =>
-        getPanelStateFromURL('form', config?.form ?? false)
-    )
+    const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(config?.notes ?? true)
+    const [isFormVisible, setIsFormVisible] = useState<boolean>(config?.form ?? false)
     const [drawerHeight, setDrawerHeight] = useState<number>(90)
 
-    // Determine effective team slug - URL param overrides config
-    const effectiveTeamSlug = getTeamSlugFromURL(config?.teamSlug)
+    const [effectiveTeamSlug, setEffectiveTeamSlug] = useState<string | undefined>(config?.teamSlug)
+
+    // Hydrate from URL params after mount
+    useEffect(() => {
+        setIsMobile(getIsMobile(siteSettings, appWindow))
+        setIsNavVisible(getPanelStateFromURL('thumbnails', config?.thumbnails))
+        setIsDrawerOpen(getPanelStateFromURL('notes', config?.notes))
+        setIsFormVisible(getPanelStateFromURL('form', config?.form ?? false))
+        setEffectiveTeamSlug(getTeamSlugFromURL(config?.teamSlug))
+    }, [])
     const [lastOpenHeight, setLastOpenHeight] = useState<number>(90)
     const [isDragging, setIsDragging] = useState<boolean>(false)
     const [dragStartHeight, setDragStartHeight] = useState<number>(0)

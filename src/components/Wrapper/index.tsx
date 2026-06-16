@@ -20,10 +20,13 @@ export default function Wrapper() {
         searchOpen,
     } = useApp()
     const [shakeReady, setShakeReady] = useState(false)
+    const [mounted, setMounted] = useState(false)
     const dotLottieRef = useRef<any>(null)
 
+    useEffect(() => setMounted(true), [])
+
     useEffect(() => {
-        if (closingAllWindowsAnimation) {
+        if (closingAllWindowsAnimation && dotLottieRef.current) {
             dotLottieRef.current.play()
         }
     }, [closingAllWindowsAnimation])
@@ -78,33 +81,37 @@ export default function Wrapper() {
             {!compact && <Dock />}
             */}
             <CookieBannerToast />
-            <AnimatePresence>
-                <motion.div
-                    exit={{ opacity: 0 }}
-                    className={`fixed inset-0 size-full z-[999999] ${closingAllWindowsAnimation ? 'block' : 'hidden'}`}
-                >
-                    <DotLottiePlayer
-                        className="size-full"
-                        src="/lotties/hogzilla-swipe.lottie"
-                        ref={dotLottieRef}
-                        onEvent={(event) => {
-                            if (event === PlayerEvents.Play) {
-                                setTimeout(() => {
-                                    setShakeReady(true)
+            {mounted && (
+                <AnimatePresence>
+                    <motion.div
+                        exit={{ opacity: 0 }}
+                        className={`fixed inset-0 size-full z-[999999] ${
+                            closingAllWindowsAnimation ? 'block' : 'hidden'
+                        }`}
+                    >
+                        <DotLottiePlayer
+                            className="size-full"
+                            src="/lotties/hogzilla-swipe.lottie"
+                            ref={dotLottieRef}
+                            onEvent={(event) => {
+                                if (event === PlayerEvents.Play) {
                                     setTimeout(() => {
-                                        closeAllWindows()
-                                        setShakeReady(false)
-                                    }, 500)
-                                }, 2200)
-                            }
-                            if (event === PlayerEvents.Complete) {
-                                setClosingAllWindowsAnimation(false)
-                                dotLottieRef.current.stop()
-                            }
-                        }}
-                    />
-                </motion.div>
-            </AnimatePresence>
+                                        setShakeReady(true)
+                                        setTimeout(() => {
+                                            closeAllWindows()
+                                            setShakeReady(false)
+                                        }, 500)
+                                    }, 2200)
+                                }
+                                if (event === PlayerEvents.Complete) {
+                                    setClosingAllWindowsAnimation(false)
+                                    dotLottieRef.current.stop()
+                                }
+                            }}
+                        />
+                    </motion.div>
+                </AnimatePresence>
+            )}
         </div>
     )
 }

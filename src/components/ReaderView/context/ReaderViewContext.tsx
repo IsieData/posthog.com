@@ -38,28 +38,27 @@ export function ReaderViewProvider({
     const { appWindow } = useWindow()
     // @2xl breakpoint for sidebar visibility (equivalent to @2xl/app-reader used in CSS)
     const isWideEnoughForSidebar = appWindow?.size?.width && appWindow?.size?.width >= 672 // 42rem = 672px
-    // `isNavVisible` is the user-facing "pinned" state for the LeftSidebar.
-    // Persisted to localStorage so the choice survives reloads. On first visit
-    // (or with no stored value) it falls back to the width-based default.
-    const [isNavVisible, setIsNavVisible] = useState<boolean>(() => {
-        if (defaultNavVisible !== undefined) return defaultNavVisible
-        const persisted = readPersistedPinned()
-        if (persisted !== null) return persisted
-        return !!isWideEnoughForSidebar
-    })
-    const [navUserToggled, setNavUserToggled] = useState(() => readPersistedPinned() !== null)
+    const [isNavVisible, setIsNavVisible] = useState<boolean>(defaultNavVisible ?? false)
+    const [navUserToggled, setNavUserToggled] = useState(false)
     // @6xl breakpoint is 72rem = 1152px
     const isLarge = appWindow?.size?.width && appWindow?.size?.width >= 1152
-    const [isTocVisible, setIsTocVisible] = useState(isLarge)
+    const [isTocVisible, setIsTocVisible] = useState(false)
     const [tocUserToggled, setTocUserToggled] = useState(false)
     const [fullWidthContent, setFullWidthContent] = useState(false)
-    const [backgroundImage, setBackgroundImage] = useState<string | null>(() => {
-        if (typeof window !== 'undefined') {
-            const savedBackground = localStorage.getItem('background-image')
-            return savedBackground
+    const [backgroundImage, setBackgroundImage] = useState<string | null>(null)
+
+    // Hydrate persisted state after mount
+    useEffect(() => {
+        const persisted = readPersistedPinned()
+        if (persisted !== null) {
+            setIsNavVisible(persisted)
+            setNavUserToggled(true)
+        } else if (isWideEnoughForSidebar) {
+            setIsNavVisible(true)
         }
-        return null
-    })
+        const savedBackground = localStorage.getItem('background-image')
+        if (savedBackground) setBackgroundImage(savedBackground)
+    }, [])
 
     const toggleNav = useCallback(() => {
         setNavUserToggled(true)
@@ -110,7 +109,7 @@ export function ReaderViewProvider({
 
         // Only update ToC visibility if user hasn't manually toggled it
         if (!tocUserToggled) {
-            setIsTocVisible(isLarge)
+            setIsTocVisible(!!isLarge)
         }
     }, [isLarge])
 
@@ -120,7 +119,7 @@ export function ReaderViewProvider({
 
         // Only update Nav visibility if user hasn't manually toggled it
         if (!navUserToggled) {
-            setIsNavVisible(isWideEnoughForSidebar)
+            setIsNavVisible(!!isWideEnoughForSidebar)
         }
     }, [isWideEnoughForSidebar, navUserToggled])
 

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import SEO from 'components/seo'
 import Editor from 'components/Editor'
 import { IconArrowUpRight, IconCheck, IconFlask, IconToggle, IconTrends, IconWarning } from '@posthog/icons'
@@ -607,9 +607,7 @@ function PostHogCodeLogomark({ className }) {
 // ─────────────────────────────────────────────
 
 function HeroSection() {
-    const [showDownload, setShowDownload] = useState(
-        () => typeof window !== 'undefined' && window.location.hash === '#download'
-    )
+    const [showDownload, setShowDownload] = useState(false)
     const [contentVisible, setContentVisible] = useState(true)
     const prefersReducedMotion = usePrefersReducedMotion()
     const allProducts = useProduct() as any[]
@@ -617,6 +615,10 @@ function HeroSection() {
     const { siteSettings } = useApp()
     const isDark = siteSettings.theme === 'dark'
     const screenshot = product?.screenshots?.home
+
+    useEffect(() => {
+        if (window.location.hash === '#download') setShowDownload(true)
+    }, [])
 
     const swapToDownload = () => {
         if (typeof window !== 'undefined') {

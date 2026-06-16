@@ -79,11 +79,12 @@ const Options = ({
     const { appWindow } = useWindow()
     const initialMaxWidth =
         typeof other.initialMaxWidth === 'number' ? other.initialMaxWidth : appWindow?.size?.width || 1000
-    const [preferredMaxWidth, setPreferredMaxWidth] = useState(
-        typeof window !== 'undefined'
-            ? Number(localStorage.getItem('preferredMaxWidth')) || initialMaxWidth
-            : initialMaxWidth
-    )
+    const [preferredMaxWidth, setPreferredMaxWidth] = useState(initialMaxWidth)
+
+    useEffect(() => {
+        const stored = Number(localStorage.getItem('preferredMaxWidth'))
+        if (stored) setPreferredMaxWidth(stored)
+    }, [])
 
     useEffect(() => {
         if (!fullWidthContent) {

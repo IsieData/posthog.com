@@ -243,7 +243,7 @@ export default function Desktop() {
         updateSiteSettings,
         initialHomepage,
     } = useApp()
-    const [iconPositions, setIconPositions] = useState<IconPositions>(generateInitialPositions())
+    const [iconPositions, setIconPositions] = useState<IconPositions>({})
     const { isInactive, dismiss } = useInactivityDetection({
         enabled: !siteSettings.screensaverDisabled,
     })

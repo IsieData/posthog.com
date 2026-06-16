@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useState, useEffect } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { Popover as RadixPopover } from 'radix-ui'
 import ScrollArea from 'components/RadixUI/ScrollArea'
 import { IconX } from '@posthog/icons'
@@ -45,7 +45,7 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
             }
         }, [websiteMode])
 
-        useLayoutEffect(() => {
+        useEffect(() => {
             if (scrollRef.current) {
                 const element = scrollRef.current
                 element.style.display = 'none'

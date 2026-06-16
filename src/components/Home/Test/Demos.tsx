@@ -892,18 +892,6 @@ export default function Home2() {
         setIsPlaying(true)
     }, [activePromptIndex])
 
-    // GraphQL query for MDX content
-    const {
-        mdx: { rawBody, mdxBody },
-    } = useStaticQuery(graphql`
-        query {
-            mdx(slug: { eq: "home" }) {
-                rawBody
-                mdxBody: body
-            }
-        }
-    `)
-
     // Derived state
     const currentPrompt = PROMPTS[activePromptIndex]
     const activeAccordion = currentPrompt.slide

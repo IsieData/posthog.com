@@ -986,12 +986,10 @@ export default function ProductComparisonTable({
         return null
     }
 
-    const { siteSettings } = useApp()
+    const { siteSettings, location: appLocation } = useApp()
     const isDark = siteSettings.theme === 'dark'
 
-    // Get current pathname - safely handle SSR
-    const currentPathname = typeof window !== 'undefined' ? window.location.pathname : ''
-
+    const currentPathname = appLocation?.pathname || ''
     // Build columns
     const columns = [
         { name: '', width: 'auto', align: 'left' as const },

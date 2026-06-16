@@ -1,5 +1,14 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import React, { createContext, useContext, useEffect, useMemo, useState, useCallback, useRef } from 'react'
+import React, {
+    createContext,
+    useContext,
+    useEffect,
+    useLayoutEffect,
+    useMemo,
+    useState,
+    useCallback,
+    useRef,
+} from 'react'
 import { AppWindow } from './Window'
 import { WindowSearchUI } from 'components/SearchUI'
 import { navigate } from 'gatsby'
@@ -1349,6 +1358,8 @@ export interface SiteSettings {
 
 const isLabel = (item: any) => !item?.url && item?.name
 
+const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect
+
 const getInitialSiteSettings = (isMobile: boolean, compact: boolean) => {
     const lastReset = typeof window !== 'undefined' ? localStorage.getItem('lastReset') : null
     const siteSettings = {
@@ -1379,27 +1390,46 @@ const getInitialSiteSettings = (isMobile: boolean, compact: boolean) => {
 
 export const Provider = ({ children, element, location }: AppProviderProps) => {
     const isSSR = typeof window === 'undefined'
-    const compact = typeof window !== 'undefined' && window !== window.parent
+    const [compact, setCompact] = useState(false)
     const constraintsRef = useRef<HTMLDivElement>(null)
     const taskbarRef = useRef<HTMLDivElement>(null)
-    const [isMobile, setIsMobile] = useState(!isSSR && window.innerWidth < 768)
-    const [siteSettings, setSiteSettings] = useState<SiteSettings>(getInitialSiteSettings(isMobile, compact))
+    const [isMobile, setIsMobile] = useState(false)
+    const [siteSettings, setSiteSettings] = useState<SiteSettings>({
+        experience: 'posthog',
+        colorMode: 'light',
+        theme: 'light',
+        skinMode: 'modern',
+        cursor: 'default',
+        wallpaper: 'keyboard-garden',
+        clickBehavior: 'double',
+        performanceBoost: false,
+        screensaverDisabled: true,
+        heaterMode: false,
+    })
     const websiteMode = siteSettings.experience === 'boring'
     const [taskbarHeight, setTaskbarHeight] = useState(59)
     const [lastClickedElementRect, setLastClickedElementRect] = useState<{ x: number; y: number } | null>(null)
     const [desktopCopied, setDesktopCopied] = useState(false)
     const [windowsInView, setWindowsInView] = useState<AppWindow[]>([])
-    const urlObj = isSSR ? null : new URL(location.href)
-    const queryString = isSSR ? '' : urlObj?.search.substring(1)
-    const parsed = isSSR ? {} : qs.parse(queryString)
-    const paramsWindows = parsed?.windows
     const stateWindows = element.props?.location?.state?.savedWindows
     const posthog = usePostHog()
     const initialHomepage = location.key === 'initial' && location.pathname === '/' && !isMobile
 
-    const [windows, setWindows] = useState<AppWindow[]>(
-        initialHomepage || !!paramsWindows ? [] : getInitialWindows(element)
-    )
+    const [windows, setWindows] = useState<AppWindow[]>(() => {
+        if (isSSR) {
+            if (location.pathname === '/') return []
+            return [createNewWindow(element, [], location, true, taskbarHeight)]
+        }
+        const compactInit = window !== window.parent
+        const isMobileInit = window.innerWidth < 768
+        const initialHomeInit = location.key === 'initial' && location.pathname === '/' && !isMobileInit
+        const urlObj = new URL(location.href)
+        const queryString = urlObj?.search.substring(1)
+        const parsed = qs.parse(queryString)
+        const paramsWindows = parsed?.windows
+        if (initialHomeInit || !!paramsWindows) return []
+        return getInitialWindows(element)
+    })
     const windowsRef = useRef(windows)
     useEffect(() => {
         windowsRef.current = windows
@@ -1419,6 +1449,17 @@ export const Provider = ({ children, element, location }: AppProviderProps) => {
     const [searchOpen, setSearchOpen] = useState<boolean>(false)
     const { addToast } = useToast()
 
+    // Hydrate client-only state before first paint to avoid layout flash
+    useIsomorphicLayoutEffect(() => {
+        const compactValue = window !== window.parent
+        const isMobileValue = window.innerWidth < 768
+        setCompact(compactValue)
+        setIsMobile(isMobileValue)
+        setSiteSettings(getInitialSiteSettings(isMobileValue, compactValue))
+        // Remove the critical CSS hook now that React owns the layout
+        delete document.documentElement.dataset.mobile
+    }, [])
+
     const destinationNav = useDataPipelinesNav({ type: 'destination' })
     const transformationNav = useDataPipelinesNav({ type: 'transformation' })
     const sourceWebhooksNav = useDataPipelinesNav({ type: 'source_webhook' })
@@ -1437,8 +1478,9 @@ export const Provider = ({ children, element, location }: AppProviderProps) => {
     )
 
     const desktopParams = useMemo(() => {
-        const innerWidth = isSSR ? 0 : window.innerWidth
-        const innerHeight = isSSR ? 0 : window.innerHeight
+        if (isSSR) return undefined
+        const innerWidth = window.innerWidth
+        const innerHeight = window.innerHeight
 
         const savedWindows = [...windows]
             .filter((win) => !win.minimized && win.path.startsWith('/'))
@@ -1459,7 +1501,7 @@ export const Provider = ({ children, element, location }: AppProviderProps) => {
         if (savedWindows.length === 0) return undefined
 
         // Preserve existing query parameters from the current URL
-        const currentParams = isSSR ? {} : qs.parse(location.search.substring(1))
+        const currentParams = qs.parse(location.search.substring(1))
         const allParams = {
             ...currentParams,
             windows: savedWindows,
@@ -1469,9 +1511,10 @@ export const Provider = ({ children, element, location }: AppProviderProps) => {
     }, [windows, taskbarHeight, location, isSSR])
 
     const shareableDesktopURL = useMemo(() => {
+        if (isSSR || !desktopParams) return ''
         const url = `${location.origin}${desktopParams}`
         return url
-    }, [location, desktopParams])
+    }, [location, desktopParams, isSSR])
 
     const injectDynamicChildren = useCallback((menu: Menu) => {
         return menu?.map((item) => {
@@ -2108,7 +2151,10 @@ export const Provider = ({ children, element, location }: AppProviderProps) => {
     }
 
     useEffect(() => {
-        if (initialHomepage || paramsWindows || location.state?.skipPageUpdate) {
+        const urlObj = new URL(location.href)
+        const queryString = urlObj?.search.substring(1)
+        const parsed = qs.parse(queryString)
+        if (initialHomepage || parsed?.windows || location.state?.skipPageUpdate) {
             return
         }
         updatePages(element)
@@ -2380,7 +2426,7 @@ export const Provider = ({ children, element, location }: AppProviderProps) => {
 
     useEffect(() => {
         const handleResize = () => {
-            setIsMobile(typeof window !== 'undefined' && window.innerWidth < 768)
+            setIsMobile(window.innerWidth < 768)
         }
 
         window.addEventListener('resize', handleResize)
@@ -2519,16 +2565,21 @@ export const Provider = ({ children, element, location }: AppProviderProps) => {
     useEffect(() => {
         if (isSSR) return
 
+        const urlObj = new URL(location.href)
+        const queryString = urlObj?.search.substring(1)
+        const parsed = qs.parse(queryString)
+        const paramsWindows = parsed?.windows
+
         if (paramsWindows) {
             const [initialWindow, ...rest] = convertWindowsToPixels(parsed.windows)
 
             // Preserve non-windows query parameters when navigating
             const nonWindowsParams = { ...parsed }
             delete nonWindowsParams.windows
-            const queryString =
+            const nonWindowsQueryString =
                 Object.keys(nonWindowsParams).length > 0 ? `?${qs.stringify(nonWindowsParams, { encode: false })}` : ''
 
-            navigate(`${initialWindow.path}${queryString}`, {
+            navigate(`${initialWindow.path}${nonWindowsQueryString}`, {
                 state: {
                     newWindow: true,
                     size: initialWindow.size,
@@ -2545,10 +2596,10 @@ export const Provider = ({ children, element, location }: AppProviderProps) => {
             // Preserve query parameters from current URL when navigating to next window
             const currentParams = qs.parse(location.search.substring(1))
             delete currentParams.windows
-            const queryString =
+            const currentQueryString =
                 Object.keys(currentParams).length > 0 ? `?${qs.stringify(currentParams, { encode: false })}` : ''
 
-            navigate(`${nextWindow.path}${queryString}`, {
+            navigate(`${nextWindow.path}${currentQueryString}`, {
                 state: {
                     newWindow: true,
                     size: nextWindow.size,
