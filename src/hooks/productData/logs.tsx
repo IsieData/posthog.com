@@ -19,14 +19,14 @@ export const logs = {
     },
     volume: 50,
     seo: {
-        title: 'Logs that sync with customer data',
+        title: 'Logs that already know your users',
         description:
-            'Logs tied to the user who hit them, linked to replays and errors – the context agents use to find a bug and ship the fix that makes your product self-driving.',
+            'Works with your existing OTel setup. Backend context, user data, and session replays in one place – the context agents use to find a bug and ship the fix.',
     },
     overview: {
-        title: 'Logs that sync with customer data',
+        title: 'Logs that already know your users',
         description:
-            'Full backend context, with events, requests, and state changes in one place – one of the apps that makes your product self-driving by giving agents the backend signal to find a bug and ship the fix, tied to the user who hit it.',
+            'Works with your existing OTel setup. Events, requests, state changes, and session replays in one place – one of the apps that makes your product self-driving by giving agents the backend signal to find a bug and ship the fix, tied to the user who hit it.',
         textColor: 'text-white',
         layout: 'overlay',
     },
@@ -69,7 +69,8 @@ export const logs = {
             title: 'Queryable logs',
             headline: 'Logs you can actually query',
             template: 'splitImage',
-            description: 'Filter, aggregate, and explore logs by attributes instead of scrolling text',
+            description:
+                'Filter, aggregate, and explore logs by attributes instead of scrolling text. No need to learn another query language',
             images: [
                 {
                     src: 'https://res.cloudinary.com/dmukukwp6/image/upload/logs_1_light_40dd0d8b26.png',
@@ -97,7 +98,7 @@ export const logs = {
             title: 'Built on OpenTelemetry',
             template: 'splitImage',
             headline: 'Built on OpenTelemetry',
-            description: 'Bring your existing logs without changing how you instrument',
+            description: 'Built on the standard your team has already invested in',
             images: [
                 {
                     src: 'https://res.cloudinary.com/dmukukwp6/image/upload/logs_2_light_160af6be32.png',
@@ -112,12 +113,12 @@ export const logs = {
                 },
                 {
                     title: 'No lock-in',
-                    description: 'Your logging setup stays portable and standards-based',
+                    description: 'No migration, no ripping out your existing setup. And no extra vendor to pay for.',
                 },
                 {
                     title: 'Logs where your context already is',
                     description:
-                        'Logs behave like your typical log tool. Having them right inside PostHog just adds the missing context',
+                        'Logs behave like your typical log tool. Having them right inside PostHog just adds the missing context and removes the separate bill.',
                 },
             ],
         },
