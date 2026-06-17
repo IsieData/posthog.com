@@ -18,7 +18,7 @@ export const experiments = {
     seo: {
         title: 'Experiments – Run A/B tests and validate ideas with PostHog',
         description:
-            'Experiments is the evaluation that proves a change worked – the A/B and multivariate tests agents use to validate impact and make your product self-driving.',
+            'Run A/B tests, multivariate tests, and other experiments to see if a change worked – the results agents use to validate impact and make your product self-driving.',
     },
     overview: {
         title: 'Test changes with statistical significance',
