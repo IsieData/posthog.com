@@ -107,6 +107,6 @@ PostHog Code works by taking signals from your product — including failed quer
 
 A unified warehouse gives your agent access to your PostHog events, revenue data, Postgres tables, and any other data source you have, so that it has the context to do things that weren't possible before. Not just "this funnel dropped", but "this funnel dropped, here's the revenue impact, here are the cohorts affected, here's what those users have in common, here's an action plan and a PR already open to fix the issue." That's the signal quality that makes agentic workflows useful.
 
-We're taking registrations for the managed warehouse beta now. If you want in, sign up below.
+Try it for yourself — join the waitlist to get notified when we release the Managed Warehouse beta.
 
-<ArrayCTA />
+<DuckDBWaitlistSurvey />
