@@ -318,10 +318,10 @@ export default function ProductsTest(): JSX.Element {
                             Everything you need to make your product self-driving
                         </h1>
                         <p className="text-lg leading-relaxed">
-                            The apps are the capabilities – analytics, replay, flags, experiments, and more – that give
-                            agents the context to see what works and act on it. The products are the surfaces you adopt
-                            to reach them: Slack, PostHog Code, the MCP, and the web app. Together they make your
-                            product self-driving.
+                           Two layers make this work. The capabilities – analytics, replay, flags, logs,  experiments, and more –
+                           give agents the context to see what's working and act on it. The surfaces – Slack, PostHog Code,
+                           the MCP, and the web app – are how you reach those agents. 
+                           Together, they make your product self-driving.
                         </p>
 
                         <GetStarted />
