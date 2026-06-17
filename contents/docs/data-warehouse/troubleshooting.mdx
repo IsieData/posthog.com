@@ -117,6 +117,15 @@ To fix this:
 1. Reconnect the Meta Ads integration for the source.
 2. Re-enable the source in PostHog.
 
+## Why is my Postgres sync failing with "exceeded the compute time quota"?
+
+If your Postgres sync fails with a message like "Your database provider has suspended the database because the account or project exceeded its compute-time quota," it means a serverless Postgres provider (like Neon) suspended your project's compute after the account used up its plan's compute-time quota, so PostHog can't connect until the database is available again. This is a non-retryable error – PostHog stops the sync instead of retrying indefinitely, since the compute stays suspended until you upgrade your plan or the quota resets.
+
+To fix this:
+
+1. Upgrade your database provider's plan, or wait for the compute-time quota to reset at the next billing period.
+2. Re-enable the source in PostHog.
+
 ## How do I speed up my SQL queries?
 
 1. Reduce the date range you're querying.
