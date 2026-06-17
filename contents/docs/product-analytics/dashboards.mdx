@@ -62,6 +62,16 @@ You can organize dashboards into folders for easier navigation. There are two wa
 
 > **Note:** Moving a dashboard to a folder requires editor access.
 
+## Sharing a template across your organization
+
+By default, a dashboard template is scoped to a single project – its **Type** shows as **Team** in the **Templates** tab. To share it with every team and environment in your organization, change its scope to **Organization**.
+
+Any user with dashboard edit access can do this – you don't need a PostHog staff member to promote it. In the **Templates** tab, open the **...** menu on a team template and select **Make visible to whole organization**. The template's **Type** changes to **Organization**, and it becomes available to every project in your organization (tagged **Organization** in the new-dashboard chooser). To reverse this, select **Make visible to this team only** to scope it back to **Team**.
+
+Unlike copying a template between projects, an organization template stays a single shared template rather than splitting into independent copies that drift apart over time.
+
+> **Note:** If a template references project-specific items – like actions, cohorts, or data warehouse tables – those references may not resolve in other projects, so the affected insights can show errors. Events and properties are matched by name and work everywhere. PostHog warns you about any non-portable references before you share.
+
 ## Copying dashboards and templates between projects
 
 You can copy dashboards and project-scoped dashboard templates from one project to another within the same organization. This is useful when you want to reuse work you've built without recreating it from scratch.
