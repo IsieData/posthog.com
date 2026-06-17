@@ -82,6 +82,16 @@ Once the first incremental sync completes, the primary key columns are locked an
 
 PostHog displays a warning if your selected primary key columns are nullable, since null values can cause deduplication issues.
 
+#### Lookback window
+
+Incremental syncs only re-read rows whose incremental field is greater than the last synced value (the watermark). Rows that land at or below the watermark on a later sync are never picked up. This can happen with backdated edits, clock skew, late-committing transactions, or bulk updates that stamp many rows with the same timestamp, and it causes your incremental table to drift from the source over time.
+
+To catch these rows, set an optional lookback window. On each sync, PostHog re-reads rows from the lookback window before the last synced value, so it re-checks a rolling overlap window every run. Because incremental syncs merge on the primary key, re-reading rows is idempotent and doesn't create duplicates. PostHog doesn't change the stored sync position, so you can adjust or remove the window at any time without resyncing.
+
+The lookback window is only available for incremental syncs on a timestamp or date incremental field. It isn't available for append only syncs, which don't merge rows. For a date field, a lookback shorter than a day has no effect, since date fields only count whole days.
+
+You can set the lookback window when choosing the sync method during source setup, or later from the schema's configuration.
+
 ### Append only
 
 Append only does what it says on the tin: append rows to your table.
