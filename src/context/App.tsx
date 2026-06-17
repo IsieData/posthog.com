@@ -2093,6 +2093,7 @@ export const Provider = ({ children, element, location }: AppProviderProps) => {
 
     useEffect(() => {
         const handleClick = (e: MouseEvent) => {
+            if (!(e.target instanceof Element)) return
             const target = e.target as HTMLElement
             const link = target.closest('a')
             const button = target.closest('button')
@@ -2112,6 +2113,7 @@ export const Provider = ({ children, element, location }: AppProviderProps) => {
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
+            if (!(e.target instanceof Element)) return
             const target = e.target as HTMLElement
 
             if (
