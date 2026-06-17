@@ -16,7 +16,7 @@ Products we know will work well if we ship them:
   - Think error tracking or feature flags. The [persona doesn't change](/handbook/who-we-build-for#our-current-persona) as the company gets bigger.
   - Especially true if it works for a 2 person startup, because that means we get in first
 - Products that are in extremely fast growing markets
-  - Think LLM Analytics, MCP 
+  - Think AI Observability, MCP 
 - Products that are very easy to integrate for our existing customers. 
   - For example, users can enable the product in PostHog without needing to make a code change, or products that built on top of data that people are already collecting in PostHog
 - Products that _you_ are excited to build. 
@@ -47,7 +47,6 @@ From our [roadmap](/roadmap), here's what we're currently working on:
 - Logs - `#project-logs`
 - Product autonomy - `#team-array`
 - Customer Analytics `#team-web-analytics`
-  - Revenue analytics now included in customer analytics
 - Workflows `#team-workflows`
 
 And these are the products we think we'll focus on next:
