@@ -16,7 +16,7 @@ export const experiments = {
     category: 'product_engineering',
     wizardSupport: 'In development',
     seo: {
-        title: 'Experiments – Run A/B tests and validate ideas with PostHog',
+        title: 'Experiments – Run tests and validate ideas with PostHog',
         description:
             'Run A/B tests, multivariate tests, and other experiments to see if a change worked – the results agents use to validate impact and make your product self-driving.',
     },

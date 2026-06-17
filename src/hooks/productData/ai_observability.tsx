@@ -65,7 +65,7 @@ export const aiObservability = {
     seo: {
         title: 'AI Observability – Observe and optimize AI products in PostHog',
         description:
-            'Observability for your AI features: traces, costs, latency, and errors. The context agents use to fix LLM behavior and make your product self-driving.',
+            'Track traces, costs, latency, and errors across your AI features, giving agents the context to fix LLM behavior and make your product self-driving.',
     },
     overview: {
         title: 'Observe and debug AI in production',

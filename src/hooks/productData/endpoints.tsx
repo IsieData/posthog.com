@@ -37,7 +37,7 @@ export const endpoints = {
     seo: {
         title: 'Endpoints – Custom API endpoints powered by your PostHog data',
         description:
-            'Custom API endpoints powered by your PostHog data – the context your agents and apps act on to build embedded analytics, data feeds, and self-driving products.',
+            'Custom API endpoints powered by your PostHog data – the context agents need to build embedded analytics, data feeds, and make your product self-driving.',
     },
     overview: {
         title: 'Custom API endpoints powered by your PostHog data',
