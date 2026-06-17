@@ -108,6 +108,15 @@ To fix this:
 2. Correct any invalid or missing values.
 3. Re-enable the source in PostHog.
 
+## Why is my Meta Ads sync failing with "The Meta Ads integration for this source no longer exists"?
+
+If your Meta Ads sync fails with a message like "The Meta Ads integration for this source no longer exists. Please reconnect the Meta Ads integration," it means the source still points at a Meta Ads integration that's been deleted or de-authorized, so PostHog can no longer find it. This is a non-retryable error – PostHog stops the sync instead of retrying indefinitely, since retrying can't bring the integration back.
+
+To fix this:
+
+1. Reconnect the Meta Ads integration for the source.
+2. Re-enable the source in PostHog.
+
 ## How do I speed up my SQL queries?
 
 1. Reduce the date range you're querying.
