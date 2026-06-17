@@ -194,6 +194,10 @@ export const dataPipelines = {
                     },
                 },
                 {
+                    name: 'Microsoft ads',
+                    url: '/docs/cdp/destinations/microsoft-ads',
+                },
+                {
                     name: 'Microsoft teams',
                     url: '/docs/cdp/destinations/microsoft-teams',
                 },
