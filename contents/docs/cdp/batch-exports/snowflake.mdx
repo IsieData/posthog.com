@@ -193,6 +193,14 @@ Once the cause has been identified and the configuration amended, a warehouse ca
 
 See Snowflake's documentation on [managing warehouses](https://docs.snowflake.com/en/user-guide/warehouses-tasks) and [the cost management auto-suspend feature](https://docs.snowflake.com/en/user-guide/cost-controlling#label-cost-control-auto-suspend) for more details.
 
+### Export fails with an "incompatible types" schema error
+
+This error occurs when a Snowflake table already exists but one or more of its columns use types PostHog doesn't support. You'll see a message like:
+
+> A Snowflake table 'TABLE_NAME' was found, but one or more fields are defined with incompatible types: '...'. Have you created the table following the PostHog documentation?
+
+This error is non-retryable, so PostHog won't keep retrying the run. To fix it, compare your table's column types against the [expected schema for your model](#models). Then either alter the offending columns to use the supported types, or delete the table and let PostHog recreate it on the next run.
+
 ## Examples
 
 These examples illustrate how to use the data from batch exports in Snowflake.
