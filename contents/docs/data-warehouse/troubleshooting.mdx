@@ -98,6 +98,18 @@ To fix this:
 3. If the object still exists, re-grant your Snowflake role access to it.
 4. Re-enable the source in PostHog.
 
+## Why is my Snowflake sync failing with an "invalid identifier" or invalid view error?
+
+If your Snowflake sync fails with a message like "A Snowflake table or view you're syncing references a column that no longer exists" or "A Snowflake view in your source is invalid — the columns it declares no longer match the columns its query returns," it means a Snowflake object the source reads from won't compile. Either a table or view references a column that was dropped or renamed (an `invalid identifier` error), or a view's declared column list no longer matches the columns its query returns. This is a non-retryable error – PostHog stops the sync instead of retrying indefinitely, since retrying can't compile a broken object until you repair it in Snowflake.
+
+This is different from the "does not exist or not authorized" error above, where the object was dropped or its access revoked – here the object still exists, but its definition is broken.
+
+To fix this:
+
+1. In Snowflake, find the table or view this source reads from and check its definition.
+2. Repair the broken object – update or remove the column the `invalid identifier` error names, or recreate the view so its declared columns match the columns its query returns.
+3. Re-enable the source in PostHog.
+
 ## Why is my sync failing with "SSH tunnel credentials are not valid"?
 
 If a source that connects through an SSH tunnel (Postgres, Redshift, MySQL, MSSQL, or ClickHouse) fails with a message like "Your SSH tunnel credentials are not valid," it means PostHog couldn't validate the SSH authentication details for your source – usually a private key that can't be parsed, or password authentication missing a username or password. This is a non-retryable error – PostHog stops the sync instead of retrying indefinitely, since retrying would replay the same invalid credentials.
