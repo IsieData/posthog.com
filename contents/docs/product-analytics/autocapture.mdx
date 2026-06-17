@@ -108,7 +108,7 @@ posthog.init('<ph_project_token>', {
         // Element filtering
         element_allowlist: ['a', 'button', 'form', 'input', 'select', 'textarea', 'label'],
         css_selector_allowlist: ['[ph-capture]', '[data-track]'],
-        css_selector_ignorelist: ['.ph-no-autocapture', '[data-ph-no-autocapture]'],
+        css_selector_ignorelist: ['.ph-no-autocapture', '[data-ph-no-autocapture]', '[data-sensitive]'],
 
         // Attribute filtering
         element_attribute_ignorelist: ['aria-label', 'data-attr-pii', 'data-sensitive'],
