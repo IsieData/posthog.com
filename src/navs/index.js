@@ -2584,6 +2584,10 @@ export const docsMenu = {
                             url: '/docs/api/personal-api-keys',
                         },
                         {
+                            name: 'Project secret API keys',
+                            url: '/docs/api/project-secret-api-keys',
+                        },
+                        {
                             name: 'OAuth integration',
                             url: '/docs/api/oauth',
                         },
@@ -4139,7 +4143,8 @@ export const docsMenu = {
             url: '/docs/replay-vision',
             color: 'yellow',
             icon: 'IconEye',
-            description: 'Use AI to automatically watch your session recordings and turn what it sees into queryable data',
+            description:
+                'Use AI to automatically watch your session recordings and turn what it sees into queryable data',
             children: [
                 {
                     name: 'Replay Vision',
