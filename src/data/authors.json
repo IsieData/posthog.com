@@ -479,14 +479,6 @@
         "profile_id": 35043
     },
     {
-        "handle": "natalia-amorim",
-        "name": "Natalia Amorim",
-        "role": "Content Marketing Manager",
-        "link_type": "linkedin",
-        "link_url": "https://www.linkedin.com/in/nataliahelenaamorim/",
-        "profile_id": 35321
-    },
-    {
         "handle": "posthog-team",
         "name": "PostHog Team",
         "role": "Equip every developer to build successful products",
@@ -658,5 +650,13 @@
         "role": "Freelance Technical Writer",
         "link_url": "https://www.linkedin.com/in/rishi-raj-jain/",
         "profile_id": 45748
+    },
+    {
+        "handle": "eric-duong",
+        "name": "Eric Duong",
+        "role": "Software Engineer",
+        "link_type": "linkedin",
+        "link_url": "https://www.linkedin.com/in/eric-duong-074420154/",
+        "profile_id": 30209
     }
 ]
