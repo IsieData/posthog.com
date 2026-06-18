@@ -2905,6 +2905,10 @@ export const docsMenu = {
                             ],
                         },
                         {
+                            name: 'Skills store',
+                            url: '/docs/ai-engineering/skills-store',
+                        },
+                        {
                             name: 'AI Observability ↗',
                             url: 'https://posthog.com/docs/ai-observability',
                         },
@@ -5964,10 +5968,6 @@ export const docsMenu = {
                             url: '/docs/prompt-management',
                         },
                         {
-                            name: 'Skills store',
-                            url: '/docs/prompt-management/skills-store',
-                        },
-                        {
                             name: 'A/B testing prompts',
                             url: '/docs/prompt-management/prompt-experiments',
                         },
@@ -6908,6 +6908,12 @@ export const docsMenu = {
                 },
                 {
                     name: 'Resources',
+                },
+                {
+                    name: 'Email engagement events',
+                    url: '/docs/workflows/engagement-events',
+                    icon: 'IconGraph',
+                    color: 'yellow',
                 },
                 {
                     name: 'Troubleshooting',

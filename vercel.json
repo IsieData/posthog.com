@@ -58,6 +58,7 @@
     "redirects": [
         { "source": "/docs/sdk-doctor", "destination": "/docs/sdk-health", "statusCode": 301 },
         { "source": "/docs/sdk-doctor/:path*", "destination": "/docs/sdk-health/:path*", "statusCode": 301 },
+        { "source": "/docs/prompt-management/skills-store", "destination": "/docs/ai-engineering/skills-store", "statusCode": 301 },
         { "source": "/docs/site-apps", "destination": "/docs/js-snippets" },
         { "source": "/docs/site-apps/:path*", "destination": "/docs/js-snippets/:path*" },
         { "source": "/code/download", "destination": "/code#download" },
@@ -1882,7 +1883,7 @@
         },
         {
             "source": "/docs/llm-analytics/skills-store",
-            "destination": "/docs/prompt-management/skills-store"
+            "destination": "/docs/ai-engineering/skills-store"
         },
         {
             "source": "/docs/llm-analytics/:path*",
