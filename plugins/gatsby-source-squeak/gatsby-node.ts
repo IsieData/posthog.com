@@ -49,7 +49,10 @@ export const sourceNodes: GatsbyNode['sourceNodes'] = async (
                 id: createNodeId(`squeak-profile-${profile.id}`),
                 squeakId: profile.id,
                 internal: {
-                    contentDigest: createContentDigest(profileData),
+                    // Digest the full attributes (including avatar) so an avatar-only
+                    // update to an existing profile invalidates the cached node and the
+                    // new avatar gets picked up on the next build.
+                    contentDigest: createContentDigest(profile.attributes),
                     type: `SqueakProfile`,
                 },
                 avatar: avatar.data?.attributes,
