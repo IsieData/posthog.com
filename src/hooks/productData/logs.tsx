@@ -19,7 +19,7 @@ export const logs = {
     },
     volume: 50,
     seo: {
-        title: 'Logs that already know your users',
+        title: 'Logs – Centralized log management with PostHog',
         description:
             'Works with your existing OTel setup. Backend context, user data, and session replays in one place – the context agents use to find a bug and ship the fix.',
     },
