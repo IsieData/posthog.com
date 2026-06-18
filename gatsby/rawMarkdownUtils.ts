@@ -624,7 +624,7 @@ export const generateLlmsTxt = (pages) => {
     // Build llms.txt content
     let llmsTxtContent = `# PostHog
 
-> PostHog is the platform for self-driving products. It pairs the full context of your product's data (events, errors, logs, replays, and more) with agents that find problems and opportunities and ship the fix. It includes apps for product analytics, session replay, feature flags, A/B testing, error tracking, surveys, AI observability, web analytics, a data warehouse, and more. The fastest way to integrate PostHog is with the setup wizard: \`npx @posthog/wizard@latest\`
+> PostHog is the platform for self-driving products. It pairs the full context of your product's data (events, errors, logs, replays, and more) with agents that find problems and ship changes with you. It includes apps for product analytics, session replay, feature flags, A/B testing, error tracking, surveys, AI observability, web analytics, a data warehouse, and more. The fastest way to integrate PostHog is with the setup wizard: \`npx @posthog/wizard@latest\`
 
 PostHog can be added to any web, mobile, or backend application. All docs pages below are available as raw Markdown by appending \`.md\` to any URL.
 
