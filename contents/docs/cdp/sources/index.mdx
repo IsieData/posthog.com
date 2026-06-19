@@ -96,6 +96,18 @@ As with incremental syncing, selecting a nullable field as the cursor skips any 
 
 This reloads the whole table on every sync. This is great for tables with common data deletions or ones without an incrementing field (such as a `updated_at` timestamp).
 
+### xmin (Postgres only)
+
+xmin sync uses PostgreSQL's hidden `xmin` system column as an incremental cursor. Use it when your table has no reliable `updated_at` or incremental field and you want incremental syncing without setting up CDC.
+
+Requirements:
+
+- PostgreSQL 13 or newer
+- Table must have a primary key
+- Only regular tables and materialized views (not views, foreign tables, or partitioned parents)
+
+xmin does not capture deletes. If you need delete tracking, use CDC instead. See the [Postgres source documentation](/docs/cdp/sources/postgres#sync-methods) for more details.
+
 ## Syncing
 
 Once you add a source, you can see its status, sync frequency, and last successful run in the [sources page](https://app.posthog.com/data-management/sources). You can also reload or delete sources here.
@@ -119,7 +131,7 @@ The schemas table supports filtering and sorting to help you find specific schem
 You can filter schemas by:
 
 - **Status** - Running, Completed, Error, etc.
-- **Sync method** - Incremental, Full table, CDC, or schemas not yet set up
+- **Sync method** - Incremental, Full table, xmin (Postgres only), CDC, or schemas not yet set up
 - **Frequency** - Filter by a specific sync interval
 
 You can also use the name search and the **Show enabled only** toggle to narrow results further.
