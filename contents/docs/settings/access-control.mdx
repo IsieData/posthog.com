@@ -84,6 +84,8 @@ See the table below for a summary of project-level permissions:
 | Manage project access controls                                                 | <span className="text-red text-lg">✖</span>   | <span className="text-green text-lg">✔</span> |
 | Delete project                                                                 | <span className="text-red text-lg">✖</span>   | <span className="text-green text-lg">✔</span> |
 | Edit project settings                                                          | <span className="text-red text-lg">✖</span>   | <span className="text-green text-lg">✔</span> |
+| Connect integrations                                                           | <span className="text-red text-lg">✖</span>   | <span className="text-green text-lg">✔</span> |
+| Request integration access                                                     | <span className="text-green text-lg">✔</span> | <span className="text-red text-lg">✖</span>   |
 | View/edit own or permitted resources (based on resource-level access controls) | <span className="text-green text-lg">✔</span> | <span className="text-green text-lg">✔</span> |
 
 ### 3. Resource level
@@ -254,6 +256,20 @@ Here are some practical examples of how to configure access controls for differe
 7. Any member with the vendor role will not be able to access the PII property
 
 To restrict additional properties, repeat steps 2–6 for each one.
+
+#### Non-admin requesting integration access
+
+**Scenario**: A team member without project admin permissions wants to connect an integration like Slack, GitHub, GitLab, Linear, or Jira.
+
+**What happens**:
+
+Connecting integrations requires project admin access. When a non-admin visits an integration's connection page, they see a **Request Access** form instead of the connect button. They can submit a short note explaining why the integration is needed.
+
+After submitting:
+
+1. PostHog emails all project admins with the requester's name, the integration requested, their reason, and a direct link to the integration's connect page
+2. Any admin can then visit the link and connect the integration on behalf of the team
+3. The request system deduplicates per requester and integration, so repeated submissions don't spam admins
 
 ## Feature availability
 
