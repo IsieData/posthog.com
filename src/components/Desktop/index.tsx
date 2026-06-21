@@ -637,11 +637,13 @@ export default function Desktop() {
                     {/* Keyboard garden */}
                     <div className="hidden select-none wallpaper-keyboard-garden:block">
                         <div className="absolute inset-0 opacity-100 bg-gradient-to-b from-[#FDEECD] to-[#FFFEF4]" />
+
+                        {/* Mobile background (light) */}
                         <div
-                            className="absolute inset-0 opacity-100"
+                            className="absolute inset-0 opacity-100 sm:hidden dark:hidden"
                             style={{
                                 backgroundImage:
-                                    "url('https://res.cloudinary.com/dmukukwp6/image/upload/q_auto,f_auto/grass_9000_033cf4e104.jpg')",
+                                    "url('https://res.cloudinary.com/dmukukwp6/image/upload/9000_mobile_bg_light_95ed14e5a3.jpg')",
                                 // backgroundImage:
                                 //    "url('https://res.cloudinary.com/dmukukwp6/image/upload/grass_2x_3dc2ffb4bc.jpg')",
                                 backgroundSize: 'cover',
@@ -649,7 +651,49 @@ export default function Desktop() {
                                 backgroundPosition: 'right bottom',
                             }}
                         />
-                        <div className="absolute website:bottom-4 website:-right-4 website:@[2600px]:right-4 os:bottom-4 os:md:bottom-0 os:-right-4 os:xs:right-8 os:md:right-0">
+
+                        {/* Mobile background (dark) */}
+                        <div
+                            className="absolute inset-0 opacity-100 hidden dark:block sm:hidden"
+                            style={{
+                                backgroundImage:
+                                    "url('https://res.cloudinary.com/dmukukwp6/image/upload/9000_mobile_bg_dark_8a84515f2d.jpg')",
+                                // backgroundImage:
+                                //    "url('https://res.cloudinary.com/dmukukwp6/image/upload/grass_2x_3dc2ffb4bc.jpg')",
+                                backgroundSize: 'cover',
+                                backgroundRepeat: 'no-repeat',
+                                backgroundPosition: 'right bottom',
+                            }}
+                        />
+
+                        {/* Desktop background (light) */}
+                        <div
+                            className="absolute inset-0 opacity-100 hidden sm:block dark:hidden"
+                            style={{
+                                backgroundImage:
+                                    "url('https://res.cloudinary.com/dmukukwp6/image/upload/9000_bg_light_8709997b6e.jpg')",
+                                // backgroundImage:
+                                //    "url('https://res.cloudinary.com/dmukukwp6/image/upload/grass_2x_3dc2ffb4bc.jpg')",
+                                backgroundSize: 'cover',
+                                backgroundRepeat: 'no-repeat',
+                                backgroundPosition: 'right bottom',
+                            }}
+                        />
+
+                        {/* Desktop background (dark) */}
+                        <div
+                            className="absolute inset-0 opacity-100 hidden sm:dark:block"
+                            style={{
+                                backgroundImage:
+                                    "url('https://res.cloudinary.com/dmukukwp6/image/upload/9000_bg_dark_7bf63b522d.jpg')",
+                                // backgroundImage:
+                                //    "url('https://res.cloudinary.com/dmukukwp6/image/upload/grass_2x_3dc2ffb4bc.jpg')",
+                                backgroundSize: 'cover',
+                                backgroundRepeat: 'no-repeat',
+                                backgroundPosition: 'right bottom',
+                            }}
+                        />
+                        <div className="absolute website:bottom-4 website:-right-4 website:@[2600px]:right-4 os:bottom-24 os:md:bottom-0 os:-right-4 os:xs:right-8 os:md:right-0">
                             {/* <CloudinaryImage
                                 loading="lazy"
                                 src="https://res.cloudinary.com/dmukukwp6/image/upload/hedges_ec3edc2a40.png"
@@ -666,24 +710,22 @@ export default function Desktop() {
                                 }
                                 draggable={false}
                             /> */}
+                            {/* Hedge scene (light) */}
                             <CloudinaryImage
                                 loading="lazy"
-                                src="https://res.cloudinary.com/dmukukwp6/image/upload/keyboard_garden_dark_opt_15e213413c.png"
-                                width={1401}
-                                height={1400}
-                                className="hidden dark:os:block size-[300px] md:size-[700px]"
+                                src="https://res.cloudinary.com/dmukukwp6/image/upload/9000_hedge_light_42c729131e.png"
+                                width={1555}
+                                height={1262}
+                                className="dark:hidden w-full max-w-full md:w-[777px]"
                                 draggable={false}
                             />
+                            {/* Hedge scene (dark) */}
                             <CloudinaryImage
                                 loading="lazy"
-                                src="https://res.cloudinary.com/dmukukwp6/image/upload/keyboard_garden_dark_opt_15e213413c.png"
-                                width={1401}
-                                height={1400}
-                                className="hidden dark:website:block"
-                                style={{
-                                    width: 'clamp(8rem, calc(4rem + (100vw - 80rem) * 0.45), 42rem)',
-                                    height: 'clamp(8rem, calc(4rem + (100vw - 80rem) * 0.45), 42rem)',
-                                }}
+                                src="https://res.cloudinary.com/dmukukwp6/image/upload/9000_hedge_dark_150c57af7f.png"
+                                width={1555}
+                                height={1262}
+                                className="hidden dark:block w-full max-w-full md:w-[777px]"
                                 draggable={false}
                             />
                         </div>
