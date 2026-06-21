@@ -23,10 +23,11 @@ import { HOME_SILHOUETTE, DEMO_SILHOUETTE, DEMO_THUMBNAIL } from 'components/OSI
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `path` | `string` | **required** | Glyph fill `d`, authored in Figma's ~37-unit frame (or a frame matching `viewBox`) |
-| `viewBox` | `string` | `"0 0 36.9853 37.7206"` | SVG viewBox — Figma's ~37-unit glyph frame. Pass a matching one for glyphs in another frame (e.g. the demo's `"0 0 58 59"`) |
+| `path` | `string` | **required** | Glyph fill `d`, authored in the 36-unit design canvas (or a frame matching `viewBox`) |
+| `viewBox` | `string` | `"0 0 36 36"` | SVG viewBox — the 36×36 design canvas. Pass a matching one for glyphs exported in another frame (e.g. self-driving's `"0 0 33 31"`) |
+| `fillRule` | `'nonzero' \| 'evenodd'` | `'nonzero'` | Use `evenodd` for glyphs with cut-out holes (e.g. the skills slash) |
 | `image` | `string` | — | Externally-hosted image rendered inside the silhouette (clipped to it) |
-| `fillOpacity` | `number` | `0.4` | Glass frost opacity; lower it when an `image` should show through |
+| `fillOpacity` | `number` | `0.5` | Glass frost opacity; lower it when an `image` should show through |
 | `blur` | `number` | `1.3` | Backdrop blur radius in px (≈ the export's blur at 36px) |
 | `glowColor` | `string` | `#53FFCB` | Hover glow color |
 | `className` | `string` | — | Additional classes on the wrapper (size is `size-9` / 36px by default) |
@@ -34,21 +35,26 @@ import { HOME_SILHOUETTE, DEMO_SILHOUETTE, DEMO_THUMBNAIL } from 'components/OSI
 
 ### How it works
 
-- **Backdrop blur (frost)**: a plain HTML `<div>` with `backdrop-filter`, clipped to the silhouette via an `objectBoundingBox` clipPath (so it scales with the icon). It must be an HTML element, **not** an SVG `<foreignObject>` — browsers refuse to render `backdrop-filter` inside `foreignObject`, which silently drops the frost and leaves a flat shape. The SVG uses `preserveAspectRatio="none"` so it stretches to the box exactly like this clip and stays aligned.
-- **Frame-proportional stroke + shadow**: the stroke width and shadow offset/blur are derived from the viewBox size (`0.0348 × vbW` etc.), matching the export's proportions (a ~37-unit frame → stroke 0.64 / shadow `dy` 1.29 / blurs 1.29 & 0.64). This is what makes it look right at the small 36px render — oversized shadows are what previously muddied the interior into a fake "inner shadow".
-- **Two layered copies of the same glyph `path`**:
-  - _Layer A_ — the glass fill (`white` at `fillOpacity`) + a thin dark hairline (`#415B66` @ 0.15) aligned just _outside_ the edge, **with the drop shadow** (the icon's outer lift).
-  - _Layer B_ — a thin white highlight aligned just _inside_ the edge, **no shadow**. The export gives this layer a shadow too, but it falls just inside the edge and reads as an unwanted inner shadow at this size, so we drop it.
-  - Together the strokes form the glass bevel (dark outside / white inside, adjacent).
-- **Stroke alignment via masks**: each stroke is drawn at double width and a `<mask>` keeps one half — `outsideMask` (white outside the glyph) for the dark hairline, `insideMask` (white inside) for the white highlight. This is the same result the export bakes into offset paths; the shared path + `fill-rule="nonzero"` keeps interior holes (e.g. the clapperboard strips) correct.
-- **Drop shadows**: each layer gets a brand-blue glow (`#0290C5` @ 0.4) and a black ambient shadow (@ 0.25). The filter reproduces the export's `feComposite operator="out"` **knockout**, which removes each shadow from behind the shape — without it the shadow bleeds through the 40% fill and darkens the frosted interior (it won't match Figma's lighter glass).
+- **Backdrop blur (frost)**: a plain HTML `<div>` with `backdrop-filter`, clipped to the silhouette via an `objectBoundingBox` clipPath (so it scales with the icon). It must be an HTML element, **not** an SVG `<foreignObject>` — browsers refuse to render `backdrop-filter` inside `foreignObject`, which silently drops the frost and leaves a flat shape. The SVG uses the default `preserveAspectRatio` (`xMidYMid meet`) so non-square glyphs aren't distorted; the frost clip uses the **same** aspect-preserving mapping (`scale 1/max(vbW,vbH)`, centered) so the two stay aligned.
+- **Constant stroke + shadow**: stroke width and shadow offset/blur are fixed values in the 36-unit canvas (the export uses stroke `0.5`, shadow `dy 1`, blurs `1` & `0.5`). Author every glyph at that scale — glyphs exported cropped to a smaller frame just need their own `viewBox`, and `meet` scales them to fit.
+- **Two layered copies of the same glyph `path`** (single-segment glyphs):
+  - _Layer A_ — the glass fill (`white` at `fillOpacity`) + a thin soft white edge (`white` @ 0.55) aligned just _outside_ the shape, **with the drop shadow** (the icon's outer lift).
+  - _Layer B_ — a thin bright white highlight (`white`) aligned just _inside_ the edge, **no shadow**. The export gives this layer a shadow too, but it falls just inside the edge and reads as an unwanted inner shadow at this size, so we drop it.
+  - Together the strokes form the glass bevel (soft white outside / bright white inside, adjacent).
+- **Stroke alignment via masks**: each stroke is drawn at double width and a per-segment `<mask>` keeps one half — `mo${i}` (white outside segment _i_) for the soft outer edge, `mi${i}` (white inside) for the bright highlight. This is the same result the export bakes into offset paths; the shared path + `fillRule` keeps cut-out holes (e.g. the skills slash) correct.
+- **Multi-segment glyphs (`path` as an array)**: glyphs made of several overlapping segments (e.g. the PostHog hedgehog's spines + head) are **flattened into one shape** — a single union fill (grouped under one opacity so overlaps don't double-up) and a single drop shadow around the whole outer silhouette. The segments are kept distinguishable by their **per-segment bevel strokes** (the outside/inside masked highlights), so spines read as separate slabs separated by crisp light bevels — _not_ by per-segment shadows. Giving each segment its own drop shadow looks wrong: the shadows stack into heavy dark grooves between spines and the glyph reads as separate layered pieces instead of one flat shape. Author the array in paint order (first = back); give any segment with a cut-out (the hedgehog eye) `fillRule: 'evenodd'`.
+- **Drop shadows**: a dark-green (`#033003`) glow @ 1 plus a `#033003` ambient @ 0.25. The filter reproduces the export's `feComposite operator="out"` **knockout**, which removes each shadow from behind the shape — without it the shadow bleeds through the translucent fill and darkens the frosted interior (it won't match Figma's lighter glass).
 - **Hover**: a subtle zoom pop (`group-hover:scale-[1.03]`) plus a soft glow that fades in slowly behind the shape. Driven by the `group` class on the parent `AppLink`, so hovering the icon + label triggers it. Click has no scale (kept snappy).
 
 Filter/clip IDs are scoped with `useId()`, so many icons can render on the same screen without colliding.
 
 ### Silhouette paths
 
-Paths live in `glyphs.ts`. Newer glyphs are authored in Figma's ~37-unit frame (the default `viewBox`); just copy the **fill** `d` from the export — `GlassIcon` derives the strokes and shadows itself. A glyph in a different frame (e.g. the demo clapperboard's 58-unit one) also exports a `viewBox` constant to pass alongside it. `PLACEHOLDER_SILHOUETTE` is a neutral rounded-square tile used as a stand-in until a real path is added.
+Paths live in `glyphs.ts`. Author glyphs in the 36-unit design canvas (the default `viewBox`); just copy the **fill** `d` from the export — `GlassIcon` derives the strokes and shadows itself. A glyph exported cropped to a different frame (e.g. self-driving's `"0 0 33 31"`, download's `"0 0 32 32"`) also exports a `viewBox` constant to pass alongside it; exporting at the full 36×36 frame keeps sizes perfectly consistent. Glyphs with cut-out holes (skills slash, download arrow) render with `fillRule="evenodd"`. `PLACEHOLDER_SILHOUETTE` is a neutral rounded-square tile used as a stand-in until a real path is added.
+
+## PricingIcon
+
+A compound glass icon (a stack of dollar bills with a `$`) that doesn't reduce to a single fill path, so it's a one-off rather than a `GlassIcon`. The SVG lives in `svgs/pricing.svg` (imported as a component via `gatsby-plugin-react-svg`), with its shadows recoloured to the system dark-green (`#033003`). `PricingIcon` wraps it at the same `size-9` / hover treatment as the glass icons. Use this pattern for any future multi-layer icon.
 
 ## AppIcon
 

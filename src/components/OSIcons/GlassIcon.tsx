@@ -1,13 +1,22 @@
 import React, { useId } from 'react'
 
+/** One sub-shape of a glyph. Multi-segment glyphs (e.g. the PostHog hedgehog) pass an array. */
+export type GlyphPart = { d: string; fillRule?: 'nonzero' | 'evenodd' }
+
 export interface GlassIconProps {
-    /** Glyph fill `d`. Author in Figma's ~37-unit frame (or pass a matching `viewBox`). */
-    path: string
-    /** SVG viewBox (defaults to Figma's ~37-unit glyph frame) */
+    /**
+     * Glyph shape. A single fill `d` string, or — for glyphs made of multiple
+     * overlapping segments (e.g. a logo) — an array of `{ d, fillRule }` parts.
+     * Author in the 36-unit design canvas (or pass a matching `viewBox`).
+     */
+    path: string | GlyphPart[]
+    /** SVG viewBox (defaults to the 36×36 design canvas) */
     viewBox?: string
+    /** Fill rule for the glyph when `path` is a string (use `evenodd` for cut-out holes) */
+    fillRule?: 'nonzero' | 'evenodd'
     /** Optional externally-hosted image rendered inside the silhouette (clipped to it) */
     image?: string
-    /** Glass frost opacity over the shape (and over `image` when present). Default 0.4. */
+    /** Glass frost opacity over the shape (and over `image` when present). Default 0.5. */
     fillOpacity?: number
     /** Backdrop blur radius in px. Default 1.3 (≈ the export's blur at 36px). */
     blur?: number
@@ -20,35 +29,40 @@ export interface GlassIconProps {
 }
 
 /**
- * Frosted-glass desktop icon. Faithfully reproduces the two-layer Figma export
- * as two stacked copies of the same glyph `path`:
+ * Frosted-glass desktop icon. Faithfully reproduces the two-layer Figma export as
+ * two stacked copies of the same glyph:
  *
  *   - Layer A (bottom): backdrop-blur frost + white fill @ `fillOpacity` + a thin
- *     dark hairline aligned just OUTSIDE the edge, with two knockout drop shadows.
- *   - Layer B (top): a thin white highlight aligned just INSIDE the edge, with the
- *     same two drop shadows.
+ *     soft white edge aligned just OUTSIDE the shape, with two knockout drop shadows.
+ *   - Layer B (top): a thin bright white highlight aligned just INSIDE the edge, with
+ *     no shadow (its shadow would read as an unwanted inner shadow at this size).
  *
- * Stroke + shadow sizes are derived PROPORTIONALLY from the viewBox so the look
- * matches the export at any glyph frame (the export's ~37-unit frame → stroke
- * 0.64 / shadow dy 1.29 / blurs 1.29 & 0.64). Stroke alignment uses SVG masks off
- * a double-width stroke (each mask keeps one half) — the same result Figma's
- * export bakes into offset paths, and it handles glyphs with interior holes
- * (e.g. the clapperboard) via the shared path + fill-rule.
+ * Stroke + shadow are CONSTANT in the 36-unit design canvas (the export uses
+ * stroke-width 0.5, shadow dy 1, blurs 1 & 0.5), so author every glyph at that scale.
+ * Stroke alignment uses SVG masks off a double-width stroke (each mask keeps one half).
+ *
+ * Multi-segment glyphs (an array of parts) are flattened into ONE shape: a single
+ * union fill + a single drop shadow around the whole outer silhouette, with each
+ * segment's bevel drawn by per-segment masked strokes. Overlapping segments (the
+ * hedgehog spines) are separated by crisp light bevels, NOT by per-segment shadows
+ * (those would stack into dark grooves and break the single-glyph read). Each part
+ * keeps its own `fillRule`, so `nonzero` spines coexist with an `evenodd` cut-out
+ * (the hedgehog's eye).
  *
  * The frost is a plain HTML element (NOT an SVG `<foreignObject>`, where browsers
  * refuse to render `backdrop-filter`) clipped to the silhouette via an
  * objectBoundingBox clipPath. The drop shadows use the export's
- * `feComposite operator="out"` knockout so they don't bleed through the
- * translucent fill and darken the frosted interior.
+ * `feComposite operator="out"` knockout so they don't bleed through the translucent
+ * fill and darken the frosted interior.
  *
- * Hover (driven by the `group` on the parent AppLink) gives a subtle zoom pop;
- * click has no scale (kept snappy).
+ * Hover (driven by the `group` on the parent AppLink) gives a subtle zoom pop.
  */
 export default function GlassIcon({
     path,
-    viewBox = '0 0 36.9853 37.7206',
+    viewBox = '0 0 36 36',
+    fillRule = 'nonzero',
     image,
-    fillOpacity = 0.4,
+    fillOpacity = 0.5,
     blur = 1.3,
     glowColor = '#53FFCB',
     className = '',
@@ -57,19 +71,20 @@ export default function GlassIcon({
     const id = useId().replace(/:/g, '')
     const frostClipId = `${id}-frost`
     const shapeClipId = `${id}-shape`
-    const outsideMaskId = `${id}-outside`
-    const insideMaskId = `${id}-inside`
     const shadowId = `${id}-shadow`
 
-    const [vbX, vbY, vbW, vbH] = viewBox.split(/\s+/).map(Number)
+    const parts: GlyphPart[] = typeof path === 'string' ? [{ d: path, fillRule }] : path
 
-    // Proportions taken from the export (a 36.99-unit frame uses stroke-width
-    // 0.643, shadow dy 1.286, blurs 1.286 & 0.643). strokeW is doubled because
-    // each mask keeps only one half of the centered stroke.
-    const strokeW = 0.0348 * vbW
-    const shOffset = 0.0348 * vbW
-    const shBlur1 = 0.0348 * vbW
-    const shBlur2 = 0.0174 * vbW
+    const [vbX, vbY, vbW, vbH] = viewBox.split(/\s+/).map(Number)
+    // Longest viewBox side — drives the aspect-preserving frost mapping below.
+    const M = Math.max(vbW, vbH)
+
+    // Constant in the 36-unit design canvas (export: stroke 0.5, shadow dy 1,
+    // blurs 1 & 0.5). strokeW is doubled because each mask keeps one half.
+    const strokeW = 1
+    const shOffset = 1
+    const shBlur1 = 1
+    const shBlur2 = 0.5
 
     const mX = vbX - 2
     const mY = vbY - 2
@@ -101,44 +116,58 @@ export default function GlassIcon({
             <svg
                 viewBox={viewBox}
                 fill="none"
-                // "none" maps the viewBox to the box edges exactly like the objectBoundingBox
-                // frost clip, so the frost and the SVG strokes/fill stay aligned.
-                preserveAspectRatio="none"
+                // Default preserveAspectRatio (xMidYMid meet) keeps non-square glyphs
+                // undistorted; the frost clip below uses the same aspect-preserving mapping.
                 className="relative block size-full overflow-visible transition-transform duration-200 ease-out group-hover:scale-[1.03]"
             >
                 <defs>
-                    {/* Normalized clip (0–1) for the HTML frost div */}
+                    {/* Normalized clip (0–1) for the HTML frost div. Maps the glyph into the
+                        box exactly like the SVG's "meet" — scale by 1/M, centered. */}
                     <clipPath id={frostClipId} clipPathUnits="objectBoundingBox">
-                        <path
-                            d={path}
-                            transform={`translate(${-vbX / vbW} ${-vbY / vbH}) scale(${1 / vbW} ${1 / vbH})`}
-                        />
+                        {parts.map((p, i) => (
+                            <path
+                                key={i}
+                                d={p.d}
+                                fillRule={p.fillRule}
+                                transform={`translate(${0.5 - (vbX + vbW / 2) / M} ${
+                                    0.5 - (vbY + vbH / 2) / M
+                                }) scale(${1 / M})`}
+                            />
+                        ))}
                     </clipPath>
 
-                    {/* Keep only the OUTSIDE half of the dark stroke (white outside the glyph) */}
-                    <mask id={outsideMaskId} maskUnits="userSpaceOnUse" x={mX} y={mY} width={mW} height={mH}>
-                        <rect x={mX} y={mY} width={mW} height={mH} fill="white" />
-                        <path d={path} fill="black" fillRule="nonzero" />
-                    </mask>
-
-                    {/* Keep only the INSIDE half of the white stroke (white inside the glyph) */}
-                    <mask id={insideMaskId} maskUnits="userSpaceOnUse" x={mX} y={mY} width={mW} height={mH}>
-                        <path d={path} fill="white" fillRule="nonzero" />
-                    </mask>
+                    {/* Per-segment bevel masks (off a double-width stroke, each keeps one half):
+                        `mo${i}` keeps the soft OUTER edge of segment i (white rect minus that
+                        segment), `mi${i}` keeps the bright INNER highlight (segment i in white).
+                        Per-segment — not unioned — so each stacked layer is beveled (and casts its
+                        shadow) independently, giving the inter-segment depth Figma shows. */}
+                    {parts.map((p, i) => (
+                        <React.Fragment key={i}>
+                            <mask id={`${id}-mo${i}`} maskUnits="userSpaceOnUse" x={mX} y={mY} width={mW} height={mH}>
+                                <rect x={mX} y={mY} width={mW} height={mH} fill="white" />
+                                <path d={p.d} fill="black" fillRule={p.fillRule} />
+                            </mask>
+                            <mask id={`${id}-mi${i}`} maskUnits="userSpaceOnUse" x={mX} y={mY} width={mW} height={mH}>
+                                <path d={p.d} fill="white" fillRule={p.fillRule} />
+                            </mask>
+                        </React.Fragment>
+                    ))}
 
                     {/* User-space clip for the optional embedded image */}
                     <clipPath id={shapeClipId}>
-                        <path d={path} />
+                        {parts.map((p, i) => (
+                            <path key={i} d={p.d} fillRule={p.fillRule} />
+                        ))}
                     </clipPath>
 
-                    {/* Two stacked drop shadows (brand-blue glow + black ambient), faithfully
-                        reproduced from the export. The `feComposite operator="out"` knockout
-                        removes each shadow from BEHIND the shape, so it only shows outside the
-                        silhouette — without it the shadow bleeds through the 40% fill and
-                        darkens the frosted interior. */}
+                    {/* Two stacked dark-green (#033003) drop shadows, faithfully reproduced from
+                        the export. The `feComposite operator="out"` knockout removes each shadow
+                        from BEHIND the shape, so it only shows outside the silhouette — without it
+                        the shadow bleeds through the translucent fill and darkens the frosted
+                        interior. */}
                     <filter id={shadowId} x="-50%" y="-50%" width="200%" height="200%" colorInterpolationFilters="sRGB">
                         <feFlood floodOpacity="0" result="BackgroundImageFix" />
-                        {/* shadow 1 — brand blue #0290C5 @ 0.4 */}
+                        {/* shadow 1 — dark green #033003 @ 1 */}
                         <feColorMatrix
                             in="SourceAlpha"
                             type="matrix"
@@ -150,10 +179,10 @@ export default function GlassIcon({
                         <feComposite in2="hardAlpha" operator="out" />
                         <feColorMatrix
                             type="matrix"
-                            values="0 0 0 0 0.00784314 0 0 0 0 0.564706 0 0 0 0 0.772549 0 0 0 0.4 0"
+                            values="0 0 0 0 0.0117647 0 0 0 0 0.188235 0 0 0 0 0.0117647 0 0 0 1 0"
                         />
                         <feBlend mode="normal" in2="BackgroundImageFix" result="shadow1" />
-                        {/* shadow 2 — black @ 0.25 */}
+                        {/* shadow 2 — dark green #033003 @ 0.25 */}
                         <feColorMatrix
                             in="SourceAlpha"
                             type="matrix"
@@ -163,7 +192,10 @@ export default function GlassIcon({
                         <feOffset dy={shOffset} />
                         <feGaussianBlur stdDeviation={shBlur2} />
                         <feComposite in2="hardAlpha" operator="out" />
-                        <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
+                        <feColorMatrix
+                            type="matrix"
+                            values="0 0 0 0 0.0117647 0 0 0 0 0.188235 0 0 0 0 0.0117647 0 0 0 0.25 0"
+                        />
                         <feBlend mode="normal" in2="shadow1" result="shadow2" />
                         {/* source composited on top of both shadows */}
                         <feBlend mode="normal" in="SourceGraphic" in2="shadow2" result="shape" />
@@ -187,23 +219,46 @@ export default function GlassIcon({
                     </g>
                 )}
 
-                {/* Layer A: white fill + outside-aligned dark hairline, with drop shadow */}
+                {/* Layer A: a single union fill + outside-aligned soft white edges, with ONE drop
+                    shadow around the whole outer silhouette. The fill is grouped under one opacity
+                    so overlapping segments don't double-up, and the strokes use PER-SEGMENT masks so
+                    each segment keeps its own bevel. For a multi-segment glyph (the hedgehog spines)
+                    that means the segments are separated by crisp light bevels — NOT by per-segment
+                    shadows, which would stack into dark grooves and break the single-glyph read. */}
                 <g filter={`url(#${shadowId})`}>
-                    <path d={path} fill="white" fillOpacity={fillOpacity} fillRule="nonzero" />
-                    <path
-                        d={path}
-                        fill="none"
-                        stroke="#415B66"
-                        strokeOpacity={0.15}
-                        strokeWidth={strokeW}
-                        mask={`url(#${outsideMaskId})`}
-                    />
+                    <g opacity={fillOpacity}>
+                        {parts.map((p, i) => (
+                            <path key={i} d={p.d} fill="white" fillRule={p.fillRule} />
+                        ))}
+                    </g>
+                    {parts.map((p, i) => (
+                        <path
+                            key={i}
+                            d={p.d}
+                            fill="none"
+                            stroke="white"
+                            strokeOpacity={0.55}
+                            strokeWidth={strokeW}
+                            mask={`url(#${id}-mo${i})`}
+                        />
+                    ))}
                 </g>
 
-                {/* Layer B: inside-aligned white highlight. No drop shadow — the export gives
-                    this layer one too, but its shadow falls just inside the edge and reads as an
-                    unwanted inner shadow at this size. The outer lift comes from Layer A. */}
-                <path d={path} fill="none" stroke="white" strokeWidth={strokeW} mask={`url(#${insideMaskId})`} />
+                {/* Layer B: inside-aligned white highlights. No drop shadow — the export gives this
+                    layer one too, but its shadow falls just inside the edge and reads as an unwanted
+                    inner shadow at this size. The outer lift comes from Layer A. */}
+                <g>
+                    {parts.map((p, i) => (
+                        <path
+                            key={i}
+                            d={p.d}
+                            fill="none"
+                            stroke="white"
+                            strokeWidth={strokeW}
+                            mask={`url(#${id}-mi${i})`}
+                        />
+                    ))}
+                </g>
             </svg>
         </span>
     )

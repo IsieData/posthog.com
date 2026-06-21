@@ -1,13 +1,21 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'components/Link'
 import { useApp } from '../../context/App'
-import { AppIcon, GlassIcon } from 'components/OSIcons'
+import { GlassIcon, PricingIcon } from 'components/OSIcons'
 import {
     HOME_SILHOUETTE,
-    DEMO_SILHOUETTE,
-    DEMO_VIEWBOX,
+    SELF_DRIVING_SILHOUETTE,
+    SKILLS_SILHOUETTE,
+    DOWNLOAD_SILHOUETTE,
+    DOCS_SILHOUETTE,
+    TALK_TO_A_HUMAN_SILHOUETTE,
+    WHY_POSTHOG_SILHOUETTE,
+    CHANGELOG_SILHOUETTE,
+    HANDBOOK_SILHOUETTE,
+    STORE_SILHOUETTE,
+    WORK_HERE_SILHOUETTE,
+    TRASH_SILHOUETTE,
     PLACEHOLDER_SILHOUETTE,
-    DEMO_THUMBNAIL,
 } from 'components/OSIcons/glyphs'
 import { AppItem } from 'components/OSIcons/AppIcon'
 import ContextMenu from 'components/RadixUI/ContextMenu'
@@ -21,7 +29,6 @@ import { motion, useMotionValue, animate } from 'framer-motion'
 import HedgeHogModeEmbed from 'components/HedgehogMode'
 import ReactConfetti from 'react-confetti'
 import { useToast } from '../../context/Toast'
-import usePostHog from '../../hooks/usePostHog'
 import { navigate } from 'gatsby'
 
 interface Product {
@@ -32,10 +39,6 @@ interface Product {
 }
 
 export const useProductLinks = () => {
-    const { posthogInstance, openNewChat, siteSettings, updateSiteSettings } = useApp()
-    const { addToast } = useToast()
-    const posthog = usePostHog()
-
     return [
         {
             label: 'Home',
@@ -44,92 +47,46 @@ export const useProductLinks = () => {
             source: 'desktop',
         },
         {
-            // TODO: swap PLACEHOLDER_SILHOUETTE for the real Product OS glass path once available
-            label: 'Product OS',
-            Icon: <GlassIcon path={PLACEHOLDER_SILHOUETTE} />,
-            url: '/products',
+            label: 'Self-driving products',
+            Icon: <GlassIcon path={SELF_DRIVING_SILHOUETTE} />,
+            url: '/self-driving',
             source: 'desktop',
         },
         {
-            // TODO: swap PLACEHOLDER_SILHOUETTE for the real Library glass path once available
-            label: 'Library',
+            label: 'Agent skills',
+            Icon: <GlassIcon path={SKILLS_SILHOUETTE} fillRule="evenodd" />,
+            url: '/skills',
+            source: 'desktop',
+        },
+        {
+            // TODO: swap PLACEHOLDER_SILHOUETTE for the real Context warehouse glass path once available
+            label: 'Context warehouse',
             Icon: <GlassIcon path={PLACEHOLDER_SILHOUETTE} />,
-            url: '/posts',
+            url: '/context-warehouse',
             source: 'desktop',
         },
         {
             label: 'Pricing',
-            Icon: <AppIcon name="pricing" />,
+            Icon: <PricingIcon />,
             url: '/pricing',
             source: 'desktop',
         },
         {
-            label: 'customers.mdx',
-            Icon: <AppIcon name="spreadsheet" />,
-            url: '/customers',
-            source: 'desktop',
-        },
-        {
-            label: 'demo.mov',
-            Icon: <GlassIcon path={DEMO_SILHOUETTE} viewBox={DEMO_VIEWBOX} image={DEMO_THUMBNAIL} fillOpacity={0.2} />,
-            url: '/demo',
-            source: 'desktop',
-        },
-        {
             label: 'Docs',
-            Icon: <AppIcon name="notebook" />,
+            Icon: <GlassIcon path={DOCS_SILHOUETTE} fillRule="evenodd" />,
             url: '/docs',
             source: 'desktop',
         },
         {
             label: 'Talk to a human',
-            Icon: <AppIcon name="envelope" />,
+            Icon: <GlassIcon path={TALK_TO_A_HUMAN_SILHOUETTE} />,
             url: '/talk-to-a-human',
             source: 'desktop',
         },
         {
-            label: 'Ask a question',
-            Icon: <AppIcon name="forums" />,
-            onClick: () => openNewChat({ path: `ask-max` }),
-            source: 'desktop',
-        },
-        ...(posthogInstance
-            ? [
-                  {
-                      label: 'Open app ↗',
-                      Icon: <AppIcon name="computerCoffee" />,
-                      url: 'https://app.posthog.com',
-                      external: true,
-                      source: 'desktop',
-                  },
-              ]
-            : [
-                  {
-                      label: 'Sign up ↗',
-                      Icon: <AppIcon name="compass" />,
-                      url: 'https://app.posthog.com/signup',
-                      external: true,
-                      source: 'desktop',
-                  },
-              ]),
-        {
-            label: 'Switch to website mode',
-            Icon: <AppIcon name="switch" />,
-            onClick: () => {
-                updateSiteSettings({ ...siteSettings, experience: 'boring' })
-                posthog?.capture('switched site mode', {
-                    value: 'website',
-                    source: 'desktop',
-                })
-                addToast({
-                    title: 'Switched to website mode',
-                    description: 'Hover the logo to return to OS mode.',
-                    duration: 5000,
-                    onUndo: () => {
-                        updateSiteSettings({ ...siteSettings, experience: 'posthog' })
-                    },
-                })
-            },
+            label: 'Download',
+            Icon: <GlassIcon path={DOWNLOAD_SILHOUETTE} fillRule="evenodd" />,
+            url: '/download',
             source: 'desktop',
         },
     ]
@@ -138,13 +95,13 @@ export const useProductLinks = () => {
 export const apps: AppItem[] = [
     {
         label: 'Why PostHog?',
-        Icon: <AppIcon name="posthog" />,
+        Icon: <GlassIcon path={WHY_POSTHOG_SILHOUETTE} />,
         url: '/about',
         source: 'desktop',
     },
     {
         label: 'Changelog',
-        Icon: <AppIcon name="invite" />,
+        Icon: <GlassIcon path={CHANGELOG_SILHOUETTE} />,
         url: '/changelog',
         source: 'desktop',
     },
@@ -156,25 +113,25 @@ export const apps: AppItem[] = [
     // },
     {
         label: 'Company handbook',
-        Icon: <AppIcon name="handbook" />,
+        Icon: <GlassIcon path={HANDBOOK_SILHOUETTE} />,
         url: '/handbook',
         source: 'desktop',
     },
     {
         label: 'Store',
-        Icon: <AppIcon name="shoppingBag" />,
+        Icon: <GlassIcon path={STORE_SILHOUETTE} />,
         url: '/merch',
         source: 'desktop',
     },
     {
         label: 'Work here',
-        Icon: <AppIcon name="typewriter" />,
+        Icon: <GlassIcon path={WORK_HERE_SILHOUETTE} />,
         url: '/careers',
         source: 'desktop',
     },
     {
         label: 'Trash',
-        Icon: <AppIcon name="trash" />,
+        Icon: <GlassIcon path={TRASH_SILHOUETTE} fillRule="evenodd" />,
         url: '/trash',
         source: 'desktop',
     },
