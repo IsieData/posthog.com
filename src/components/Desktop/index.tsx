@@ -16,7 +16,7 @@ import DraggableDesktopIcon from './DraggableDesktopIcon'
 import { Screensaver } from '../Screensaver'
 import { useInactivityDetection } from '../../hooks/useInactivityDetection'
 import NotificationsPanel from 'components/NotificationsPanel'
-import useTheme from '../../hooks/useTheme'
+import Wallpapers from './Wallpapers'
 import { motion, useMotionValue, animate } from 'framer-motion'
 import HedgeHogModeEmbed from 'components/HedgehogMode'
 import ReactConfetti from 'react-confetti'
@@ -253,7 +253,6 @@ export default function Desktop() {
     const cursorY = useMotionValue(0)
     const cursorScale = useMotionValue(1)
     const cursorOpacity = useMotionValue(0)
-    const { getWallpaperClasses } = useTheme()
     const { addToast } = useToast()
     function generateInitialPositions(columns = 2): IconPositions {
         const positions: IconPositions = {}
@@ -578,210 +577,7 @@ export default function Desktop() {
                     onMouseEnter={handleMouseEnter}
                     onMouseLeave={handleMouseLeave}
                 >
-                    <div className={`fixed inset-0 -z-10 ${getWallpaperClasses()}`} />
-                    {/* Hogzilla */}
-                    <div className="hidden select-none wallpaper-hogzilla:flex items-end justify-end absolute inset-0">
-                        <div className="absolute inset-0 bg-gradient-to-b from-[#FFF1D5] to-[#DAE0EB] dark:opacity-0"></div>
-                        <CloudinaryImage
-                            src="https://res.cloudinary.com/dmukukwp6/image/upload/hogzilla_bf40c5e271.png"
-                            alt=""
-                            width={2574}
-                            height={1256}
-                            className="absolute inset-0 flex items-end justify-end"
-                            imgClassName="max-w-none md:max-h-[628px] h-auto md:h-full w-[700px] md:w-auto z-10"
-                        />
-                    </div>
-
-                    {/* Startup Monopoly */}
-                    <div className="hidden select-none wallpaper-startup-monopoly:block absolute inset-0">
-                        <CloudinaryImage
-                            loading="lazy"
-                            src="https://res.cloudinary.com/dmukukwp6/image/upload/startup_monopoly_2ac9d45ce3.png"
-                            alt=""
-                            width={1087}
-                            height={540}
-                            className="absolute right-0 top-0 w-[1087px] h-[540px]"
-                        />
-                    </div>
-
-                    {/* Office party */}
-                    <div className="hidden select-none wallpaper-office-party:block absolute inset-0">
-                        <div
-                            className="absolute inset-0 opacity-100"
-                            style={{
-                                backgroundImage:
-                                    "url('https://res.cloudinary.com/dmukukwp6/image/upload/carpet_light_27d74f73b5.png')",
-                                backgroundSize: '200px 198px',
-                                backgroundRepeat: 'repeat',
-                            }}
-                        />
-                        <div
-                            className="absolute inset-0 opacity-0 dark:opacity-100"
-                            style={{
-                                backgroundImage:
-                                    "url('https://res.cloudinary.com/dmukukwp6/image/upload/carpet_dark_f1c9f5ce39.png')",
-                                backgroundSize: '200px 198px',
-                                backgroundRepeat: 'repeat',
-                            }}
-                        />
-                        <CloudinaryImage
-                            loading="lazy"
-                            src="https://res.cloudinary.com/dmukukwp6/image/upload/office_cc4ae8675f.png"
-                            alt=""
-                            width={997}
-                            height={858}
-                            className="absolute bottom-24 left-24 md:bottom-12 md:left-36 w-[498.5px] h-[429px]"
-                        />
-                    </div>
-
-                    {/* Keyboard garden */}
-                    <div className="hidden select-none wallpaper-keyboard-garden:block">
-                        <div className="absolute inset-0 opacity-100 bg-gradient-to-b from-[#FDEECD] to-[#FFFEF4]" />
-
-                        {/* Mobile background (light) */}
-                        <div
-                            className="absolute inset-0 opacity-100 sm:hidden dark:hidden"
-                            style={{
-                                backgroundImage:
-                                    "url('https://res.cloudinary.com/dmukukwp6/image/upload/9000_mobile_bg_light_95ed14e5a3.jpg')",
-                                // backgroundImage:
-                                //    "url('https://res.cloudinary.com/dmukukwp6/image/upload/grass_2x_3dc2ffb4bc.jpg')",
-                                backgroundSize: 'cover',
-                                backgroundRepeat: 'no-repeat',
-                                backgroundPosition: 'right bottom',
-                            }}
-                        />
-
-                        {/* Mobile background (dark) */}
-                        <div
-                            className="absolute inset-0 opacity-100 hidden dark:block sm:hidden"
-                            style={{
-                                backgroundImage:
-                                    "url('https://res.cloudinary.com/dmukukwp6/image/upload/9000_mobile_bg_dark_8a84515f2d.jpg')",
-                                // backgroundImage:
-                                //    "url('https://res.cloudinary.com/dmukukwp6/image/upload/grass_2x_3dc2ffb4bc.jpg')",
-                                backgroundSize: 'cover',
-                                backgroundRepeat: 'no-repeat',
-                                backgroundPosition: 'right bottom',
-                            }}
-                        />
-
-                        {/* Desktop background (light) */}
-                        <div
-                            className="absolute inset-0 opacity-100 hidden sm:block dark:hidden"
-                            style={{
-                                backgroundImage:
-                                    "url('https://res.cloudinary.com/dmukukwp6/image/upload/9000_bg_light_8709997b6e.jpg')",
-                                // backgroundImage:
-                                //    "url('https://res.cloudinary.com/dmukukwp6/image/upload/grass_2x_3dc2ffb4bc.jpg')",
-                                backgroundSize: 'cover',
-                                backgroundRepeat: 'no-repeat',
-                                backgroundPosition: 'right bottom',
-                            }}
-                        />
-
-                        {/* Desktop background (dark) */}
-                        <div
-                            className="absolute inset-0 opacity-100 hidden sm:dark:block"
-                            style={{
-                                backgroundImage:
-                                    "url('https://res.cloudinary.com/dmukukwp6/image/upload/9000_bg_dark_7bf63b522d.jpg')",
-                                // backgroundImage:
-                                //    "url('https://res.cloudinary.com/dmukukwp6/image/upload/grass_2x_3dc2ffb4bc.jpg')",
-                                backgroundSize: 'cover',
-                                backgroundRepeat: 'no-repeat',
-                                backgroundPosition: 'right bottom',
-                            }}
-                        />
-                        <div className="absolute website:bottom-4 website:-right-4 website:@[2600px]:right-4 os:bottom-24 os:md:bottom-0 os:-right-4 os:xs:right-8 os:md:right-0">
-                            {/* <CloudinaryImage
-                                loading="lazy"
-                                src="https://res.cloudinary.com/dmukukwp6/image/upload/hedges_ec3edc2a40.png"
-                                width={1802}
-                                height={1512}
-                                className={`${websiteMode ? '' : 'w-[300px] md:w-[700px]'} dark:hidden`}
-                                style={
-                                    websiteMode
-                                        ? {
-                                            width: 'clamp(8rem, calc(4rem + (100vw - 80rem) * 0.45), 42rem)',
-                                            height: 'clamp(8rem, calc(4rem + (100vw - 80rem) * 0.45), 42rem)',
-                                        }
-                                        : undefined
-                                }
-                                draggable={false}
-                            /> */}
-                            {/* Hedge scene (light) */}
-                            <CloudinaryImage
-                                loading="lazy"
-                                src="https://res.cloudinary.com/dmukukwp6/image/upload/9000_hedge_light_42c729131e.png"
-                                width={1555}
-                                height={1262}
-                                className="dark:hidden w-full max-w-full md:w-[777px]"
-                                draggable={false}
-                            />
-                            {/* Hedge scene (dark) */}
-                            <CloudinaryImage
-                                loading="lazy"
-                                src="https://res.cloudinary.com/dmukukwp6/image/upload/9000_hedge_dark_150c57af7f.png"
-                                width={1555}
-                                height={1262}
-                                className="hidden dark:block w-full max-w-full md:w-[777px]"
-                                draggable={false}
-                            />
-                        </div>
-                    </div>
-
-                    {/* 2001 bliss */}
-                    <div
-                        className="hidden select-none wallpaper-2001-bliss:block absolute inset-0 bg-repeat bg-center"
-                        style={{
-                            backgroundImage:
-                                "url('https://res.cloudinary.com/dmukukwp6/image/upload/bliss_8bit_1x_27e9e47112.jpg')",
-                            backgroundSize: '1180px 738px',
-                        }}
-                    >
-                        <CloudinaryImage
-                            loading="lazy"
-                            src="https://res.cloudinary.com/dmukukwp6/image/upload/bliss_8bit_1x_27e9e47112.jpg"
-                            alt=""
-                            width={1180}
-                            height={738}
-                            imgClassName="hidden"
-                        />
-                        <div className="absolute inset-0 bg-white/60 dark:bg-black/60"></div>
-                    </div>
-
-                    {/* Parade */}
-                    <div className="hidden select-none wallpaper-parade:flex items-end fixed inset-0">
-                        <CloudinaryImage
-                            loading="lazy"
-                            src="https://res.cloudinary.com/dmukukwp6/image/upload/parade_light_ffe041646a.png"
-                            alt=""
-                            width={1565}
-                            height={744}
-                            imgClassName="dark:hidden w-full"
-                        />
-                        <CloudinaryImage
-                            loading="lazy"
-                            src="https://res.cloudinary.com/dmukukwp6/image/upload/parade_dark_238d90c5ef.png"
-                            alt=""
-                            width={1565}
-                            height={744}
-                            imgClassName="hidden dark:block"
-                        />
-                    </div>
-
-                    {/* Coding at night */}
-                    <div className="hidden select-none wallpaper-coding-at-night:flex items-end fixed inset-0">
-                        <CloudinaryImage
-                            loading="lazy"
-                            src="https://res.cloudinary.com/dmukukwp6/image/upload/coding_at_night_5d7d21791e.png"
-                            alt=""
-                            width={2360}
-                            height={696}
-                            className="w-full"
-                        />
-                    </div>
+                    <Wallpapers wallpaper={siteSettings.wallpaper} reduceMotion={siteSettings.performanceBoost} />
 
                     <nav className="website:hidden">
                         <motion.ul
