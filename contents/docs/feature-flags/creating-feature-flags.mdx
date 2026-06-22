@@ -309,6 +309,8 @@ We recommend reading the [evaluation contexts documentation](/docs/feature-flags
 
 Tags are a way to categorize and organize your Feature Flags. They are purely organizational and do not affect flag evaluation. Use tags to label flags by team, project, or any other grouping that helps you manage flags at scale.
 
+You can filter flags by tag in the flag list. There's also an **Exclude tags** filter that hides flags carrying specific tags — useful for removing noise from teams or projects you don't work on.
+
 Tags are separate from [evaluation contexts](#evaluation-contexts-optional), which control where flags evaluate at runtime.
 
 ## Editing feature flags
@@ -352,6 +354,26 @@ For feature flags linked to an [experiment](/docs/experiments), inline editing i
 
 After creating Feature Flags, you may need to manage or delete them to keep your project organized. PostHog provides tools to help you clean up flags at scale.
 
+### Archiving Feature Flags
+
+Archiving is for flags you're done with but want to keep for historical reference — for example, a flag tied to a finished experiment or a completed rollout. Unlike deleting, archiving preserves all linked data (experiments, surveys, etc.) while removing the flag from your day-to-day list.
+
+Key rules for archived flags:
+
+- **Archived flags must be disabled.** You can archive an enabled flag, but PostHog will disable it as part of the archive action. A confirmation dialog warns you that this will immediately stop serving the flag to users.
+- **Archived flags are hidden by default.** They don't appear in the flag list, bulk operations, or "select all matching" results unless you filter for them.
+- **Archived flags can't be re-enabled directly.** Unarchive the flag first, then enable it.
+
+To archive a flag, open the flag's detail page or the row menu in the flag list and select **Archive feature flag**. To find archived flags, use the **Status** filter and select **Archived**. You can unarchive from the same menu or from the banner shown on an archived flag's detail page.
+
+#### Archive vs. disable vs. delete
+
+| Action      | Flag serves traffic?  | Visible in list?  | Linked data kept? | Reversible?                  |
+| ----------- | --------------------- | ----------------- | ----------------- | ---------------------------- |
+| **Disable** | No                    | Yes               | Yes               | Yes — re-enable anytime      |
+| **Archive** | No (must be disabled) | Hidden by default | Yes               | Yes — unarchive anytime      |
+| **Delete**  | No                    | No (soft delete)  | Yes               | Yes — restore from flag page |
+
 ### Deleting Feature Flags in bulk
 
 To delete multiple Feature Flags at once:
@@ -374,7 +396,7 @@ Deleting a feature flag is a soft delete. The flag stops being served and is rem
 
 </CalloutBox>
 
-Some flags can't be deleted until you remove whatever references them. PostHog blocks the deletion and tells you why if the flag is:
+Some flags can't be deleted until you remove whatever references them. When deletion is blocked, PostHog opens a dialog listing exactly which resources are in the way, each with a direct link so you can resolve the blocker without searching. Deletion is blocked when the flag is:
 
 - In use by an [early access feature](/docs/feature-flags/early-access-feature-management)
 - Linked to a **running** [experiment](/docs/experiments) (draft, stopped, and completed experiments are fine)
