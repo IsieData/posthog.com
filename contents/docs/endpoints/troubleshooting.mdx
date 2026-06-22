@@ -95,6 +95,30 @@ When a query exceeds ClickHouse resource limits, the API returns HTTP 400 with a
   "type": "server_error",
   "code": "query_timeout",
   "detail": "This query exceeded the execution time limit. Narrow its scope (e.g. a smaller date range) or materialize the endpoint for dedicated compute."
+## Query performance errors (400)
+
+These errors mean your query hit a ClickHouse resource guardrail. They return HTTP 400 with a machine-readable `code` you can branch on.
+
+| Code | Cause | Fix |
+| --- | --- | --- |
+| `query_timeout` | Query exceeded the execution time limit | Narrow the date range or add filters to reduce the data scanned |
+| `query_memory_limit` | Query exceeded the memory limit | Reduce the query scope or simplify aggregations |
+| `query_too_large` | Query text is too large to execute | Simplify the query |
+| `query_estimated_too_slow` | Query is estimated to run too long | Narrow the time range or reduce the data scanned |
+
+For `query_timeout`, `query_memory_limit`, and `query_estimated_too_slow`, [materializing the endpoint](/docs/endpoints/materialization) moves execution to dedicated compute and is the durable fix for consistently heavy queries.
+
+See [error responses](/docs/endpoints/execution#error-responses) for the full response format.
+
+## Capacity errors (503)
+
+**`code`: `query_capacity`**
+
+- The shared ClickHouse query pool is momentarily at capacity
+- This is transient — retry after a short delay
+- For consistently heavy endpoints, [materialize the endpoint](/docs/endpoints/materialization) to run on dedicated compute that isn't affected by shared query load
+
+
 }
 ```
 
