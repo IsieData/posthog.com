@@ -117,6 +117,15 @@ export const onCreateWebpackConfig: GatsbyNode['onCreateWebpackConfig'] = ({ sta
                     'Docs',
                     'OnboardingContentWrapper.tsx'
                 ),
+                // Upstream monorepo moved this wrapper under /shared/; keep the old key above for
+                // older sourced content and alias the new path to the same posthog.com shim.
+                'scenes/onboarding/shared/OnboardingDocsContentWrapper': path.resolve(
+                    __dirname,
+                    'src',
+                    'components',
+                    'Docs',
+                    'OnboardingContentWrapper.tsx'
+                ),
             },
         },
     })

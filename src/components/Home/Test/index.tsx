@@ -93,13 +93,14 @@ const PostHogMention = () => {
 
 const Tagline = () => (
     <>
-        <h1 className="!text-3xl pt-4">
-            Just ask <PostHogMention />.
+        <h1 className="!text-3xl pt-4 @2xl:pr-[20rem] @3xl:pr-[22rem] @4xl:pr-[26rem]">
+            PostHog makes your product self-driving.
         </h1>
         <HeroImage />
         <p className="text-balance @xl:text-wrap text-lg">
-            <PostHogMention /> knows your product, customers, and what needs fixing. It answers questions, triages work,
-            writes code, and is always working even when you don't prompt it.
+            It knows your product, customers, and what needs fixing – and it's always working, even when you don't
+            prompt it. Tag <PostHogMention /> in Slack, dig into the hard stuff in PostHog on Desktop, and let Scouts
+            ship fixes before you do.
         </p>
 
         <p className="text-balance @xl:text-wrap text-secondary">
@@ -431,7 +432,9 @@ function Hero(): JSX.Element {
         <RenderInClient
             placeholder={<></>}
             render={() =>
-                posthog?.getFeatureFlag?.('homepage-slack-test', { fresh: true }) === 'test' ? (
+                // Local override: force the "test" (Slack) homepage experience for previewing
+                // eslint-disable-next-line no-constant-condition
+                true || posthog?.getFeatureFlag?.('homepage-slack-test', { fresh: true }) === 'test' ? (
                     <TestHero />
                 ) : (
                     <ControlHero />
@@ -502,7 +505,7 @@ export default function HomeTest() {
             <SEO
                 title="PostHog – We make dev tools for product engineers"
                 updateWindowTitle={false}
-                description="All your developer tools in one place. PostHog gives engineers everything to build, test, measure, and ship successful products faster. Get started free."
+                description="PostHog is self-driving – autonomous agents that know your product and customers, and do the work for you in Slack, on your desktop, and on their own. Get started free."
                 image="/images/og/default.png"
             />
             <MDXEditor

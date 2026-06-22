@@ -43,22 +43,22 @@ Here are some of our paying customers. (Yes they actually use us, no it's not ju
 
 <div id="customer-infrastructure">
 
-## PostHog data stack, built for data teams and loved by product teams
+## One context warehouse, feeding every agent
 
 <div class="@lg:float-right text-sm @lg:max-w-xs bg-accent p-4 rounded-sm @lg:ml-6 @lg:mb-2 relative pb-[120px] @md:pb-4 @md:pr-[220px] @lg:pr-6 @lg:pb-[120px]">
 
 <p class="my-0 [&_p]:my-0">
 
-**Built-in, Product OS ships with:**
+**Your context warehouse includes:**
 
 </p>
 
 <span class="[&_ul]:mb-0">
 
-- A data warehouse <TooltipDW />
-- 120+ sources/destinations
+- Events, recordings & traces <TooltipDW />
+- 120+ imports & sources
+- MCP access for any agent
 - SQL editor + BI + data viz
-- User activity feed (CDP-lite)
 - API, webhooks
 
 </span>
@@ -67,39 +67,19 @@ Here are some of our paying customers. (Yes they actually use us, no it's not ju
 
 </div>
 
-When you're analyzing how customers use your product, you should be operating from _the full set of data_.
+Self-driving only works if PostHog actually _knows_ your product. That's the job of the context warehouse.
 
-This includes customer information that happens _outside your product_:
+It pulls together all the data that matters – events, session recordings, traces, and more – straight from your products through SDKs, third-party imports, and MCPs:
 
 - payments from Stripe
 - exceptions in an error tracking tool
 - tickets in your support platform
 
-Having all the data in one place means you can make more informed decisions about what to build next.
+That shared context is what lets your agents, Skills, and products work together instead of in silos – a Scout that spots a bug, the data that proves it, and the agent that ships the fix all read from the same source of truth.
 
-PostHog's Product OS isn't just analytics – it's the entire suite of tools built to give you a single source of truth about your customers.
+It's not just analytics – it's the single source of truth that makes everything else self-driving.
 
 <ButtonDataStack />
-
-</div>
-
-<div id="pricing">
-
-## Usage-based pricing
-
-<ImageMoney />
-
-Our whole philosophy is that you shouldn't have to worry about pricing.
-
-All our paid products are pay-per-use with generous monthly free tiers. In fact, 98% of our customers use PostHog for free.
-
-We aim to match the cheapest option at scale – PostHog should be a no-brainer. You never have to "jump on a quick call" with sales.
-
-Here are some examples of how we charge for most popular products:
-
-<Pricing />
-
-<ButtonPricing />
 
 </div>
 
@@ -109,6 +89,7 @@ Here are some examples of how we charge for most popular products:
 
 We're different from most companies for a bunch of reasons:
 
+- **We're going all-in on self-driving.** We'd rather build the future of autonomous product development than protect a list of products. Read our [company strategy](/handbook/why-does-posthog-exist).
 - **Transparency.** You can read our [company handbook](/handbook), our [sales manual](/handbook/growth/sales/overview), and [company strategy](/handbook/why-does-posthog-exist).
 - **We ship fast.** See our [changelog](/changelog).
 - **_Actually_-technical support.** Our <SupportSmallTeamLink /> all have engineering backgrounds.

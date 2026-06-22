@@ -30,13 +30,14 @@ export const SlackSlide = () => {
                 <div className="flex flex-col gap-3">
                     <div className="space-y-2">
                         <p className="flex items-center gap-1.5 text-secondary text-sm font-semibold m-0">
-                            <IconAtSign className="size-4" /> PostHog Slackbot
+                            <IconAtSign className="size-4" /> Access surfaces
                         </p>
-                        <h2 className="text-2xl font-bold m-0">Create pull requests in Slack</h2>
+                        <h2 className="text-2xl font-bold m-0">Meet PostHog where you work</h2>
                     </div>
                     <p className="text-secondary m-0">
-                        Tag <code>@PostHog</code> in a thread to analyze customer behavior or create a PR – all without
-                        ever leaving Slack. Triage and build with your team in your existing tools.
+                        Tag <code>@PostHog</code> in Slack for quick, proactive help, or open PostHog on Desktop to dig
+                        into the bigger jobs. Either way it analyzes behavior, triages work, and ships PRs – without
+                        leaving your tools.
                     </p>
                     <OSButton to="/slack" state={{ newWindow: true }} variant="secondary" asLink>
                         Explore PostHog Slackbot
@@ -70,7 +71,7 @@ export const FixBugsSlide = () => {
                     hideTitle
                     options={[
                         { label: <span className="whitespace-nowrap">Slack</span>, value: 'slack' },
-                        { label: <span className="whitespace-nowrap">PostHog Code</span>, value: 'code' },
+                        { label: <span className="whitespace-nowrap">Desktop</span>, value: 'code' },
                     ]}
                     value={view}
                     onValueChange={(v) => v && setView(v as 'slack' | 'code')}
@@ -92,13 +93,13 @@ export const FixBugsSlide = () => {
                     <div className="flex flex-col gap-3">
                         <div className="space-y-2">
                             <p className="flex items-center gap-1.5 text-secondary text-sm font-semibold m-0">
-                                <IconAtSign className="size-4" /> PostHog Slackbot
+                                <IconAtSign className="size-4" /> Scouts
                             </p>
-                            <h2 className="text-2xl font-bold m-0">Fix bugs automatically</h2>
+                            <h2 className="text-2xl font-bold m-0">Scouts that never sleep</h2>
                         </div>
                         <p className="text-secondary m-0">
-                            PostHog Signals runs analysis on errors, logs, and summarized session recordings to detect
-                            and fix bugs without any human prompting.
+                            Scouts are long-running agents that watch your errors, logs, and session recordings – using
+                            memory and your data to find and fix issues before anyone files a ticket.
                         </p>
                         {/* TODO: re-enable once /signals (or equivalent) lands.
                         <OSButton to="/signals" state={{ newWindow: true }} variant="primary" asLink>
@@ -110,12 +111,12 @@ export const FixBugsSlide = () => {
                     <div className="flex flex-col gap-3">
                         <div className="space-y-2">
                             <p className="flex items-center gap-1.5 text-secondary text-sm font-semibold m-0">
-                                <IconCoffee className="size-4" /> PostHog Code (beta)
+                                <IconCoffee className="size-4" /> PostHog on Desktop (beta)
                             </p>
-                            <h2 className="text-2xl font-bold m-0">Fix bugs automatically</h2>
+                            <h2 className="text-2xl font-bold m-0">Scouts that never sleep</h2>
                         </div>
                         <p className="text-secondary m-0">
-                            <strong>PostHog Code</strong>, our AI code editor:
+                            <strong>PostHog on Desktop</strong>, our AI code editor:
                         </p>
                         <ul className="list-none p-0 m-0 space-y-1.5">
                             <li className="flex items-center gap-2 text-secondary">
@@ -183,15 +184,15 @@ export const AskAnythingSlide = () => {
                             <p className="flex items-center gap-1.5 text-secondary text-sm font-semibold m-0">
                                 <IconSparkles className="size-4" /> PostHog AI
                             </p>
-                            <h2 className="text-2xl font-bold m-0">Ask PostHog anything</h2>
+                            <h2 className="text-2xl font-bold m-0">Ask anything – or teach it new Skills</h2>
                         </div>
                         <p className="text-secondary m-0">
                             PostHog has 250+ data and analysis tools that are stitched together on-the-fly to answer any
                             customer usage or data question you have.
                         </p>
                         <p className="text-secondary m-0">
-                            Pipe in third party data to analyze alongside customer usage data for a more complete
-                            picture of product usage.
+                            Teach it new Skills to handle the jobs you do over and over – so it goes from answering
+                            questions to doing the work.
                         </p>
                         <OSButton to="/ai" state={{ newWindow: true }} variant="secondary" asLink>
                             Explore PostHog AI
@@ -203,15 +204,15 @@ export const AskAnythingSlide = () => {
                             <p className="flex items-center gap-1.5 text-secondary text-sm font-semibold m-0">
                                 <IconSparkles className="size-4" /> PostHog AI
                             </p>
-                            <h2 className="text-2xl font-bold m-0">Ask PostHog anything</h2>
+                            <h2 className="text-2xl font-bold m-0">Ask anything – or teach it new Skills</h2>
                         </div>
                         <p className="text-secondary m-0">
                             PostHog has 250+ data and analysis tools that are stitched together on-the-fly to answer any
                             customer usage or data question you have.
                         </p>
                         <p className="text-secondary m-0">
-                            Pipe in third party data to analyze alongside customer usage data for a more complete
-                            picture of product usage.
+                            Teach it new Skills to handle the jobs you do over and over – so it goes from answering
+                            questions to doing the work.
                         </p>
                         <OSButton to="/ai" state={{ newWindow: true }} variant="secondary" asLink>
                             Explore PostHog AI

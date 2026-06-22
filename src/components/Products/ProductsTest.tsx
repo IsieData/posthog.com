@@ -361,7 +361,9 @@ export default function ProductsTest(): JSX.Element {
                     <RenderInClient
                         placeholder={<></>}
                         render={() =>
-                            posthog?.getFeatureFlag?.('homepage-slack-test', { fresh: true }) === 'test' ? (
+                            // Local override: force the "test" (Slack) homepage experience for previewing
+                            // eslint-disable-next-line no-constant-condition
+                            true || posthog?.getFeatureFlag?.('homepage-slack-test', { fresh: true }) === 'test' ? (
                                 <HeroCarousel tabs={productUsageTabs} />
                             ) : (
                                 <></>
