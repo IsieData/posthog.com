@@ -54,15 +54,21 @@ export default function BusinessIntelligence(): JSX.Element {
     return (
         <>
             <SEO
-                title="Business Intelligence (BI) - PostHog data stack"
-                description="Learn about our business intelligence capabilities."
+                title="Data viz & analytics - PostHog context warehouse"
+                description="Visualize your data with dashboards and ad-hoc analyses, alongside product analytics, session replays, and notebooks – all in PostHog."
                 image="images/og/cdp.jpg"
             />
-            <ReaderView leftSidebar={<LeftSidebarContent />} title="Business Intelligence (BI)">
+            <ReaderView leftSidebar={<LeftSidebarContent />} title="Data viz & analytics">
                 <p>
                     PostHog's business intelligence (BI) capabilities empower product and data teams to derive deep
-                    insights from their data. With integrated BI tools, teams can create interactive dashboards, perform
-                    ad-hoc analyses, and visualize key metrics to drive informed decision-making.
+                    insights from their data. Create interactive dashboards, perform ad-hoc analyses, and visualize key
+                    metrics to drive informed decision-making.
+                </p>
+                <p>
+                    And because it all lives in PostHog, you can combine BI dashboards with{' '}
+                    <Link to="/product-analytics">product analytics</Link>,{' '}
+                    <Link to="/session-replay">session replays</Link>, and notebooks in a single place – analysis
+                    without switching tabs.
                 </p>
                 <div className="dark:bg-dark bg-accent border border-input p-4 rounded mb-4">
                     <p className="!my-0">

@@ -35,7 +35,7 @@ export default function IntegratedWarehouseSlide({ variant = 'default' }: Integr
                 </Link>
 
                 <Link
-                    to="/cdp"
+                    to="/data-stack/warehouse"
                     state={{ newWindow: true }}
                     className="border border-primary rounded p-6 bg-primary hover:bg-accent transition-colors flex flex-col group"
                 >

@@ -14,14 +14,18 @@ export default function DataModeling(): JSX.Element {
     return (
         <>
             <SEO
-                title="Data modeling - PostHog data stack"
-                description="Learn how to model your data in PostHog"
+                title="Data modeling - PostHog context warehouse"
+                description="Clean, enrich, and model your data into the exact shape you need – so a metric means the same thing in every dashboard, experiment, and AI answer."
                 image="images/og/cdp.jpg"
             />
             <ReaderView leftSidebar={<LeftSidebarContent />} title="Data modeling">
                 <p>
                     PostHog provides powerful tools to clean, enrich, and model your data into the exact shape you need
                     for downstream use.
+                </p>
+                <p>
+                    Raw data is messy; modeling is the fix. Lock in definitions everyone agrees on so a metric means the
+                    same thing in every dashboard, experiment, and AI answer that depends on it.
                 </p>
                 <div className="dark:bg-dark bg-accent border border-input p-4 rounded">
                     <p className="!mt-0">

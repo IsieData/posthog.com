@@ -218,7 +218,7 @@ export const OnePlaceSlide = ({ translate = identity }: { translate?: TranslateF
                     </div>
                     <div className="@lg:text-center mt-auto leading-tight">
                         <Link
-                            to="/data-stack/integrations-library?type=destination"
+                            to="/integrations?type=destination"
                             state={{ newWindow: true }}
                             className="text-sm font-semibold"
                         >

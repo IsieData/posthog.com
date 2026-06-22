@@ -10,7 +10,7 @@ export const dataWarehouse = {
     name: 'Managed warehouse', // Query & visualize data
     handle: 'data_warehouse',
     type: 'data_warehouse',
-    slug: 'data-stack/managed-warehouse',
+    slug: 'data-stack/warehouse',
     color: 'purple',
     colorSecondary: 'lilac',
     category: 'data',

@@ -380,7 +380,7 @@ export const ProfessionalServices = () => {
                         — pull from Stripe, Hubspot, Zendesk, Postgres, and more
                     </li>
                     <li>
-                        <Link to="/cdp" state={{ newWindow: true }}>
+                        <Link to="/data-stack/reverse-etl-export" state={{ newWindow: true }}>
                             <strong>Pipeline destinations</strong>
                         </Link>{' '}
                         — push to your CRM, data warehouse, or anywhere else

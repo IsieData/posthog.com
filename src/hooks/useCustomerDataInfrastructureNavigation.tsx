@@ -1,61 +1,40 @@
 import { navigate } from 'gatsby'
 
 export const customerDataInfrastructureNav = {
-    name: 'PostHog data stack',
+    name: 'Context warehouse',
     url: '/data-stack',
     children: [
         {
-            name: 'PostHog data stack',
-        },
-        {
-            name: 'Overview',
+            name: 'Context warehouse',
             url: '/data-stack',
         },
         {
-            name: 'Is PostHog warehouse native?',
-            url: '/data-stack/warehouse-native',
-        },
-        {
-            name: 'Data tools',
-        },
-        {
-            name: 'Managed DuckDB warehouse',
-            url: '/data-stack/managed-warehouse',
-        },
-        {
-            name: 'PostHog AI',
-            url: '/data-stack/posthog-ai',
-        },
-        {
-            name: 'Data sources & import (ELT)',
+            name: 'Get data in',
             url: '/data-stack/sources',
-        },
-        {
-            name: 'CDP',
-            url: '/cdp',
         },
         {
             name: 'Data modeling',
             url: '/data-stack/data-modeling',
         },
         {
-            name: 'SQL editor',
-            url: '/data-stack/sql-editor',
+            name: 'Data warehouse',
+            url: '/data-stack/warehouse',
         },
         {
-            name: 'Business intelligence (BI)',
+            name: 'Querying data',
+            url: '/data-stack/ask-posthog-anything',
+        },
+        {
+            name: 'Data viz & analytics',
             url: '/data-stack/business-intelligence',
         },
         {
-            name: 'Reverse ETL & export',
+            name: 'Self-healing software',
+            url: '/data-stack/self-driving',
+        },
+        {
+            name: 'Send data out',
             url: '/data-stack/reverse-etl-export',
-        },
-        {
-            name: 'Integrations',
-        },
-        {
-            name: 'Integration library',
-            url: '/data-stack/integrations-library',
         },
     ],
 }

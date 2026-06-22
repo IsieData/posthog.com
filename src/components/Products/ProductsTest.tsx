@@ -35,7 +35,7 @@ const sections = [
             {
                 label: 'Data I/O',
                 handles: ['data_in', 'data_out'],
-                afterLink: { label: 'View all integrations', url: '/data-stack/integrations-library' },
+                afterLink: { label: 'View all integrations', url: '/integrations' },
             },
             {
                 label: 'Manage & query',
