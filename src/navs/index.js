@@ -4768,6 +4768,12 @@ export const docsMenu = {
                     color: 'blue',
                 },
                 {
+                    name: 'Anonymous user experiments',
+                    url: '/docs/experiments/run-experiments-on-anonymous-users',
+                    icon: 'IconPerson',
+                    color: 'purple',
+                },
+                {
                     name: 'A/A testing',
                     url: '/tutorials/aa-testing',
                     icon: 'IconBalance',
