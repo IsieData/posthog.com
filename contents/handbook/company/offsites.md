@@ -43,7 +43,7 @@ We want team offsites to be social events and encourage you to optimize offsites
 - We've put a lot of money and effort into making Hogpatch and Hedge House beautiful spaces that you want to work from
 - SF has the benefit of being the epicenter of everything happening in tech, and we have lots of YC founders working out of Hogpatch who you can meet and learn from
 
-We prefer AirBnBs over hotels, to give your team even more time to hang out, but this is not mandatory.
+The above is less relevant for large, multi team (10+ people) offsites. In those cases it sometimes makes sense to pick another location that's more convenient or optimizes more for spending a lot of quality time together, over hanging out with other PostHog people.
 
 If you do decide to do a small team offsite somewhere outside of these two hubs, let Kendal know why. That way we can figure out how to make going to the hubs more appealing, or perhaps open new hubs.
 
@@ -65,6 +65,7 @@ Each team member is still responsible for booking their own flights.
 
 Some guidelines:
 
+- We prefer AirBnBs over hotels, to give your team even more time to hang out, but this is not mandatory.
 - Quarterly planning is a great focal point for team offsites – it's worth scheduling your meetup for the week of planning.
 - Outside of your small team, you should only invite people who actually need to attend to make the offsite a success - if it would be 'nice to have' them attend, they shouldn't be going.
 - It can be useful to combine offsites but beware if you add too many people everything gets harder to arrange. There's no hard and fast rule here but the more people that are attending the more concrete you need to be on who is organising and why people are attending. It will be more work and you should be purposeful about it.
