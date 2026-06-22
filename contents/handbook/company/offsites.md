@@ -45,7 +45,7 @@ We want team offsites to be social events and encourage you to optimize offsites
 
 We prefer AirBnBs over hotels, to give your team even more time to hang out, but this is not mandatory.
 
-If you do decide to do a small team offsite somewhere outside of these two hubs, let Kendal know why. That way we can figure out how to make going to the hubs more appealing, or perhaps open new hubs.
+You should default to one of the hubs unless you have a good reason not to - the main exceptions being if a hub creates visa issues for some of your team, or if it means excess travel time for most attendees. If you do decide to do a small team offsite somewhere outside of these two hubs, let Kendal know why. That way we can figure out how to make going to the hubs more appealing, or perhaps open new hubs.
 
 Planning a small team offsite? Kendal’s got you covered.
 Here’s how it works:
