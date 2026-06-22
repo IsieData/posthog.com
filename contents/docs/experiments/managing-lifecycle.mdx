@@ -24,11 +24,22 @@ Beyond this, we recommend:
 
 3. Removing the experiment and losing variant's code.
 
-4. Archiving the experiment. When you archive an experiment, PostHog also archives its linked feature flag automatically — but only if the flag is already disabled and no other live experiment uses it. If the flag is still enabled (e.g., you're rolling out the winning variant), it's left untouched. Unarchiving the experiment unarchives the flag too (it stays disabled).
+4. Archiving the experiment.
 
-5. Disabling or deleting the feature flag once the winning variant is hardcoded in your application and the flag check has been removed from your code. You can [delete flags linked to non-running experiments](/docs/feature-flags/creating-feature-flags#deleting-flags-linked-to-experiments) without losing the experiment's historical data. Every active flag counts toward your [feature flag billing](/docs/feature-flags/cutting-costs), even if it's rolled out to 100% and no longer doing anything useful.
+5. Disabling, archiving, or deleting the feature flag once the winning variant is hardcoded in your application and the flag check has been removed from your code. You can [delete flags linked to non-running experiments](/docs/feature-flags/creating-feature-flags#deleting-flags-linked-to-experiments) without losing the experiment's historical data. Every active flag counts toward your [feature flag billing](/docs/feature-flags/cutting-costs), even if it's rolled out to 100% and no longer doing anything useful.
 
 Remember, experimentation is an iterative process. Each experiment teaches you something about your users, even when results aren't what you expected.
+
+### Auto-archiving experiment flags
+
+When you archive an experiment, PostHog also archives its linked feature flag automatically when:
+
+- The flag is already disabled (not serving traffic)
+- No other live experiment uses the same flag
+
+If the flag is still enabled (for example, you're rolling out the winning variant), it won't be auto-archived. This avoids disrupting your rollout. You can [archive the flag manually](/docs/feature-flags/creating-feature-flags#archiving-feature-flags) after you've hardcoded the winning variant and removed the flag check from your code.
+
+When you unarchive an experiment, its auto-archived flag is also unarchived (but remains disabled). Re-enabling the flag is a separate action. Flags you archived manually are not affected by unarchiving the experiment.
 
 ### Ending an already rolled out experiment
 
