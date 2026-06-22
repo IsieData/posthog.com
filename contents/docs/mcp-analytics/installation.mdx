@@ -80,7 +80,11 @@ A Python SDK ships inside the [`posthog`](/docs/libraries/python) package (the s
 pip install posthog[mcp]
 ```
 
-`instrument(server, posthog_client, options?)` wraps a [`FastMCP`](https://github.com/modelcontextprotocol/python-sdk) server or the low-level `mcp.server.Server`:
+`instrument(server, posthog_client, options?)` works with every common Python MCP server:
+
+- `FastMCP` and the low-level `Server` from the official [`modelcontextprotocol/python-sdk`](https://github.com/modelcontextprotocol/python-sdk) (the `mcp` package)
+- [jlowin's standalone **FastMCP 2.0**](https://github.com/jlowin/fastmcp) (the separate `fastmcp` package)
+- `PostHogMCP` for custom dispatchers with no server object (see below)
 
 ```python
 from posthog import Posthog
