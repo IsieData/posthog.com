@@ -102,7 +102,7 @@ server = FastMCP("my-server")
 analytics = instrument(server, posthog)
 ```
 
-Options mirror the TypeScript ones in snake_case, passed as `MCPAnalyticsOptions`:
+Options are passed as `MCPAnalyticsOptions`, the snake_case equivalent of the TypeScript options:
 
 ```python
 from posthog.mcp import instrument
@@ -114,6 +114,32 @@ instrument(server, posthog, MCPAnalyticsOptions(
     enable_conversation_id=True,  # stitch calls across reconnects
     identify=lambda request, extra: UserIdentity(distinct_id="user_123"),
 ))
+```
+
+`MCPAnalyticsOptions` fields (the TypeScript [Configuration](#configuration) table below uses camelCase — these are the Python names):
+
+| Option | Type | Default | What it does |
+|---|---|---|---|
+| `context` | `bool \| MCPAnalyticsContextOptions` | `True` | Inject the `context` intent argument into every tool. |
+| `report_missing` | `bool` | `False` | Register the `get_more_tools` virtual tool. |
+| `missing_capability_tool_name` | `str` | `"get_more_tools"` | Rename the virtual tool registered by `report_missing`. |
+| `enable_conversation_id` | `bool` | `False` | Inject an optional `conversation_id` argument to stitch calls. |
+| `enable_exception_autocapture` | `bool` | `True` | Emit a `$exception` sibling on failed tool calls. |
+| `identify` | `(request, extra) -> UserIdentity \| None` (sync or async) | — | Map a request to one of your users. |
+| `intent_fallback` | `(request, extra) -> str \| None` | — | Provide intent when the agent didn't pass `context`. |
+| `before_send` | `(event) -> event \| None` | — | Inspect/modify/drop each event before send. |
+| `event_properties` | `(request, extra) -> dict` | — | Properties merged onto every event. |
+| `logger` | `(message: str) -> None` | no-op | STDIO-safe log sink. |
+
+### Flushing on exit
+
+The `posthog` client batches events asynchronously and you own its lifecycle. On the `instrument()` path, auto-captured events are scheduled in the background — `await analytics.flush()` waits for in-flight events, then `posthog.flush()` / `posthog.shutdown()` sends them. Call this from your shutdown/`SIGTERM` handler so trailing events aren't dropped (see [`examples/mcp_analytics_demo.py`](https://github.com/PostHog/posthog-python/blob/main/examples/mcp_analytics_demo.py) for a runnable end-to-end example):
+
+```python
+analytics = instrument(server, posthog)
+# ... serve ...
+await analytics.flush()   # drain in-flight auto-capture events
+posthog.shutdown()        # flush + stop the posthog client
 ```
 
 No server object to wrap (a custom HTTP/edge dispatcher)? Use `PostHogMCP`, a `posthog` client subclass with `capture_tool_call()`, `capture_initialize()`, `prepare_tool_list()`, and `prepare_tool_call()` — the Python equivalent of [Custom servers](/docs/mcp-analytics/custom-servers).
