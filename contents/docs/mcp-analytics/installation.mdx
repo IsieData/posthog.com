@@ -12,8 +12,8 @@ import CalloutBox from 'components/Docs/CalloutBox'
 
 ## Requirements
 
-- Node.js 18 or later
-- A TypeScript or JavaScript MCP server built on `@modelcontextprotocol/sdk`. (Running a custom dispatcher with no server object to wrap? See [Custom servers](/docs/mcp-analytics/custom-servers).)
+- Node.js 18 or later (TypeScript/JavaScript), or Python 3.10+ — see [Python](#python) below
+- An MCP server built on `@modelcontextprotocol/sdk` (TS) or the `mcp` package (Python). (Running a custom dispatcher with no server object to wrap? See [Custom servers](/docs/mcp-analytics/custom-servers).)
 - A PostHog [project API key](/docs/getting-started/project-token) (`phc_…`)
 
 ## Install
@@ -71,6 +71,54 @@ server.tool("search_events", { /* ... */ }, async (args) => {
   // your handler runs untouched
 })
 ```
+
+## Python
+
+A Python SDK ships inside the [`posthog`](/docs/libraries/python) package (the same way [`posthog.ai`](/docs/ai-engineering) does). Install it with the `mcp` extra:
+
+```bash
+pip install posthog[mcp]
+```
+
+`instrument(server, posthog_client, options?)` wraps a [`FastMCP`](https://github.com/modelcontextprotocol/python-sdk) server or the low-level `mcp.server.Server`:
+
+```python
+from posthog import Posthog
+from posthog.mcp import instrument
+from mcp.server.fastmcp import FastMCP
+
+posthog = Posthog(
+    "phc_your_project_api_key",
+    host="https://us.i.posthog.com",  # or https://eu.i.posthog.com
+)
+server = FastMCP("my-server")
+
+# register your tools as usual...
+
+analytics = instrument(server, posthog)
+```
+
+Options mirror the TypeScript ones in snake_case, passed as `MCPAnalyticsOptions`:
+
+```python
+from posthog.mcp import instrument
+from posthog.mcp.types import MCPAnalyticsOptions, UserIdentity
+
+instrument(server, posthog, MCPAnalyticsOptions(
+    context=True,                 # inject the `context` intent argument (default)
+    report_missing=True,          # register the get_more_tools virtual tool
+    enable_conversation_id=True,  # stitch calls across reconnects
+    identify=lambda request, extra: UserIdentity(distinct_id="user_123"),
+))
+```
+
+No server object to wrap (a custom HTTP/edge dispatcher)? Use `PostHogMCP`, a `posthog` client subclass with `capture_tool_call()`, `capture_initialize()`, `prepare_tool_list()`, and `prepare_tool_call()` — the Python equivalent of [Custom servers](/docs/mcp-analytics/custom-servers).
+
+<CalloutBox icon="IconInfo" title="Python SDK is alpha" type="fyi">
+
+The Python SDK is alpha and TypeScript-only features may land first. It emits the identical `$mcp_*` events documented on the [events](/docs/mcp-analytics/events) page.
+
+</CalloutBox>
 
 ## Configuration
 
