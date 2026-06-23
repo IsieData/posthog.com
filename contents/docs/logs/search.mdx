@@ -2,9 +2,35 @@
 title: Search logs
 ---
 
-Filter logs from the filter bar at the top of the [logs page](https://app.posthog.com/logs). Pick a field, choose an operator, and enter a value. Add as many filters as you need — they're combined with AND.
+There are two ways to filter logs on the [logs page](https://app.posthog.com/logs): the **facet rail** on the left sidebar and the **filter bar** at the top.
 
-There are four kinds of fields you can filter on:
+## Facet rail
+
+The facet rail is a sidebar on the left side of the logs viewer. It shows curated filters you can click to narrow results without typing in the filter bar.
+
+Two facets always appear:
+
+- **Level** – filter by log severity (`trace`, `debug`, `info`, `warn`, `error`, `fatal`)
+- **Service** – filter by `service.name`
+
+Additional facets appear automatically when your logs contain common OpenTelemetry resource attributes:
+
+| Facet           | Resource attribute            | Group          |
+| --------------- | ----------------------------- | -------------- |
+| **Environment** | `deployment.environment.name` | Standard       |
+| **Namespace**   | `k8s.namespace.name`          | Kubernetes     |
+| **Deployment**  | `k8s.deployment.name`         | Kubernetes     |
+| **Pod**         | `k8s.pod.name`                | Kubernetes     |
+| **Node**        | `k8s.node.name`               | Kubernetes     |
+| **Host**        | `host.name`                   | Infrastructure |
+
+These facets are presence-gated — they only show up when your logs actually contain the corresponding resource attribute. For example, the Kubernetes facets won't appear if your services don't emit Kubernetes metadata.
+
+## Filter bar
+
+The filter bar at the top of the logs page lets you build precise filters. Pick a field, choose an operator, and enter a value. Add as many filters as you need — they're combined with AND.
+
+There are four kinds of fields you can filter on in the filter bar:
 
 - **Logs** – top-level log properties: `severity_level`, `trace_id`, and `span_id`
 - **Message** – full-text search over the log body
