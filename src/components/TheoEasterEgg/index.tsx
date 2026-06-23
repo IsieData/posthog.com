@@ -306,7 +306,7 @@ const TheoWidgets = () =>
     )
 
 export default function TheoEasterEgg(): JSX.Element | null {
-    const { addWindow } = useApp()
+    const { addWindow, windows, closeWindow } = useApp()
     const { appWindow } = useWindow()
     const [dismissed, setDismissed] = useState(false)
     const [theoMode, setTheoMode] = useState(false)
@@ -333,6 +333,27 @@ export default function TheoEasterEgg(): JSX.Element | null {
             {theoMode && <TheoBackground />}
             {theoMode && <TheoWidgets />}
             {theoMode && <CursorTrail />}
+            {theoMode &&
+                createPortal(
+                    <motion.button
+                        initial={{ opacity: 0, translateY: '-120%' }}
+                        animate={{ opacity: 1, translateY: '0%' }}
+                        transition={{ delay: 0.5, type: 'spring', bounce: 0.4 }}
+                        onClick={() => {
+                            setTheoMode(false)
+                            setDismissed(true)
+                            const fmWindow = windows.find((w) => w.path === '/fm')
+                            if (fmWindow) {
+                                closeWindow(fmWindow)
+                            }
+                        }}
+                        data-scheme="primary"
+                        className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-light dark:bg-dark border border-primary rounded-md shadow-xl px-3 py-2 text-sm font-semibold text-primary"
+                    >
+                        Exit Theo mode ✕
+                    </motion.button>,
+                    document.body
+                )}
             {confetti &&
                 createPortal(
                     <div className="fixed inset-0 z-50 pointer-events-none">

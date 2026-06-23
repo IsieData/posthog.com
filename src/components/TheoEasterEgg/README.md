@@ -9,6 +9,7 @@ Easter egg for visitors arriving from Theo's (t3.gg) YouTube channel via the `/t
    - Opens the PostHog FM tape deck (`<TapePlayer />`) in a new window, loaded with the "Sk8er Boi" mixtape (Squeak CMS mixtape `27`). Playback autostarts with sound — the click counts as the user gesture browsers require for unmuted autoplay.
    - Switches on "Theo mode": a handful of Theo tweet cards (styled after `components/Tweet`, not real X embeds) scattered across the desktop background, portaled into the desktop container (`[data-app="Desktop"]`) so they sit above the wallpaper but below all windows.
 3. The ✕ button dismisses the popup without any of the above.
+4. While Theo mode is active, an "Exit Theo mode" button sits top-center; clicking it tears down the background, widgets, and cursor trail and returns the page to normal.
 
 State is local and per-pageload; there is no persistence.
 
