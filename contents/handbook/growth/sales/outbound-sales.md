@@ -219,10 +219,10 @@ Whether a BDR-sourced meeting becomes an opportunity is dependent on a set of fi
 Create an opportunity in `Problem Agreement` only when all of the following are true:
 
 - **The meeting was held** - No-shows are not qualified. If rescheduled, fantastic - the meeting must happen before opportunity creation. 
-- **ICP fit is confirmed** — the account matches [who we build for](/handbook/who-we-build-for).
+- **ICP fit is confirmed** — the account matches [who we build for](/handbook/who-we-build-for) or the "fit" for PostHog is otherwise undeniable.
 - **A specific pain is identified** — there is a concrete problem PostHog addresses.
-- **The prospect agrees the problem** is worth solving — this is what Problem Agreement means. The stage name is the entry test.
-- **There's an active timeline** — they intend to do something about it inside a defined window (roughly the next two quarters).
+- **The prospect agrees the problem** is worth exploring
+- **There's a known timeline** — they intend to do something about it inside a defined window (roughly the next two quarters).
 - **You have access to authority** — you're talking to, or have a confirmed path to, whoever decides or could champion PostHog internally. 
 - **A mutually-agreed next step** is on the calendar — demo, trial kickoff, technical eval, with a date. No committed next step, no opp.
 
