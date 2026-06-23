@@ -3,12 +3,12 @@ title: Postgres destination for batch exports
 sidebar: Docs
 showTitle: true
 availability:
-    free: full
-    selfServe: full
-    enterprise: full
+  free: full
+  selfServe: full
+  enterprise: full
 ---
 
-import PersonsModelNote from '../_snippets/persons-model-note.mdx'
+import PersonsModelNote from "../_snippets/persons-model-note.mdx";
 
 Batch exports can be used to export data to a Postgres table.
 
@@ -84,33 +84,33 @@ When creating a Postgres integration, you can configure how PostHog verifies the
 
 This is the default model for Postgres batch exports. The schema of the model as created in Postgres is:
 
-| Field       | Type           | Description                                                               |
-|-------------|----------------|---------------------------------------------------------------------------|
-| uuid        | `VARCHAR(200)` | The unique ID of the event within PostHog                                 |
-| event       | `VARCHAR(200)` | The name of the event that was sent                                       |
-| properties  | `JSONB`        | A JSON object with all the properties sent along with an event            |
-| elements    | `JSONB`        | This field is present for backwards compatibility but has been deprecated |
-| set         | `JSONB`        | A JSON object with any person properties sent with the `$set` field       |
-| set_once    | `JSONB`        | A JSON object with any person properties sent with the `$set_once` field  |
-| distinct_id | `VARCHAR(200)` | The `distinct_id` of the user who sent the event                          |
-| team_id     | `INTEGER`      | The `team_id` for the event                                               |
-| ip          | `VARCHAR(200)` | The IP address that was sent with the event                               |
-| site_url    | `VARCHAR(200)` | This field is present for backwards compatibility but has been deprecated |
-| timestamp   | `TIMESTAMP WITH TIME ZONE`    | The timestamp associated with an event                                    |
+| Field       | Type                       | Description                                                               |
+| ----------- | -------------------------- | ------------------------------------------------------------------------- |
+| uuid        | `VARCHAR(200)`             | The unique ID of the event within PostHog                                 |
+| event       | `VARCHAR(200)`             | The name of the event that was sent                                       |
+| properties  | `JSONB`                    | A JSON object with all the properties sent along with an event            |
+| elements    | `JSONB`                    | This field is present for backwards compatibility but has been deprecated |
+| set         | `JSONB`                    | A JSON object with any person properties sent with the `$set` field       |
+| set_once    | `JSONB`                    | A JSON object with any person properties sent with the `$set_once` field  |
+| distinct_id | `VARCHAR(200)`             | The `distinct_id` of the user who sent the event                          |
+| team_id     | `INTEGER`                  | The `team_id` for the event                                               |
+| ip          | `VARCHAR(200)`             | The IP address that was sent with the event                               |
+| site_url    | `VARCHAR(200)`             | This field is present for backwards compatibility but has been deprecated |
+| timestamp   | `TIMESTAMP WITH TIME ZONE` | The timestamp associated with an event                                    |
 
 ### Persons model
 
 The schema of the model as created in Postgres is:
 
-| Field                      | Type               | Description                                                                                                                        |
-|----------------------------|--------------------|------------------------------------------------------------------------------------------------------------------------------------|
-| team_id                    | `INTEGER`        | The id of the project (team) the person belongs to                                                                                 |
-| distinct_id                | `TEXT`           | A `distinct_id` associated with the person                                                                                         |
-| person_id                  | `TEXT`           | The id of the person associated to this (`team_id`, `distinct_id`) pair                                                            |
-| properties                 | `JSONB`          | A JSON object with all the latest properties of the person                                                                         |
-| person_distinct_id_version | `INTEGER`        | Internal version of the person to `distinct_id` mapping associated with a (`team_id`, `distinct_id`) pair, used by batch export in merge operation |
-| person_version             | `INTEGER`        | Internal version of the person properties associated with a (`team_id`, `distinct_id`) pair, used by batch export in merge operation               |
-| created_at                 | `TIMESTAMP WITH TIME ZONE`   | The timestamp when the person was created                                                                                          |
+| Field                      | Type                       | Description                                                                                                                                        |
+| -------------------------- | -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| team_id                    | `INTEGER`                  | The id of the project (team) the person belongs to                                                                                                 |
+| distinct_id                | `TEXT`                     | A `distinct_id` associated with the person                                                                                                         |
+| person_id                  | `TEXT`                     | The id of the person associated to this (`team_id`, `distinct_id`) pair                                                                            |
+| properties                 | `JSONB`                    | A JSON object with all the latest properties of the person                                                                                         |
+| person_distinct_id_version | `INTEGER`                  | Internal version of the person to `distinct_id` mapping associated with a (`team_id`, `distinct_id`) pair, used by batch export in merge operation |
+| person_version             | `INTEGER`                  | Internal version of the person properties associated with a (`team_id`, `distinct_id`) pair, used by batch export in merge operation               |
+| created_at                 | `TIMESTAMP WITH TIME ZONE` | The timestamp when the person was created                                                                                                          |
 
 The Postgres table will contain one row per `(team_id, distinct_id)` pair, and each pair is mapped to their corresponding `person_id` and latest `properties`.
 
