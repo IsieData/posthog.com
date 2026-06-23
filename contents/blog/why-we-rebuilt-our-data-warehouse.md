@@ -8,7 +8,7 @@ hideAnchor: true
 author:
     - eric-duong
 featuredImage: >-
-    https://res.cloudinary.com/dmukukwp6/image/upload/posthog.com/contents/images/blog/data-warehouse-rebuild.png
+    https://res.cloudinary.com/dmukukwp6/image/upload/How_dirty_is_your_data_92fe322136.png
 featuredImageType: full
 category: General
 tags:
