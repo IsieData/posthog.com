@@ -48,10 +48,9 @@ Some reasons to _not_ have your offsite in one of our hubs include:
 - Excessive travel time
 - You're running a large, multi team (10+ people) offsite, and need to optimize for travel time or lots of quality time, over hanging out with other PostHog people
 - You really want to be heads down to start or complete a big project or direction setting, and don't want the distraction of other people around
-- You and/or a large portion of the people at this offsite have been to both London and SF a lot, and so would prefer a different location
+- You and a large portion of the people at this offsite have been to both London and SF a lot, and so would prefer a different location
 
-
-If you do decide to do a small team offsite somewhere outside of these two hubs, let Kendal know why. That way we can figure out how to make going to the hubs more appealing, or perhaps open new hubs.
+As always, we trust you to make the right decision here, balancing personal preference with what's best for the company. If you do decide to do a small team offsite somewhere outside of these two hubs, let Kendal know why. That way we can figure out how to make going to the hubs more appealing, or perhaps open new hubs.
 
 Planning a small team offsite? Kendal’s got you covered.
 Here’s how it works:
