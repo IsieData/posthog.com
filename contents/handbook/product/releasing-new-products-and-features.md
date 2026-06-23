@@ -86,9 +86,9 @@ Product teams are responsible for [writing documentation](/handbook/engineering/
 
 Betas are free for most products. We want as many people as possible trying them and giving feedback, and that's easiest when there's no cost in the way.
 
-There are exceptions. Some products — particularly token-heavy AI products — are genuinely expensive to run, so much so that offering them for free at any meaningful scale isn't viable. In those cases it's fine to charge during beta. A product being new and rough around the edges doesn't disqualify it from being paid; if the cost of providing it is significant, charging is the honest option.
+There are exceptions. Some products – particularly token-heavy AI products – are genuinely expensive to run, so much so that offering them for free at any meaningful scale isn't viable. In those cases it's fine to charge during beta. A product being new and rough around the edges doesn't disqualify it from being paid; if the cost of providing it is significant, charging is the honest option.
 
-When we do charge for a beta, we should have a generous refund policy, and it should be documented and linkable from our docs. The goal is to not frustrate paying users when they hit the rough edges that come with any beta — if something goes wrong or doesn't deliver, they should be able to get their money back easily.
+When we do charge for a beta, we should have a generous refund policy, and it should be documented and linkable from our docs. The goal is to not frustrate paying users when they hit the rough edges that come with any beta – if something goes wrong or doesn't deliver, they should be able to get their money back easily.
 
 ### Collecting beta feedback
 
