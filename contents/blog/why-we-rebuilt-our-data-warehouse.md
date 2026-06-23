@@ -34,17 +34,23 @@ The problem was the next chapter for these companies, here's the pattern we kept
 
 So what was stopping data engineers from being happy on our platform?
 
-### Problem 1: HogQL
+### Challenge 1: Multi-tenancy
+
+This one is structural. PostHog's ClickHouse cluster is optimised for fast, interactive queries, the kind a user fires off in a browser and expects an answer to within seconds or minutes.
+
+Data warehouse queries don't work like that. A modeling job can run for hours. Sometimes days. Running those workloads on a shared multi-tenant cluster would have unpredictable knock-on effects across the entire platform — and "unpredictable" is not a word you want associated with your customers' data infrastructure.
+
+### Challenge 2: HogQL
 
 HogQL is our SQL dialect, a fork of ClickHouse SQL. It's enabled us to safely build direct SQL querying on our multi tenant data infrastructure but Clickhouse SQL is not the first language that data engineers and analysts reach for when building analyses. 
 
 Data engineers come in with SQL knowledge from a handful of popular engines. These dialects have market demand, good documentation, and an ecosystem of tools.
 
-The answer: to make HogQL good enough for data engineers, we'd need to treat it as a first-class product. Better error messages, smarter suggestions, serious LLM completions, deep documentation. That's a significant investment, and while we've continued to improve the language for in app use, we needed to rethink what data engineers would feel at home using.
+The answer: we're treating HogQL as a first-class product. Better error messages, smarter suggestions, serious LLM completions, deep documentation.
 
-### Problem 2: ClickHouse as a query engine
+### Challenge 3: ClickHouse as a query engine
 
-ClickHouse is excellent at what it was designed for. We use it internally and have built a lot on top of it. But it has gaps when you use it as a data warehouse query engine.
+We use Clickhouse internally for the parts of our product where it really shines: fast, scalable analytics over large event datasets, with schemas and queries designed specifically around its strengths. All of our customer data is stored in ClickHouse and that use case isn’t changing; the challenge our users are facing is using ClickHouse as a general-purpose warehouse, where they need lots of sources connected, modelling flexibility, schema changes, and mutations.
 
 - **No cost-based query optimizer.** ClickHouse is unmatched when you hand-craft queries to match your schema. But data engineers expect to write declarative SQL and let the engine figure out the execution plan, which is how every major warehouse works. ClickHouse doesn't do this well enough.
 
@@ -52,31 +58,14 @@ ClickHouse is excellent at what it was designed for. We use it internally and ha
 
 - **Query consistency across versions.** We've seen ClickHouse change query results between releases, or based on which settings were enabled. Our test suite catches this for our own queries, but we can't test every shape of customer data and query a warehouse needs to handle.
 
+## We've rebuilt on top of DuckDB
 
-### Problem 3: Multi-tenancy
-
-This one is structural. PostHog's ClickHouse cluster is optimised for fast, interactive queries, the kind a user fires off in a browser and expects an answer to within seconds or minutes.
-
-Data warehouse queries don't work like that. A modeling job can run for hours. Sometimes days. Running those workloads on a shared multi-tenant cluster would have unpredictable knock-on effects across the entire platform — and "unpredictable" is not a word you want associated with your customers' data infrastructure.
-
-## The bet: DuckDB
-
-We needed a query engine with a cost-based optimizer, modern S3/Parquet support, a SQL dialect that data engineers want to use, and an ownership model that gives us confidence in its future. DuckDB checks all of those boxes.
-
-DuckDB came out of the Database Architectures Group at CWI Amsterdam, the same academic environment that produced MonetDB. It has one of the most carefully designed query optimizers of any OLAP engine. Its SQL dialect is derived from PostgreSQL, which means it's immediately familiar to anyone who's worked with Postgres, including most of our early warehouse customers. And unlike our other options, it's governed by the DuckDB Foundation and MIT licensed. None of the features we depend on are going to get locked behind a cloud tier.
-
-There's also the ecosystem. DuckDB has an extension model, you can add capabilities without forking the codebase or going through a painful UDF deployment process. It has out of the box support for all the popular data catalogs and the team behind DuckDB has built Ducklake, a novel take on the existing catalogs.
-
-## What we've built on top of DuckDB
-
-Deciding on DuckDB was step one. The hard part was the architecture.
-
-The obvious move, one shared DuckDB instance, doesn't work. We needed single-tenant isolation: one DuckDB instance per organisation, so a long-running job for one customer can't impact anyone else. Here's what the new managed warehouse looks like:
+We needed a query engine with none of these problems and found that (and more) in DuckDB. The hard part was getting the architecture right.
 
 - **Fully single-tenant DuckDB instances:** Every organisation gets their own. It's not shared with anyone else.
 - **A lifecycle service:** Instances sleep when idle and wake up when a query arrives. 
 - **A Postgres Wire protocol endpoint:** Most modern data stack tooling speaks Postgres, so does our warehouse. You connect with `psql`, point your BI tool at it, wire up PostHog Code or Claude via MCP, and it just works. We translate the Postgres catalog so your tools can introspect the schema, and queries run as DuckDB SQL.
-- **DuckHog:** This is the part I'm most excited about. DuckHog is a DuckDB extension that lets you point local compute at your warehouse data. You import it, connect to your S3-backed data lake, and then pull subsets of data locally to work with using DuckDB, pandas, polars, or whatever you prefer, then write results back to your warehouse. For agents that want to iterate quickly on data, this is a better pattern than sending every query to the cluster: grab a subset, run fast local loops, go back out for more data if needed.
+- **DuckHog:** DuckHog is a DuckDB extension that lets you point local compute at your warehouse data. Pull a subset locally, work with it using DuckDB, pandas, polars, or whatever you prefer, then write results back. For agents iterating quickly on data, this is a better pattern than sending every query to the cluster. It's possible because of DuckDB's extension model; add capabilities without forking the codebase or painful UDF deployments. The SQLite of the OLAP world, it just works.
 - **DuckLake as our catalog:** Underneath this is DuckLake, which separates storage from compute. Your data lives in S3 independent of whatever's querying it, so we're not locked into DuckDB forever. If a better engine comes along, we can swap it in without touching how the data is stored.
 
 ## All your data, ready in PostHog
@@ -91,9 +80,9 @@ We still support HogQL for PostHog product queries, funnels, cohorts, and retent
 
 The data warehouse is the context layer for AI-driven product development.
 
-PostHog Code works by taking signals from your product — including failed queries, error patterns, conversion drops, and user behaviour — and routing them to agents that can act on them. That loop requires the data to be trustworthy, complete, and in one place. If your product data is in PostHog, your revenue data is in another warehouse, and your user data is somewhere else, any agent working with those signals is working with an incomplete picture.
+PostHog works by taking signals from your product — including failed queries, error patterns, conversion drops, and user behaviour — and all your external data from places like Stripe, Postgres, and your CRM, and routing them to agents that can act on them. That loop requires the data to be trustworthy, complete, and in one place. If your product data is in PostHog, your revenue data is in another warehouse, and your user data is somewhere else, any agent working with those signals is working with an incomplete picture.
 
-A unified warehouse gives your agent access to your PostHog events, revenue data, Postgres tables, and any other data source you have, so that it has the context to do things that weren't possible before. Not just "this funnel dropped", but "this funnel dropped, here's the revenue impact, here are the cohorts affected, here's what those users have in common, here's an action plan and a PR already open to fix the issue." That's the signal quality that makes agentic workflows useful.
+A unified warehouse gives your agents access to your full business context to do things that weren't possible before. Not just "this funnel dropped", but "this funnel dropped, here's the revenue impact, here are the cohorts affected, here's what those users have in common, here's an action plan and a PR already open to fix the issue." That's the signal quality that makes agentic workflows useful.
 
 Try it for yourself — join the waitlist to get notified when we release the Managed Warehouse beta.
 
