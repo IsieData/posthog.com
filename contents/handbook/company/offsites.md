@@ -41,9 +41,15 @@ We want team offsites to be social events and encourage you to optimize offsites
 - They're places where there are already a lot of PostHog people that you can hang out with. The more we have random cross-pollination, the more ambitious ideas we'll come up with
 - If most teams do their offsites there, you're much more likely to run into even more people
 - We've put a lot of money and effort into making Hogpatch and Hedge House beautiful spaces that you want to work from
-- SF has the benefit of being the epicenter of everything happening in tech, and we have lots of YC founders working out of Hogpatch who you can meet and learn from
+- SF has the benefit of being the epicenter of everything happening in tech, and we have lots of YC founders working out of Hogpatch who you can meet and learn from. It's good to get exposure to this.
 
-The above is less relevant for large, multi team (10+ people) offsites. In those cases it sometimes makes sense to pick another location that's more convenient or optimizes more for spending a lot of quality time together, over hanging out with other PostHog people.
+Some reasons to _not_ have your offsite in one of our hubs include:
+- Visa restrictions into both UK and US
+- Excessive travel time
+- You're running a large, multi team (10+ people) offsite, and need to optimize for travel time or lots of quality time, over hanging out with other PostHog people
+- You really want to be heads down to start or complete a big project or direction setting, and don't want the distraction of other people around
+- You and/or a large portion of the people at this offsite have been to both London and SF a lot, and so would prefer a different location
+
 
 If you do decide to do a small team offsite somewhere outside of these two hubs, let Kendal know why. That way we can figure out how to make going to the hubs more appealing, or perhaps open new hubs.
 
@@ -257,30 +263,6 @@ Below is a rough timeline for planning your next offsite, as well as links to te
 **1 week after**
 - [ ] Collect post-mortem feedback from the team
   - We generally do this as an [open GitHub issue](https://github.com/PostHog/company-internal/issues/new?assignees=&labels=&projects=&template=small-team-offsite-retro.md&title=%5BRETRO%5D+%7Bteam_name%7D+%7Byear%7D+%7Blocation%7D+offsite), but you can also create a Google form to facilitate this
-
-
-## All company offsite hackathon
-
-The hackathon is always a highlight of the offsite. We tend to run them like this:
-
-**Session 1: ideation dinner**
-The day before the start of the hackathon we do a casual 'ideation' dinner where we encourage people to chat about ideas
-
-**Session 2: hackathon kick-off**
-The hackathon kick off is 1.5 hours at the end of the day. Ideally we do this in a conference room with beers and wine.
-
-- Everyone writes down their ideas on multiple post-it notes in about 10 minutes.
-- People come up to the front one-by-one, and they get 30 seconds to pitch all their ideas.
-- Everyone gets three votes to put on whichever ideas they like most. Just do this as a tally. You can't vote on your own idea
-- We dismiss all ideas with zero votes, and sort all the other ideas from top to bottom based on the number of votes.
-- Everyone writes their name on the other side of the sticky bit of a small piece of post-it note, then add their name to the idea they want to work on. Every group should have at least two people in it, and ideally 3.
-- Once groups are formed, everyone can go off and ideate or hack.
-
-**Session 3: presentations**
-
-This should be the last work related session of the offsite. Again ideally in a conference center with beer and wine provided.
-
-Each group gets 5 minutes to demo and present their idea.
 
 
 **2 weeks after**
