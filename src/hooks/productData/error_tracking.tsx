@@ -21,7 +21,7 @@ export const errorTracking = {
     overview: {
         title: 'Track errors and resolve issues',
         description:
-            'Error tracking is one of the apps that makes your product self-driving: every exception is tied to the user who hit it, so agents have the context to ship the fix.',
+            'Error tracking is one of the tools that makes your product self-driving: every exception is tied to the user who hit it, so agents have the context to ship the fix.',
         textColor: 'text-black', // tw
     },
     screenshots: {
@@ -250,7 +250,7 @@ export const errorTracking = {
                     title: 'Agents can act on every error and the user who hit it – the context that powers self-driving',
                 },
                 {
-                    title: 'Integration with other PostHog apps',
+                    title: 'Integration with other PostHog tools',
                 },
                 {
                     title: 'Feature flags for error recovery',

@@ -652,7 +652,7 @@ export default function SlidesTemplate({
         rawContent: slide.content,
     }))
 
-    // schema.org JSON-LD so agents/LLMs and search engines get machine-readable facts about each app/product.
+    // schema.org JSON-LD so agents/LLMs and search engines get machine-readable facts about each tool/product.
     const productStructuredData = productData
         ? buildProductStructuredData({
               name: productData.name,

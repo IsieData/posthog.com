@@ -22,7 +22,7 @@ export const webAnalytics = {
     overview: {
         title: 'Privacy-focused web analytics',
         description:
-            'Web analytics is one of the apps that makes your product self-driving: the lightweight measurement layer that feeds agents traffic context. Track visitors, pageviews, and conversions with a pre-built dashboard. No cookies required, no complex setup, real-time data, and privacy-focused. Built for people who really liked GA3...',
+            'Web analytics is one of the tools that makes your product self-driving: the lightweight measurement layer that feeds agents traffic context. Track visitors, pageviews, and conversions with a pre-built dashboard. No cookies required, no complex setup, real-time data, and privacy-focused. Built for people who really liked GA3...',
         textColor: 'text-[#063619]', // tw
     },
     videos: {

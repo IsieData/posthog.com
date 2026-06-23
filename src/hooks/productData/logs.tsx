@@ -26,7 +26,7 @@ export const logs = {
     overview: {
         title: 'Logs that already know your users',
         description:
-            'Works with your existing OTel setup. Events, requests, state changes, and session replays in one place – one of the apps that makes your product self-driving by giving agents the backend signal to find a bug and ship the fix, tied to the user who hit it.',
+            'Works with your existing OTel setup. Events, requests, state changes, and session replays in one place – one of the tools that makes your product self-driving by giving agents the backend signal to find a bug and ship the fix, tied to the user who hit it.',
         textColor: 'text-white',
         layout: 'overlay',
     },

@@ -23,7 +23,7 @@ export const dataWarehouse = {
     overview: {
         title: 'Query & visualize product and third party data together',
         description:
-            'The data warehouse is one of the apps that makes your product self-driving: where your product context lives alongside data from any source, so agents can query all of it. Unify and analyze it next to your product data.',
+            'The data warehouse is one of the tools that makes your product self-driving: where your product context lives alongside data from any source, so agents can query all of it. Unify and analyze it next to your product data.',
         textColor: 'text-white', // tw
     },
     screenshots: {

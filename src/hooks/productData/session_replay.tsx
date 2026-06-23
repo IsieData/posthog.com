@@ -24,12 +24,12 @@ export const sessionReplay = {
     seo: {
         title: 'Session Replay – Debug and analyze sessions with PostHog',
         description:
-            'Watch exactly why something happened so the fix is obvious – the session context agents use to debug and ship. One of the apps that makes your product self-driving.',
+            'Watch exactly why something happened so the fix is obvious – the session context agents use to debug and ship. One of the tools that makes your product self-driving.',
     },
     overview: {
         title: 'Watch people use your product',
         description:
-            'Session replay is one of the apps that makes your product self-driving: play back sessions to see exactly why something happened so the fix is obvious. The context agents use to debug UI issues and nuanced user behavior in your product, website, or mobile app.',
+            'Session replay is one of the tools that makes your product self-driving: play back sessions to see exactly why something happened so the fix is obvious. The context agents use to debug UI issues and nuanced user behavior in your product, website, or mobile app.',
         textColor: 'text-black', // tw
     },
     videos: {

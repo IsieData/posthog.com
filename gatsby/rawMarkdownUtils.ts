@@ -329,10 +329,10 @@ export const generateSdkReferencesMarkdown = (sdkReferences: SdkReferenceData) =
 
 // Function to generate llms.txt file according to spec
 // Canonical self-driving taxonomy used to generate /platform.md, the per-product .md files,
-// and the "Products and apps" section of llms.txt. Single source so they stay in sync.
+// and the "Products and tools" section of llms.txt. Single source so they stay in sync.
 // Copy mirrors the handbook canonical vocabulary: products = the surfaces you adopt;
-// apps = the functional capabilities; context = the data; context warehouse = warehouse + ingestion.
-type PlatformItem = { name: string; slug?: string; layer: 'product' | 'app'; oneLiner: string; link?: string }
+// tools = the functional capabilities; context = the data; context warehouse = warehouse + ingestion.
+type PlatformItem = { name: string; slug?: string; layer: 'product' | 'tool'; oneLiner: string; link?: string }
 
 const PLATFORM_ITEMS: PlatformItem[] = [
     // Products — the surfaces a customer adopts to access self-driving
@@ -361,79 +361,79 @@ const PLATFORM_ITEMS: PlatformItem[] = [
         link: 'https://posthog.com/docs/model-context-protocol',
         oneLiner: 'Brings reactive self-driving into your own editor or agent via MCP.',
     },
-    // Apps — the functional capabilities that produce and act on your product's context
+    // Tools — the functional capabilities that produce and act on your product's context
     {
         name: 'Product analytics',
         slug: 'product-analytics',
-        layer: 'app',
+        layer: 'tool',
         oneLiner: 'The measurement agents use to see what works.',
     },
     {
         name: 'Web analytics',
         slug: 'web-analytics',
-        layer: 'app',
+        layer: 'tool',
         oneLiner: 'The lightweight measurement layer feeding the loop.',
     },
     {
         name: 'Session replay',
         slug: 'session-replay',
-        layer: 'app',
+        layer: 'tool',
         oneLiner: 'A proactive signal — watch exactly why something happened.',
     },
     {
         name: 'Feature flags',
         slug: 'feature-flags',
-        layer: 'app',
+        layer: 'tool',
         oneLiner: 'How agents roll a change out and roll it back.',
     },
-    { name: 'Experiments', slug: 'experiments', layer: 'app', oneLiner: 'The evaluation that proves a change worked.' },
+    { name: 'Experiments', slug: 'experiments', layer: 'tool', oneLiner: 'The evaluation that proves a change worked.' },
     {
         name: 'Error tracking',
         slug: 'error-tracking',
-        layer: 'app',
+        layer: 'tool',
         oneLiner: 'The signal that triggers a fix — every error tied to the user who hit it.',
     },
     {
         name: 'Surveys',
         slug: 'surveys',
-        layer: 'app',
+        layer: 'tool',
         oneLiner: 'The qualitative signal — what users say, not just what they do.',
     },
     {
         name: 'AI observability',
         slug: 'ai-observability',
-        layer: 'app',
+        layer: 'tool',
         oneLiner: 'Observability for your AI features — the context agents use to fix LLM behavior.',
     },
     {
         name: 'Logs',
         slug: 'logs',
-        layer: 'app',
+        layer: 'tool',
         oneLiner: 'Backend signal that triggers fixes, tied to the user who hit it.',
     },
     {
         name: 'Data warehouse',
         slug: 'data-warehouse',
-        layer: 'app',
+        layer: 'tool',
         oneLiner: "Where your product's context lives so agents can use all of it.",
     },
     {
         name: 'CDP',
         slug: 'cdp',
-        layer: 'app',
+        layer: 'tool',
         oneLiner: 'How agents move and act on your data across 50+ destinations.',
     },
     {
         name: 'Endpoints',
         slug: 'endpoints',
-        layer: 'app',
-        oneLiner: "How your product's context flows out to agents and apps.",
+        layer: 'tool',
+        oneLiner: "How your product's context flows out to agents and tools.",
     },
-    { name: 'Workflows', slug: 'workflows', layer: 'app', oneLiner: 'How agents act — automated actions in the loop.' },
+    { name: 'Workflows', slug: 'workflows', layer: 'tool', oneLiner: 'How agents act — automated actions in the loop.' },
     {
         name: 'PostHog AI',
         slug: 'ai',
-        layer: 'app',
+        layer: 'tool',
         oneLiner: 'The interface humans and agents use to understand the product.',
     },
 ]
@@ -452,7 +452,7 @@ export const generatePlatformMd = () => {
     const publicPath = path.resolve(__dirname, '../public')
     if (!fs.existsSync(publicPath)) fs.mkdirSync(publicPath, { recursive: true })
 
-    const list = (layer: 'product' | 'app') =>
+    const list = (layer: 'product' | 'tool') =>
         PLATFORM_ITEMS.filter((i) => i.layer === layer)
             .map((i) => `- [${i.name}](${pageLinkFor(i)}) — ${i.oneLiner}`)
             .join('\n')
@@ -467,11 +467,11 @@ The surfaces a customer adopts. Each has a distinct job.
 
 ${list('product')}
 
-## Apps — the functional capabilities
+## Tools — the functional capabilities
 
-The apps produce and act on your product's context. They sit below the products, but this is where the work happens.
+The tools produce and act on your product's context. They sit below the products, but this is where the work happens.
 
-${list('app')}
+${list('tool')}
 
 ## Context — the fuel
 
@@ -483,7 +483,7 @@ ${CONTEXT_WAREHOUSE_BLURB}
 
 ---
 
-Pricing: every app has a generous free tier, then usage-based pricing. Exact numbers: https://posthog.com/pricing.md
+Pricing: every tool has a generous free tier, then usage-based pricing. Exact numbers: https://posthog.com/pricing.md
 All docs are available as Markdown (append \`.md\` to any docs URL). Full index: https://posthog.com/llms.txt
 `
 
@@ -491,7 +491,7 @@ All docs are available as Markdown (append \`.md\` to any docs URL). Full index:
     console.log('Generated: platform.md')
 }
 
-// Generate a clean .md for each product/app page (built from the curated taxonomy, not HTML-scraped,
+// Generate a clean .md for each product/tool page (built from the curated taxonomy, not HTML-scraped,
 // since the slide-based pages don't convert to useful markdown).
 export const generateProductPagesMarkdown = () => {
     const publicPath = path.resolve(__dirname, '../public')
@@ -501,7 +501,7 @@ export const generateProductPagesMarkdown = () => {
         const layerLabel =
             item.layer === 'product'
                 ? "one of PostHog's products — the surfaces you adopt to access self-driving"
-                : "one of PostHog's apps — the functional capabilities that make your product self-driving"
+                : "one of PostHog's tools — the functional capabilities that make your product self-driving"
 
         const content = `# ${item.name}
 
@@ -512,7 +512,7 @@ ${item.name} is ${layerLabel}.
 PostHog is the platform for self-driving products: it pairs the full context of your data (events, errors, logs, replays, and more) with agents that ship better products, faster.
 
 - Full page: ${pageLinkFor(item)}
-- All products and apps: https://posthog.com/platform.md
+- All products and tools: https://posthog.com/platform.md
 - Pricing: https://posthog.com/pricing.md
 
 For features, screenshots, and details, see ${pageLinkFor(item)}.
@@ -624,7 +624,7 @@ export const generateLlmsTxt = (pages) => {
     // Build llms.txt content
     let llmsTxtContent = `# PostHog
 
-> PostHog is the platform for self-driving products. It pairs the full context of your product's data (events, errors, logs, replays, and more) with agents that find problems and ship changes with you. It includes apps for product analytics, session replay, feature flags, A/B testing, error tracking, surveys, AI observability, web analytics, a data warehouse, and more. The fastest way to integrate PostHog is with the setup wizard: \`npx @posthog/wizard@latest\`
+> PostHog is the platform for self-driving products. It pairs the full context of your product's data (events, errors, logs, replays, and more) with agents that find problems and ship changes with you. It includes tools for product analytics, session replay, feature flags, A/B testing, error tracking, surveys, AI observability, web analytics, a data warehouse, and more. The fastest way to integrate PostHog is with the setup wizard: \`npx @posthog/wizard@latest\`
 
 PostHog can be added to any web, mobile, or backend application. All docs pages below are available as raw Markdown by appending \`.md\` to any URL.
 
@@ -653,8 +653,8 @@ If the wizard doesn't support the framework, see the [SDKs and Libraries](https:
 
 `
 
-    // Products and apps overview (self-driving taxonomy) — kept in sync with /platform.md via PLATFORM_ITEMS.
-    llmsTxtContent += `## Products and apps
+    // Products and tools overview (self-driving taxonomy) — kept in sync with /platform.md via PLATFORM_ITEMS.
+    llmsTxtContent += `## Products and tools
 
 PostHog has one umbrella story — self-driving — and four layers. Full machine-readable overview: https://posthog.com/platform.md
 
@@ -663,8 +663,8 @@ ${PLATFORM_ITEMS.filter((i) => i.layer === 'product')
     .map((i) => `- [${i.name}](${mdLinkFor(i)}) — ${i.oneLiner}`)
     .join('\n')}
 
-**Apps** (the functional capabilities):
-${PLATFORM_ITEMS.filter((i) => i.layer === 'app')
+**Tools** (the functional capabilities):
+${PLATFORM_ITEMS.filter((i) => i.layer === 'tool')
     .map((i) => `- [${i.name}](${mdLinkFor(i)}) — ${i.oneLiner}`)
     .join('\n')}
 

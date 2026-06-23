@@ -24,7 +24,7 @@ export const surveys = {
     overview: {
         title: 'Ask anything with no-code surveys',
         description:
-            'Surveys is one of the apps that makes your product self-driving: the qualitative signal in the loop – what users say, not just what they do. Build in-app or on-page popups with freeform text responses, multiple choice, NPS, ratings, and emoji reactions, or use the API for a headless implementation.',
+            'Surveys is one of the tools that makes your product self-driving: the qualitative signal in the loop – what users say, not just what they do. Build in-app or on-page popups with freeform text responses, multiple choice, NPS, ratings, and emoji reactions, or use the API for a headless implementation.',
         textColor: 'text-white', // tw
     },
     videos: {

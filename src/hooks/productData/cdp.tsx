@@ -24,7 +24,7 @@ export const cdp = {
     overview: {
         title: 'Ingest, transform, and send data between 145+ tools',
         description:
-            'The CDP is one of the apps that make your product self-driving: it moves your data wherever agents need to act on it. Import from a warehouse, sync with event data, and send it across 50+ destinations in your stack.',
+            'The CDP is one of the tools that make your product self-driving: it moves your data wherever agents need to act on it. Import from a warehouse, sync with event data, and send it across 50+ destinations in your stack.',
         textColor: 'text-white', // tw
     },
     screenshots: {

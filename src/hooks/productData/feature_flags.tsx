@@ -24,7 +24,7 @@ export const featureFlags = {
         title: 'Safely roll out features to specific users or groups',
         description: (
             <>
-                Feature flags are one of the apps that make your product self-driving: the control layer agents use to
+                Feature flags are one of the tools that make your product self-driving: the control layer agents use to
                 roll a change out and roll it back. Test changes with small groups of users before rolling out wider,
                 then analyze usage with{' '}
                 <Link to="/product-analytics" className="font-bold underline" state={{ newWindow: true }}>

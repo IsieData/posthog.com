@@ -53,7 +53,7 @@ export const workflows = {
     overview: {
         title: 'Automate workflows with product data',
         description:
-            'Workflows is one of the apps that makes your product self-driving: the actions agents take to close the loop. Trigger Slack messages, emails, or events based on live user behavior.',
+            'Workflows is one of the tools that makes your product self-driving: the actions agents take to close the loop. Trigger Slack messages, emails, or events based on live user behavior.',
         textColor: 'text-black',
         layout: 'overlay',
     },

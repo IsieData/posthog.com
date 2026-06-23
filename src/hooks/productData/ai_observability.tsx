@@ -70,7 +70,7 @@ export const aiObservability = {
     overview: {
         title: 'Observe and debug AI in production',
         description:
-            'AI observability is one of the apps that makes your product self-driving: inspect traces, spans, latency, usage, and per-user costs for your AI features – the context agents use to fix LLM behavior.',
+            'AI observability is one of the tools that makes your product self-driving: inspect traces, spans, latency, usage, and per-user costs for your AI features – the context agents use to fix LLM behavior.',
         textColor: 'text-white',
         layout: 'overlay',
     },

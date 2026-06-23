@@ -34,7 +34,7 @@ export const productAnalytics = {
     overview: {
         title: 'Product analytics with autocapture',
         description:
-            'Product analytics is one of the apps that makes your product self-driving: the measurement agents use to see what works. Built to natively work with session replay, feature flags, experiments, and surveys.',
+            'Product analytics is one of the tools that makes your product self-driving: the measurement agents use to see what works. Built to natively work with session replay, feature flags, experiments, and surveys.',
         textColor: 'text-white', // tw
     },
     screenshots: {
