@@ -47,6 +47,11 @@ const FEATURE_DATA: Record<string, BaseFeature> = {
         owner: ['ai-gateway'],
         label: false,
     },
+    'ai-playground': {
+        feature: 'AI playground',
+        owner: ['ai-gateway'],
+        label: false,
+    },
     alerts: {
         feature: 'Alerts',
         owner: ['analytics-platform'],
@@ -56,8 +61,8 @@ const FEATURE_DATA: Record<string, BaseFeature> = {
         owner: ['product-analytics'],
     },
     'background-agents': {
-        feature: 'Background agents',
-        owner: ['posthog-ai'],
+        feature: 'Cloud agents',
+        owner: ['posthog-code'],
         label: 'feature/background-agents',
     },
     'api-structure': {
@@ -71,7 +76,7 @@ const FEATURE_DATA: Record<string, BaseFeature> = {
     },
     autocapture: {
         feature: 'Autocapture',
-        owner: ['analytics-platform', 'web-analytics'],
+        owner: ['web-analytics'],
     },
     'base-currency': {
         feature: 'Base currency',
@@ -88,7 +93,11 @@ const FEATURE_DATA: Record<string, BaseFeature> = {
     },
     'cache-warming': {
         feature: 'Cache warming',
-        owner: ['analytics-platform'],
+        owner: ['query-performance'],
+    },
+    cli: {
+        feature: 'CLI',
+        owner: ['error-tracking'],
     },
     'client-libraries': {
         feature: 'Client libraries',
@@ -134,7 +143,7 @@ const FEATURE_DATA: Record<string, BaseFeature> = {
     },
     'data-colors-themes': {
         feature: 'Data colors & themes',
-        owner: ['analytics-platform'],
+        owner: ['platform-ux'],
         label: 'feature/colors-and-themes',
     },
     'data-management': {
@@ -217,6 +226,11 @@ const FEATURE_DATA: Record<string, BaseFeature> = {
         feature: 'Insights',
         owner: ['product-analytics'],
     },
+    integrations: {
+        feature: 'Integrations',
+        owner: ['workflows'],
+        label: 'feature/integrations',
+    },
     'internal-messaging': {
         feature: 'Internal messaging (email, notifications)',
         owner: ['platform-features'],
@@ -237,18 +251,12 @@ const FEATURE_DATA: Record<string, BaseFeature> = {
     },
     'mcp-server': {
         feature: 'MCP server',
-        owner: ['posthog-ai'],
+        owner: ['signals'],
         label: 'feature/mcp',
     },
     notebooks: {
         feature: 'Notebooks',
-        notes: (
-            <>
-                Owns the notebooks feature and triages other tickets out to the right owner (e.g. insights in notebooks
-                is owned by product analytics)
-            </>
-        ),
-        owner: ['platform-features'],
+        owner: ['data-tools'],
         label: 'feature/notebooks',
     },
     oauth: {
@@ -315,7 +323,7 @@ const FEATURE_DATA: Record<string, BaseFeature> = {
     },
     'posthog-ai': {
         feature: 'PostHog AI platform',
-        owner: ['posthog-ai'],
+        owner: ['signals'],
         label: 'feature/posthog-ai',
     },
     'posthog-code': {
@@ -340,12 +348,17 @@ const FEATURE_DATA: Record<string, BaseFeature> = {
     },
     'query-performance': {
         feature: 'Query performance',
-        owner: ['analytics-platform'],
+        owner: ['query-performance'],
         label: 'feature/insights',
     },
     'quota-limiting': {
         feature: 'Quota limiting',
         owner: ['billing', 'platform-features'],
+        label: false,
+    },
+    'realtime-cohort-calculations': {
+        feature: 'Realtime cohort calculations',
+        owner: ['feature-flags'],
         label: false,
     },
     replay: {
@@ -430,7 +443,7 @@ const FEATURE_DATA: Record<string, BaseFeature> = {
     },
     'slack-app': {
         feature: 'Slack app',
-        owner: ['posthog-ai'],
+        owner: ['signals'],
         label: 'feature/slack-app',
     },
     settings: {
@@ -464,6 +477,10 @@ const FEATURE_DATA: Record<string, BaseFeature> = {
     subscriptions: {
         feature: 'Subscriptions',
         owner: ['analytics-platform'],
+    },
+    support: {
+        feature: 'Support',
+        owner: ['conversations'],
     },
     surveys: {
         feature: 'Surveys',
