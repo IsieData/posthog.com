@@ -64,7 +64,7 @@ export default function PostHogMCPLanding(): JSX.Element {
                             A product analyst that lives in your editor. Ask anything.
                         </p>
                         <div className="flex flex-wrap gap-2 mb-6">
-                            <CallToAction type="primary" size="md" to="http://app.posthog.com/sign-up">
+                            <CallToAction type="primary" size="md" to="https://app.posthog.com/signup">
                                 Get started free
                             </CallToAction>
                             <CallToAction
@@ -229,7 +229,7 @@ export default function PostHogMCPLanding(): JSX.Element {
                                     'experiments',
                                     'error_tracking',
                                     'surveys',
-                                    'llm_analytics',
+                                    'ai_observability',
                                     'data_warehouse',
                                     'cdp',
                                     'logs',
@@ -427,7 +427,7 @@ export default function PostHogMCPLanding(): JSX.Element {
                             <p>That's it! You're ready to start integrating.</p>
 
                             <div className="flex flex-wrap gap-2 mt-4">
-                                <CallToAction type="primary" size="md" to="http://app.posthog.com/sign-up">
+                                <CallToAction type="primary" size="md" to="https://app.posthog.com/signup">
                                     Get started free
                                 </CallToAction>
                                 <CallToAction
