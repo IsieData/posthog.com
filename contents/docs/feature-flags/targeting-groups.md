@@ -12,6 +12,8 @@ This tutorial shows you how to target these non-user entities in your use of fea
 
 If you enabled [group analytics](/docs/product-analytics/group-analytics) and set up group identification, targeting by groups, teams, or organizations is easy. When creating your feature flag, make sure **Properties** is selected as the top-level targeting mode under **Release conditions**. Then, on each condition set, use the **Target by** dropdown to select your group type name, add any conditions you want, and roll out the flag.
 
+![Target by group type](https://res.cloudinary.com/dmukukwp6/image/upload/q_auto,f_auto/Screenshot_2026_06_24_at_3_38_15_PM_4e4128972b.png)
+
 ### Property or cohort filter
 
 Another way to target an organization or team is to use the email or similar repeated identifier of a user. This enables you to filter for groups without using group analytics. Similarly, you can create a cohort for the organization, then use that as a condition.
