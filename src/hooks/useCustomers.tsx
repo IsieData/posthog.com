@@ -528,8 +528,8 @@ const CUSTOMER_DATA: Record<string, BaseCustomer> = {
                 },
                 quotes: [
                     "About 1 out of 7 requests was successful. Before switching to Endpoints, during the last few weeks we weren't able to get any reports at all — the API was constantly responding that it was too busy and couldn't process our requests.",
-                    'The requests started to be processed much faster, and the response stability improved significantly.',
-                    'Previously, marketers had to manually gather all this information from different PostHog dashboards. After automation, everything is now consolidated and available in a single place, and they spend their time analyzing the results instead of searching for the right data.',
+                    "The requests started to be processed much faster, and the response stability improved significantly.",
+                    "Previously, marketers had to manually gather all this information from different PostHog dashboards. After automation, everything is now consolidated and available in a single place, and they spend their time analyzing the results instead of searching for the right data.",
                 ],
             },
         },
