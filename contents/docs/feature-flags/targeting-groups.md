@@ -10,9 +10,7 @@ This tutorial shows you how to target these non-user entities in your use of fea
 
 ## Targeting groups, teams, or organizations
 
-If you enabled [group analytics](/docs/product-analytics/group-analytics) and set up group idenitifcation, targeting by groups, teams, or organizations is easy. When creating your feature flag, change the "Match by" value under "Release conditions" your group type name, add any conditions you want, and roll out the flag.
-
-![Match by organization](https://res.cloudinary.com/dmukukwp6/image/upload/v1710055416/posthog.com/contents/images/tutorials/group-page-machine-flags/org.png)
+If you enabled [group analytics](/docs/product-analytics/group-analytics) and set up group identification, targeting by groups, teams, or organizations is easy. When creating your feature flag, make sure **Properties** is selected as the top-level targeting mode under **Release conditions**. Then, on each condition set, use the **Target by** dropdown to select your group type name, add any conditions you want, and roll out the flag.
 
 ### Property or cohort filter
 
