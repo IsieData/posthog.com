@@ -67,7 +67,6 @@ const AIObservability: React.FC = () => {
                 buttonText="Start capturing LLM data"
                 buttonLink="/docs/ai-observability/start-here"
                 imageColumnClasses="max-w-96 mt-8 md:mt-0"
-                imageClasses="max-h-48 md:max-h-64"
                 imageUrl="https://res.cloudinary.com/dmukukwp6/image/upload/ai_robo_hog_9c1c225c94.png"
             />
 

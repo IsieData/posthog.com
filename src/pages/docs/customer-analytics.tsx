@@ -86,7 +86,6 @@ export const Content = ({ quickLinks = true }) => {
                 description="Understand your customers without building dashboards from scratch. Track active users, signups, conversions, and engagement."
                 buttonText="Setup guide"
                 buttonLink="/docs/customer-analytics/start-here"
-                imageClasses="max-h-48 md:max-h-64"
                 imageUrl="https://res.cloudinary.com/dmukukwp6/image/upload/q_auto,f_auto/hog_crm_40195fd72f.png"
             />
             <section className="mb-4">

@@ -211,7 +211,6 @@ const PostHogAI: React.FC = () => {
                         buttonLink="/docs/posthog-ai/start-here"
                         imageColumnClasses="mt-4 md:-mt-8"
                         imageUrl="https://res.cloudinary.com/dmukukwp6/image/upload/q_auto,f_auto/all_knowing_4e50835711.png"
-                        imageClasses="max-h-48 md:max-h-64"
                     />
                 </section>
 

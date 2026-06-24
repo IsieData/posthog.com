@@ -136,7 +136,6 @@ const SessionRecording: React.FC<SessionRecordingProps> = ({ data }) => {
                 buttonLink="/docs/session-replay/start-here"
                 imageColumnClasses="max-w-96 mt-8 md:mt-0"
                 imageUrl="https://res.cloudinary.com/dmukukwp6/image/upload/SESSION_REPLAY_a3ca565731.png"
-                imageClasses="max-h-48 md:max-h-64"
             />
 
             <AskMax

@@ -193,7 +193,6 @@ const FeatureFlags: React.FC = () => {
                         buttonLink="/docs/feature-flags/start-here"
                         imageColumnClasses="mt-4 md:-mt-8"
                         imageUrl="https://res.cloudinary.com/dmukukwp6/image/upload/posthog.com/src/components/Home/Slider/images/feature-flags-hog.png"
-                        imageClasses="max-h-48 md:max-h-64"
                     />
                 </section>
 

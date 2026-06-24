@@ -49,7 +49,6 @@ export const Content = ({ quickLinks = false }) => {
                 buttonLink="/docs/product-analytics/installation"
                 imageColumnClasses="max-w-96"
                 imageUrl="https://res.cloudinary.com/dmukukwp6/image/upload/PRODUCT_ANALYTICS_hog_23b2808c18.png"
-                imageClasses="max-h-48 md:max-h-64"
             />
 
             <AskMax

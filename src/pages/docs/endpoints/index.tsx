@@ -142,7 +142,6 @@ const Endpoints: React.FC = () => {
                         description="Create predefined queries from insights or SQL and expose them as optimized API endpoints."
                         buttonText="Get started"
                         buttonLink="/docs/endpoints/start-here"
-                        imageClasses="max-h-48 md:max-h-64"
                         imageUrl="https://res.cloudinary.com/dmukukwp6/image/upload/multiple_puzzle_teamwork_f73168bc7c.png"
                     />
                 </section>
