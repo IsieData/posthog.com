@@ -81,7 +81,7 @@ const WebAnalytics: React.FC<WebAnalyticsProps> = ({ data }) => {
                     buttonText="Installation guide"
                     buttonLink="/docs/web-analytics/installation"
                     imageColumnClasses="mt-4 md:-mt-8"
-                    imageUrl="https://res.cloudinary.com/dmukukwp6/image/upload/web_analytics_hog_f6db3a01c9.png"
+                    imageUrl="https://res.cloudinary.com/dmukukwp6/image/upload/web_cursor_hog_2e5fec02ad.png"
                     imageClasses="max-h-48 md:max-h-64"
                 />
 

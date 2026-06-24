@@ -143,7 +143,7 @@ const Endpoints: React.FC = () => {
                         buttonText="Get started"
                         buttonLink="/docs/endpoints/start-here"
                         imageClasses="max-h-48 md:max-h-64"
-                        imageUrl="https://res.cloudinary.com/dmukukwp6/image/upload/q_auto,f_auto/hog_endpoints_8737bb2c29.png"
+                        imageUrl="https://res.cloudinary.com/dmukukwp6/image/upload/multiple_puzzle_teamwork_f73168bc7c.png"
                     />
                 </section>
 
