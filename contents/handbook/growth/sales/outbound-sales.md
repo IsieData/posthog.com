@@ -221,10 +221,10 @@ Create an opportunity in `Problem Agreement` only when all of the following are 
 - **The meeting was held** - No-shows are not qualified. If rescheduled, fantastic - the meeting must happen before opportunity creation. 
 - **ICP fit is confirmed** — the account matches [who we build for](/handbook/who-we-build-for) or the "fit" for PostHog is otherwise undeniable.
 - **A specific pain is identified** — there is a concrete problem PostHog addresses.
-- **The prospect agrees the problem** is worth exploring
+- **The prospect agrees the problem is worth exploring** -- as we're reaching out to these folks, they need to tell us it's a big enough problem to solve. 
 - **There's a known timeline** — they intend to do something about it inside a defined window (roughly the next two quarters).
 - **You have access to authority** — you're talking to, or have a confirmed path to, whoever decides or could champion PostHog internally. 
-- **A mutually-agreed next step** is on the calendar — demo, trial kickoff, technical eval, with a date. No committed next step, no opp.
+- **A mutually-agreed next step** is on the calendar — demo, trial kickoff, technical eval, with a date. Ideally, we secure a verbal commitment on the call, and this is an emphasis point for TAEs. No committed next step, no opp.
 
 ## How our outbound data pipelines work
 
