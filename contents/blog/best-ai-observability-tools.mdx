@@ -224,9 +224,11 @@ Teams building complex agents who want open-source observability with agent simu
 
 ![OpenLLMetry dashboard](https://res.cloudinary.com/dmukukwp6/image/upload/openllmetry_dashboard_ec040a225c.png)
 
-OpenLLMetry is an open-source set of extensions to OpenTelemetry, built by Traceloop. It's the pick for teams that already run OpenTelemetry and want LLM instrumentation to fit their existing stack rather than introduce a new platform. It captures data from a wide range of LLM providers, vector databases, and frameworks, then sends it to whatever backend you already use, from Datadog to New Relic to Honeycomb. It's Apache 2.0-licensed, and its conventions directly seeded the OpenTelemetry GenAI SIG – now the upstream standard for LLM observability, though still in experimental status as of 2026.
+OpenLLMetry is an open-source set of extensions to OpenTelemetry, built by Traceloop. It's the pick for teams that already run OpenTelemetry and want LLM instrumentation to fit their existing stack rather than introduce a new platform. 
 
-One thing to factor in: Traceloop was acquired by ServiceNow in March 2026 to power its AI Control Tower governance platform. Unlike Helicone's maintenance-mode acquisition, Traceloop is being actively built, but it does mean the platform's roadmap and pricing are now shaped by a large enterprise vendor rather than an independent startup. Worth knowing before you build a dependency on it.
+It captures data from a wide range of LLM providers, vector databases, and frameworks, then sends it to whatever backend you already use, from Datadog to New Relic to Honeycomb. It's Apache 2.0-licensed, and its conventions directly seeded the OpenTelemetry GenAI SIG – now the upstream standard for LLM observability, though still in experimental status as of 2026.
+
+One thing to factor in: Traceloop was acquired by ServiceNow in March 2026 to power its AI Control Tower governance platform. The platform's roadmap and pricing are now shaped by a large enterprise vendor rather than an independent startup; worth knowing before you build a dependency on it.
 
 OpenLLMetry is instrumentation, not a full platform, so it isn't where you go for prompt management. Traceloop, the company behind it, adds an evaluation and dashboard layer; its free tier covers 50,000 spans per month with 24-hour data retention.
 
@@ -257,9 +259,13 @@ The free tier is not a good indicator of how your cost would scale. What actuall
 | LangWatch | Per seat + event-based overage | Seat plus event volume |
 | OpenLLMetry | Free library, backend billed separately | Your backend's storage costs |
 
-Two patterns cause most of the bill shock. **Per-seat pricing** punishes team growth. **Per-span, per-observation, or per-event pricing** punishes agents, because a single agent run can emit ten or more spans, so your volume balloons faster than your traffic does. The exception is **per-trace pricing** (LangSmith): one trace covers a whole request no matter how many calls are nested inside, so an agent's fan-out doesn't inflate the count – there, the cost drivers are seats and request volume instead.
+Two patterns cause most of the bill shock. **Per-seat pricing** punishes team growth. **Per-span, per-observation, or per-event pricing** punishes agents, because a single agent run can emit ten or more spans, so your volume balloons faster than your traffic does. 
 
-Here's a concrete example. Say you're a five-engineer team running an LLM feature in production. It handles 100,000 user requests a month, but each request is an agent making around five model calls plus two tool calls – roughly seven spans/operations per request, so about 700,000 spans a month across 100,000 top-level requests. Let's see how much this would cost, across different platforms:
+The exception is **per-trace pricing** (LangSmith): one trace covers a whole request no matter how many calls are nested inside, so an agent's fan-out doesn't inflate the count – there, the cost drivers are seats and request volume instead.
+
+> Here's a concrete example. Say you're a five-engineer team running an LLM feature in production. It handles 100,000 user requests a month, but each request is an agent making around five model calls plus two tool calls – roughly seven spans/operations per request, so about 700,000 spans a month across 100,000 top-level requests. 
+
+Let's see how much this would cost, across different platforms:
 
 - **PostHog:** the first 100,000 LLM analytics events each month are free, then you pay a $0.00006 per-event rate with no seat fees. PostHog logs each generation and span as an event, so this workload is roughly 700,000 events; you'd pay for the ~600,000 above the free tier = ~$36.
 
@@ -271,7 +277,7 @@ Here's a concrete example. Say you're a five-engineer team running an LLM featur
 
 - **Self-hosting (PostHog, Langfuse, Phoenix, Opik, LangWatch, or OpenLLMetry):** no per-observation or per-seat fee at all. You trade that for the infrastructure and the engineering time to run it. At high volume, this is usually the cheapest path if you have the people to maintain it.
 
-Takeaway: if your team is growing, avoid per-seat models. If your app is agent-heavy, watch per-span pricing closely. And if you have the ops capacity, self-hosting an open-source tool is the most predictable bill at scale. 
+**Takeaway**: if your team is growing, avoid per-seat models. If your app is agent-heavy, watch per-span pricing closely. And if you have the ops capacity, self-hosting an open-source tool is the most predictable bill at scale. 
 
 ## Which LLM observability tool should you choose?
 
