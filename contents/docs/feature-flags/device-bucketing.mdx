@@ -8,11 +8,6 @@ import { CalloutBox } from "components/Docs/CalloutBox"
 
 Device bucketing keeps feature flag values stable for anonymous and pre-login users. Instead of hashing on the user's `distinct_id`, PostHog hashes on `$device_id`, which stays the same when someone signs up, logs in, or logs out on the same browser or device.
 
-<CalloutBox icon="IconWarning" title="Beta feature" type="action">
-
-Device bucketing is currently in beta. JavaScript web supports it automatically. Other SDKs support it when you send the device ID as `$device_id` in person properties when evaluating flags, including with local evaluation.
-
-</CalloutBox>
 
 Use it when a flag is shown before `identify()` runs, such as signup flows, landing page experiments, and onboarding that starts before authentication. If you need the same user to get the same value across multiple devices, keep the default user bucketing instead.
 
