@@ -7,8 +7,9 @@ showTitle: true
 hideAnchor: true
 author:
     - natalia-amorim
+    -
 featuredImage: >-
-    https://res.cloudinary.com/dmukukwp6/image/upload/posthog.com/contents/images/blog/hog_ql.png
+    https://res.cloudinary.com/dmukukwp6/image/upload/Film_Noir_Hog_Evals_beta_announcement_blog_b7b25b6aeb.png
 featuredImageType: full
 category: General
 tags:
@@ -254,7 +255,6 @@ The free tier is not a good indicator of how your cost would scale. What actuall
 | Arize Phoenix | Free self-host; Arize AX usage-based | Span volume on the cloud (AX) plan |
 | Braintrust | Flat fee + data, no seats | Data volume and score count above your tier |
 | W&B Weave | Per seat + data ingestion | Seats plus ingested bytes |
-| Helicone | Request-based tiers | Request volume, plus maintenance-mode risk |
 | Opik | Usage-based per span | Span volume |
 | LangWatch | Per seat + event-based overage | Seat plus event volume |
 | OpenLLMetry | Free library, backend billed separately | Your backend's storage costs |
@@ -347,20 +347,6 @@ LLM observability adds a quality dimension. A model call can return a perfectly 
 <summary>Do I need LLM observability if I'm just using OpenAI's API?</summary>
 
 Yes, if real users are involved. Calling OpenAI's API directly still leaves you blind to which prompts cause bad answers, where your token spend is going, and how latency behaves under load. Even a simple setup benefits from capturing requests and costs. Tools like PostHog and Langfuse can start logging your OpenAI calls with very little setup, so there's little reason to fly blind.
-
-</details>
-
-<details>
-<summary>Which LLM observability tool is best for a solo developer or side project?</summary>
-
-For a solo developer, prioritize a generous free tier and minimal setup. **PostHog** gives you 100,000 LLM events free a month plus the rest of its platform, **Langfuse** is free to self-host, and **Opik** offers 25,000 spans monthly with 60 day reteniton. Avoid per-seat tools like **LangSmith** for solo work, since you'd be paying for team capacity you don't need.
-
-</details>
-
-<details>
-<summary>Which is best for an early-stage startup?</summary>
-
-Early-stage startups should look for a free tier with real headroom, self-serve onboarding, and pricing that doesn't punish growth. **PostHog** stands out because LLM observability comes with product analytics, session replay, and experiments in one platform, so you don't buy separate tools as you scale. **Braintrust** is also strong thanks to its 1 GB (~1M span) free tier and no per-seat charges, and **Langfuse** is the best dedicated open-source choice.
 
 </details>
 
