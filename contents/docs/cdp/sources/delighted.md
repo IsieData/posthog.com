@@ -65,3 +65,7 @@ Delighted tables support different sync modes depending on whether the API expos
 | `metrics`          | Full refresh | Single-row snapshot, reloads on every sync  |
 
 The `survey_responses` table supports a true `updated_at` cursor, so updated responses are re-synced. The `people`, `unsubscribes`, and `bounces` tables are append-only based on their event timestamp.
+
+## Supported tables
+
+<SourceTables />
