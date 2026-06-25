@@ -91,25 +91,8 @@ const PageModal = ({ children }: { children: React.ReactNode }) => {
 }
 
 const Router = (props) => {
-    const { minimizeWindow, closeWindow } = useApp()
     const { appWindow } = useWindow()
-    const { children, path, minimizing, onExit } = props
-
-    useEffect(() => {
-        if (minimizing) {
-            minimizeWindow(appWindow)
-            // Trigger the animation in the TaskBarMenu
-            const taskbarMenu = document.querySelector('#taskbar')
-            if (taskbarMenu) {
-                const event = new CustomEvent('windowMinimized')
-                taskbarMenu.dispatchEvent(event)
-            }
-        }
-
-        return () => {
-            onExit?.()
-        }
-    }, [minimizing])
+    const { children, path } = props
 
     if (/^\/questions/.test(path)) {
         return <Inbox {...props} />
@@ -200,6 +183,7 @@ export default function AppWindow({ item, chrome = true }: { item: AppWindowType
         menu: appMenu,
         taskbarRef,
         websiteMode,
+        closeWindow,
     } = useApp()
     const isSSR = typeof window === 'undefined'
     const controls = useDragControls()
@@ -612,11 +596,7 @@ export default function AppWindow({ item, chrome = true }: { item: AppWindowType
     )
 
     const handleClose = () => {
-        setAnimating(true)
-        setClosing(true)
-        setTimeout(() => {
-            setClosed(true)
-        }, 0)
+        closeWindow(item)
     }
 
     const onAnimationStart = () => {
@@ -694,230 +674,85 @@ export default function AppWindow({ item, chrome = true }: { item: AppWindowType
                 </div>
             ) : (
                 <WindowContainer closing={closing}>
-                    {!item.minimized && !closed && (
-                        <>
-                            {snapIndicator && <SnapIndicator side={snapIndicator} />}
-                            <motion.div
-                                ref={windowRef}
-                                data-app="AppWindow"
+                    <div
+                        ref={windowRef}
+                        data-app="AppWindow"
+                        data-scheme="tertiary"
+                        className={`@container relative size-full !select-auto flex flex-col border-primary ${
+                            siteSettings.heaterMode
+                                ? 'bg-primary/75 backdrop-blur-3xl will-change-[transform,backdrop-filter] transform-gpu'
+                                : `bg-primary ${meshVariant}`
+                        } flex flex-col ${
+                            siteSettings.experience === 'boring'
+                                ? ''
+                                : `border rounded-lg ${
+                                      item.expanded
+                                          ? 'rounded-tr-none rounded-tl-none'
+                                          : item.snapped === 'left'
+                                          ? 'rounded-tl-none rounded-tr-none rounded-br-none'
+                                          : item.snapped === 'right'
+                                          ? 'rounded-tl-none rounded-tr-none rounded-bl-none'
+                                          : ''
+                                  }`
+                        }`}
+                    >
+                        <div className={`${hasToolbar ? 'bg-primary flex items-center py-0.5 px-1' : ''}`}>
+                            {hasToolbar && <div className="flex-1" />}
+                            {item.appSettings?.size?.fixed && (
+                                <div
+                                    className={`group cursor-move touch-none z-50 ${
+                                        hasToolbar ? '' : 'absolute top-2 left-1/2 -translate-x-1/2'
+                                    }`}
+                                    onPointerDown={(e) => controls.start(e)}
+                                    onDoubleClick={toggleMaximize}
+                                >
+                                    <IconDrag className="size-5 rotate-90 opacity-25 group-hover:opacity-50 text-primary" />
+                                </div>
+                            )}
+                            <div
                                 data-scheme="tertiary"
-                                suppressHydrationWarning
-                                className={`@container absolute !select-auto flex flex-col ${
-                                    item.expanded && siteSettings.experience !== 'boring'
-                                        ? 'top-0 left-2 right-2 bottom-2'
-                                        : ''
-                                } ${
-                                    item.appSettings?.size?.fixed
-                                        ? 'bg-transparent'
-                                        : siteSettings.heaterMode
-                                        ? 'bg-primary/75 backdrop-blur-3xl will-change-[transform,backdrop-filter] transform-gpu'
-                                        : `bg-primary ${meshVariant}`
-                                } ${
-                                    siteSettings.experience === 'boring' && !item.appSettings?.size?.fixed
-                                        ? 'border-b border-primary'
-                                        : `${
-                                              focusedWindow === item
-                                                  ? 'shadow-2xl border-primary'
-                                                  : 'shadow-lg border-input'
-                                          } ${dragging ? '[&_*]:select-none' : ''} ${
-                                              item.minimal
-                                                  ? '!shadow-none'
-                                                  : `flex flex-col ${
-                                                        siteSettings.experience === 'boring'
-                                                            ? ''
-                                                            : `border rounded-lg ${
-                                                                  item.expanded
-                                                                      ? 'rounded-tr-none rounded-tl-none'
-                                                                      : item.snapped === 'left'
-                                                                      ? 'rounded-tl-none rounded-tr-none rounded-br-none'
-                                                                      : item.snapped === 'right'
-                                                                      ? 'rounded-tl-none rounded-tr-none rounded-bl-none'
-                                                                      : ''
-                                                              }`
-                                                    }`
-                                          }`
-                                } ${chrome ? 'overflow-hidden' : ''}`}
-                                style={{
-                                    zIndex: item.zIndex,
-                                    ...(item.expanded || siteSettings.experience === 'boring'
-                                        ? {}
-                                        : {
-                                              width: size.width,
-                                              height: item.appSettings?.size?.autoHeight ? 'auto' : size.height,
-                                          }),
-                                }}
-                                initial={
-                                    item.expanded && !item.fromOrigin
-                                        ? false
-                                        : {
-                                              scale: 0.08,
-                                              x: rendered
-                                                  ? siteSettings.experience === 'boring' || !windowPosition
-                                                      ? 0
-                                                      : windowPosition.x
-                                                  : item.fromOrigin?.x ||
-                                                    windowPosition?.x ||
-                                                    (item.expanded ? 0 : Math.round(position.x)),
-                                              y: rendered
-                                                  ? siteSettings.experience === 'boring' || !windowPosition
-                                                      ? 0
-                                                      : windowPosition.y
-                                                  : item.fromOrigin?.y ||
-                                                    windowPosition?.y ||
-                                                    (item.expanded ? 0 : Math.round(position.y)),
-                                              ...(siteSettings.experience === 'boring'
-                                                  ? { width: '100%', height: '100%' }
-                                                  : {}),
-                                          }
-                                }
-                                animate={{
-                                    scale: 1,
-                                    x:
-                                        siteSettings.experience === 'boring' || item.expanded
-                                            ? 0
-                                            : Math.round(position.x),
-                                    y:
-                                        siteSettings.experience === 'boring' || item.expanded
-                                            ? 0
-                                            : Math.round(position.y),
-                                    ...(siteSettings.experience === 'boring' ? { width: '100%', height: '100%' } : {}),
-                                    transition: {
-                                        duration:
-                                            siteSettings.experience === 'boring' ||
-                                            siteSettings.performanceBoost ||
-                                            leftDragResizing
-                                                ? 0
-                                                : 0.2,
-                                        scale: {
-                                            duration:
-                                                siteSettings.experience === 'boring' ||
-                                                siteSettings.performanceBoost ||
-                                                !windowPosition
-                                                    ? 0
-                                                    : 0.2,
-                                            delay:
-                                                siteSettings.experience === 'boring' ||
-                                                siteSettings.performanceBoost ||
-                                                !windowPosition
-                                                    ? 0
-                                                    : 0.2,
-                                            ease: [0.2, 0.2, 0.8, 1],
-                                        },
-                                    },
-                                }}
-                                exit={{
-                                    scale: 0.005,
-                                    ...(closing || !windowPosition ? {} : { x: windowPosition.x, y: windowPosition.y }),
-                                    transition: {
-                                        scale: {
-                                            duration:
-                                                siteSettings.experience === 'boring' || siteSettings.performanceBoost
-                                                    ? 0
-                                                    : 0.23,
-                                            ease: [0.2, 0.2, 0.8, 1],
-                                        },
-                                        x: {
-                                            duration: 0.23,
-                                            ease: [0.2, 0.2, 0.8, 1],
-                                        },
-                                        y: {
-                                            duration: 0.23,
-                                            ease: [0.2, 0.2, 0.8, 1],
-                                        },
-                                    },
-                                }}
-                                drag={siteSettings.experience === 'posthog'}
-                                dragControls={controls}
-                                dragListener={false}
-                                dragMomentum={false}
-                                dragConstraints={constraintsRef}
-                                onDrag={handleDrag}
-                                onDragEnd={handleDragEnd}
-                                onDragTransitionEnd={handleDragTransitionEnd}
-                                onMouseDown={handleMouseDown}
-                                onAnimationStart={onAnimationStart}
-                                onAnimationComplete={onAnimationComplete}
+                                onDoubleClick={handleDoubleClick}
+                                className={`inline-flex gap-1 items-center py-0.5 pl-1.5 pr-0.5 skin-classic:bg-primary opacity-40 hover:opacity-75 transition-opacity duration-100 ${
+                                    hasToolbar ? 'flex-1 justify-end' : 'absolute z-20 right-1 top-1'
+                                }`}
                             >
-                                {!item.minimal && !compact && siteSettings.experience !== 'boring' && (
-                                    <div className={`${hasToolbar ? 'bg-primary flex items-center py-0.5 px-1' : ''}`}>
-                                        {hasToolbar && <div className="flex-1" />}
-                                        {item.appSettings?.size?.fixed && (
-                                            <div
-                                                className={`group cursor-move touch-none z-50 ${
-                                                    hasToolbar ? '' : 'absolute top-2 left-1/2 -translate-x-1/2'
-                                                }`}
-                                                onPointerDown={(e) => controls.start(e)}
-                                                onDoubleClick={toggleMaximize}
-                                            >
-                                                <IconDrag className="size-5 rotate-90 opacity-25 group-hover:opacity-50 text-primary" />
-                                            </div>
-                                        )}
-                                        <div
-                                            data-scheme="tertiary"
-                                            onDoubleClick={handleDoubleClick}
-                                            className={`inline-flex gap-1 items-center py-0.5 pl-1.5 pr-0.5 skin-classic:bg-primary opacity-40 hover:opacity-75 transition-opacity duration-100 ${
-                                                hasToolbar ? 'flex-1 justify-end' : 'absolute z-20 right-1 top-1'
-                                            }`}
-                                        >
-                                            <div className="flex justify-end">
-                                                <Tooltip
-                                                    trigger={
-                                                        <OSButton
-                                                            windowButton
-                                                            size="md"
-                                                            onClick={handleClose}
-                                                            icon={<IconX />}
-                                                        />
-                                                    }
-                                                >
-                                                    <div className="flex flex-col items-center gap-2">
-                                                        <span>Close window</span>
-                                                        <div>
-                                                            <KeyboardShortcut text="Shift" size="xs" />
-                                                            &nbsp;
-                                                            <KeyboardShortcut text="W" size="xs" />
-                                                        </div>
-                                                    </div>
-                                                </Tooltip>
+                                <div className="flex justify-end">
+                                    <Tooltip
+                                        trigger={
+                                            <OSButton windowButton size="md" onClick={handleClose} icon={<IconX />} />
+                                        }
+                                    >
+                                        <div className="flex flex-col items-center gap-2">
+                                            <span>Close window</span>
+                                            <div>
+                                                <KeyboardShortcut text="Shift" size="xs" />
+                                                &nbsp;
+                                                <KeyboardShortcut text="W" size="xs" />
                                             </div>
                                         </div>
-                                    </div>
-                                )}
-                                <div
-                                    ref={contentRef}
-                                    style={animating ? { visibility: 'hidden' } : undefined}
-                                    className={`size-full flex-grow ${
-                                        chrome
-                                            ? `overflow-hidden rounded-lg ${hasToolbar ? 'rounded-t-none' : ''} ${
-                                                  item.expanded
-                                                      ? 'rounded-tr-none rounded-tl-none'
-                                                      : item.snapped === 'left'
-                                                      ? 'rounded-tl-none rounded-tr-none rounded-br-none'
-                                                      : item.snapped === 'right'
-                                                      ? 'rounded-tl-none rounded-tr-none rounded-bl-none'
-                                                      : ''
-                                              }`
-                                            : ''
-                                    }`}
-                                >
-                                    <Router
-                                        minimizing={minimizing}
-                                        onExit={() => {
-                                            if (minimizing) {
-                                                setMinimizing(false)
-                                                if (siteSettings.experience === 'posthog') {
-                                                    setAnimating(true)
-                                                }
-                                            }
-                                        }}
-                                        {...item.props}
-                                    >
-                                        {item.element}
-                                    </Router>
+                                    </Tooltip>
                                 </div>
-                            </motion.div>
-                        </>
-                    )}
+                            </div>
+                        </div>
+                        <div
+                            ref={contentRef}
+                            className={`size-full flex-grow ${
+                                chrome
+                                    ? `overflow-hidden rounded-lg ${hasToolbar ? 'rounded-t-none' : ''} ${
+                                          item.expanded
+                                              ? 'rounded-tr-none rounded-tl-none'
+                                              : item.snapped === 'left'
+                                              ? 'rounded-tl-none rounded-tr-none rounded-br-none'
+                                              : item.snapped === 'right'
+                                              ? 'rounded-tl-none rounded-tr-none rounded-bl-none'
+                                              : ''
+                                      }`
+                                    : ''
+                            }`}
+                        >
+                            <Router {...item.props}>{item.element}</Router>
+                        </div>
+                    </div>
                 </WindowContainer>
             )}
         </WindowProvider>

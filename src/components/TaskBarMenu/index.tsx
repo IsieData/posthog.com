@@ -282,7 +282,7 @@ export default function TaskBarMenu() {
 
     return (
         <>
-            <div className="website:z-40 website:border-b website:border-primary os:z-50 os:p-2 os:pb-0">
+            <div className="z-50">
                 <motion.div
                     onAnimationComplete={updateTaskbarHeight}
                     ref={taskbarRef}

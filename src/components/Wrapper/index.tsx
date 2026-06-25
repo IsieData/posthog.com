@@ -30,45 +30,17 @@ export default function Wrapper() {
     }, [closingAllWindowsAnimation])
 
     return (
-        <div
-            data-scheme="primary"
-            className="os:fixed os:inset-0 os:size-full website:max-w-7xl website:mx-auto website:border-x website:border-primary website:bg-primary website:shadow-xl website:min-h-screen flex flex-col"
-            id="app-container"
-        >
+        <div data-scheme="primary" className="h-screen flex flex-col p-2" id="app-container">
             {!compact && <TaskBarMenu />}
             <div ref={constraintsRef} className={`flex-grow relative min-h-0`}>
                 <Desktop />
-                <AnimatePresence>
-                    {windows.map((item, index) => {
-                        return (
-                            <motion.div
-                                key={item.key}
-                                animate={
-                                    shakeReady
-                                        ? {
-                                              x: [0, (Math.random() - 0.5) * 45],
-                                              y: [0, (Math.random() - 0.5) * 22],
-                                              rotate: [0, (Math.random() - 0.5) * 15],
-                                              transition: {
-                                                  delay: index * 0.05,
-                                                  duration: 0.1,
-                                              },
-                                          }
-                                        : {}
-                                }
-                                exit={{
-                                    y: typeof window !== 'undefined' ? window.innerHeight + 200 : 0,
-                                    transition: {
-                                        delay: index * 0.05,
-                                        ease: 'easeInOut',
-                                    },
-                                }}
-                            >
-                                <AppWindow item={item} key={item.key} chrome={item.key !== 'search'} />
-                            </motion.div>
-                        )
-                    })}
-                </AnimatePresence>
+                <div className="flex size-full">
+                    <AnimatePresence>
+                        {windows.map((item) => (
+                            <AppWindow item={item} key={item.key} chrome={item.key !== 'search'} />
+                        ))}
+                    </AnimatePresence>
+                </div>
             </div>
             <WebsiteFooter />
             {/*             
