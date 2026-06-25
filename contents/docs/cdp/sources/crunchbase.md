@@ -64,6 +64,10 @@ Data is partitioned by the `created_at` field using monthly partitions.
 
 <SourceParameters />
 
+## Supported tables
+
+<SourceTables />
+
 ## Limitations
 
 - **Deletions not synced** – If a record is removed from Crunchbase's dataset, that deletion isn't reflected in PostHog. The record remains in your synced tables.
