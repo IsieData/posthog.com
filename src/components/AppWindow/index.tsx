@@ -675,6 +675,7 @@ export default function AppWindow({ item, chrome = true }: { item: AppWindowType
             ) : (
                 <WindowContainer closing={closing}>
                     <div
+                        onMouseDown={handleMouseDown}
                         ref={windowRef}
                         data-app="AppWindow"
                         data-scheme="tertiary"

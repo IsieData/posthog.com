@@ -1611,7 +1611,7 @@ export const Provider = ({ children, element, location }: AppProviderProps) => {
             location?: Location,
             additional: {
                 expanded?: boolean
-                snapped?: boolean
+                snapped?: 'left' | 'right' | false
                 size?: { width: number; height: number }
                 position?: { x: number; y: number }
             } = {}
@@ -1622,7 +1622,7 @@ export const Provider = ({ children, element, location }: AppProviderProps) => {
                     zIndex: el === item ? windows.length : el.zIndex < item.zIndex ? el.zIndex : el.zIndex - 1,
                     minimized: item === el ? false : el.minimized,
                     location: item === el ? location || el.location : el.location,
-                    ...additional,
+                    ...(el === item ? additional : {}),
                 }))
             )
         },
@@ -1919,11 +1919,19 @@ export const Provider = ({ children, element, location }: AppProviderProps) => {
         }
 
         if (newWindow.key !== '/' && !isSideBySide && !newWindow.appSettings?.size?.fixed) {
-            const expandedDimensions = getExpandedDimensions()
-            newWindow.size = expandedDimensions.size
-            newWindow.position = expandedDimensions.position
-            newWindow.expanded = true
-            newWindow.snapped = false
+            if (focusedWindow?.snapped) {
+                const sideSnap = getSnapDimensions(focusedWindow.snapped)
+                newWindow.size = sideSnap.size
+                newWindow.position = sideSnap.position
+                newWindow.snapped = focusedWindow.snapped
+                newWindow.expanded = false
+            } else {
+                const expandedDimensions = getExpandedDimensions()
+                newWindow.size = expandedDimensions.size
+                newWindow.position = expandedDimensions.position
+                newWindow.expanded = true
+                newWindow.snapped = false
+            }
         }
 
         if (siteSettings.experience === 'boring') {
@@ -1935,12 +1943,16 @@ export const Provider = ({ children, element, location }: AppProviderProps) => {
         }
 
         if (existingWindow) {
-            bringToFront(existingWindow, element.props.location, {
-                expanded: newWindow.expanded,
-                snapped: newWindow.snapped,
-                size: newWindow.size,
-                position: newWindow.position,
-            })
+            if (existingWindow.snapped && !isSideBySide) {
+                bringToFront(existingWindow, element.props.location)
+            } else {
+                bringToFront(existingWindow, element.props.location, {
+                    expanded: newWindow.expanded,
+                    snapped: newWindow.snapped,
+                    size: newWindow.size,
+                    position: newWindow.position,
+                })
+            }
         } else if (isSideBySide && !windows.some((w) => w.key === newWindow.key)) {
             const focusedSide = location?.state?.sideBySide === 'left' ? 'right' : 'left'
             const sideSnap = getSnapDimensions(focusedSide)
