@@ -76,6 +76,10 @@ Connect PostHog to your Google Search Console property:
 
 <SourceParameters />
 
+## Supported tables
+
+<SourceTables />
+
 ## Troubleshooting
 
 ### "Site is not visible to the connected Google account"
