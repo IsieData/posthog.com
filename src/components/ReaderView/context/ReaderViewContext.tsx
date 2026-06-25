@@ -12,6 +12,7 @@ interface ReaderViewContextType {
     toggleNav: () => void
     toggleToc: () => void
     setBackgroundImage: (image: string | null) => void
+    hasMounted: boolean
 }
 
 const ReaderViewContext = createContext<ReaderViewContextType | undefined>(undefined)
@@ -38,14 +39,15 @@ export function ReaderViewProvider({
     const { appWindow } = useWindow()
     // @2xl breakpoint for sidebar visibility (equivalent to @2xl/app-reader used in CSS)
     const isWideEnoughForSidebar = appWindow?.size?.width && appWindow?.size?.width >= 672 // 42rem = 672px
-    const [isNavVisible, setIsNavVisible] = useState<boolean>(defaultNavVisible ?? false)
+    const [isNavVisible, setIsNavVisible] = useState<boolean>(defaultNavVisible ?? true)
     const [navUserToggled, setNavUserToggled] = useState(false)
     // @6xl breakpoint is 72rem = 1152px
     const isLarge = appWindow?.size?.width && appWindow?.size?.width >= 1152
-    const [isTocVisible, setIsTocVisible] = useState(false)
+    const [isTocVisible, setIsTocVisible] = useState(true)
     const [tocUserToggled, setTocUserToggled] = useState(false)
     const [fullWidthContent, setFullWidthContent] = useState(false)
     const [backgroundImage, setBackgroundImage] = useState<string | null>(null)
+    const [hasMounted, setHasMounted] = useState(false)
 
     // Hydrate persisted state after mount
     useEffect(() => {
@@ -53,8 +55,6 @@ export function ReaderViewProvider({
         if (persisted !== null) {
             setIsNavVisible(persisted)
             setNavUserToggled(true)
-        } else if (isWideEnoughForSidebar) {
-            setIsNavVisible(true)
         }
         const savedBackground = localStorage.getItem('background-image')
         if (savedBackground) setBackgroundImage(savedBackground)
@@ -123,6 +123,13 @@ export function ReaderViewProvider({
         }
     }, [isWideEnoughForSidebar, navUserToggled])
 
+    // Enable transitions after the initial render has painted.
+    useEffect(() => {
+        requestAnimationFrame(() => {
+            setHasMounted(true)
+        })
+    }, [])
+
     const value = {
         isNavVisible,
         isTocVisible,
@@ -132,6 +139,7 @@ export function ReaderViewProvider({
         toggleNav,
         toggleToc,
         setBackgroundImage: handleBackgroundImageChange,
+        hasMounted,
     }
 
     return <ReaderViewContext.Provider value={value}>{children}</ReaderViewContext.Provider>

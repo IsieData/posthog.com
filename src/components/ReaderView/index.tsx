@@ -834,7 +834,7 @@ interface LeftSidebarProps {
     background?: boolean | string
 }
 
-const SIDEBAR_TRANSITION = { type: 'spring' as const, stiffness: 380, damping: 36 }
+const SIDEBAR_CSS_TRANSITION = 'width 300ms cubic-bezier(0.32, 0.72, 0, 1)'
 
 /**
  * Tracks whether the LeftSidebar is currently expanded (pinned, hovered, or
@@ -984,6 +984,7 @@ const LeftSidebar = ({
 }: LeftSidebarProps) => {
     const { websiteMode } = useApp()
     const { searchQuery } = useSearch()
+    const { hasMounted } = useReaderView()
     const hasActiveSearch = !!searchQuery && searchQuery.length >= 2
 
     // Persist/restore the menu scroll position across navigations (ReaderView
@@ -1009,38 +1010,38 @@ const LeftSidebar = ({
     // toggle button, written to localStorage in ReaderViewContext). When NOT
     // pinned the inner panel collapses to 48px and only expands as an overlay
     // when the user hovers it OR clicks the search icon (`searchFocused`).
-    // We track hover in JS (rather than CSS group-hover) so framer-motion can
-    // drive the width / icon-row → icon-column animations off the same boolean.
+    // We track hover in JS (rather than CSS group-hover) so the CSS width
+    // transitions and icon-row → icon-column layout flip share the same boolean.
     const isPinned = isNavVisible
     const [searchFocused, setSearchFocused] = useState(false)
     const [hovered, setHovered] = useState(false)
     const expanded = isPinned || searchFocused || hovered
 
     // `displayExpanded` mirrors `expanded` instantly when growing, but only
-    // flips to false AFTER the panel's shrink animation finishes (driven by
-    // the panel motion.div's `onAnimationComplete` below). Things that should
-    // animate IN on expand but only disappear once the wrapper is fully
-    // collapsed — the product switcher swap, the menu's label-hide rule —
-    // read this instead of `expanded`. Wrapper widths still use `expanded`
-    // so they animate with the hover/blur immediately.
+    // flips to false AFTER the panel's shrink transition finishes (driven by
+    // `onTransitionEnd` below). Things that should appear on expand but only
+    // disappear once the wrapper is fully collapsed — the product switcher
+    // swap, the menu's label-hide rule — read this instead of `expanded`.
+    // Wrapper widths still use `expanded` so they transition with the
+    // hover/blur immediately.
     const [displayExpanded, setDisplayExpanded] = useState(expanded)
     useEffect(() => {
         if (expanded) setDisplayExpanded(true)
     }, [expanded])
 
-    // The tab strip wrapper animates its width 32 ↔ 234 in lockstep with
-    // the panel. If the user pins WHILE that animation is mid-flight (e.g.
-    // they hover then immediately click pin), the tab strip's flex layout
-    // would flip from column to row before the wrapper has reached 234 — the
-    // FLIP measurement in SidebarTabButton would capture mid-animation
-    // positions, so the icons appear to snap rather than glide to their
-    // final spots.
+    // The tab strip wrapper transitions its width 32 ↔ 234 in lockstep
+    // with the panel. If the user pins WHILE that transition is mid-flight
+    // (e.g. they hover then immediately click pin), the tab strip's flex
+    // layout would flip from column to row before the wrapper has reached
+    // 234 — the FLIP measurement in SidebarTabButton would capture
+    // mid-transition positions, so the icons appear to snap rather than
+    // glide to their final spots.
     //
     // `appliedPinned` defers the visual stacked switch until the wrapper
     // settles. `tabsAnimating` is set true whenever the width target
-    // changes (a new animation will run) and back to false on the wrapper's
-    // `onAnimationComplete`. While animating, pin/unpin updates are queued
-    // and applied only when the wrapper is settled.
+    // changes (a new transition will run) and back to false on the
+    // wrapper's `onTransitionEnd`. While animating, pin/unpin updates are
+    // queued and applied only when the wrapper is settled.
     const tabsWidthTarget = isPinned || expanded ? 234 : 32
     const tabsWidthTargetRef = useRef(tabsWidthTarget)
     const [tabsAnimating, setTabsAnimating] = useState(false)
@@ -1113,24 +1114,24 @@ const LeftSidebar = ({
     return (
         <aside
             data-scheme="secondary"
-            className={`relative flex-shrink-0 transition-[flex-basis] duration-300 ${
+            className={`relative flex-shrink-0 ${hasMounted ? 'transition-[flex-basis] duration-300' : ''} ${
                 isPinned ? 'basis-[250px]' : 'basis-12'
             } ${websiteMode ? 'sticky top-0 z-50' : ''}`}
             style={websiteMode ? { height } : {}}
         >
-            <motion.div
-                initial={false}
-                animate={{ width: expanded ? 250 : 48 }}
-                transition={SIDEBAR_TRANSITION}
-                onAnimationComplete={() => {
-                    // Defer ProductSwitcher/menu-label hide until the panel
-                    // has actually finished shrinking — otherwise the swap
-                    // happens mid-animation and the icon visibly jumps.
-                    if (!expanded) setDisplayExpanded(false)
+            <div
+                onTransitionEnd={(e) => {
+                    if (e.propertyName === 'width' && e.target === e.currentTarget && !expanded) {
+                        setDisplayExpanded(false)
+                    }
                 }}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
                 data-scheme="secondary"
+                style={{
+                    width: expanded ? 250 : 48,
+                    transition: hasMounted ? SIDEBAR_CSS_TRANSITION : 'none',
+                }}
                 className={`absolute inset-y-0 left-0 flex flex-col min-h-0 overflow-hidden border-r border-primary will-change-[transform,backdrop-filter] transform-gpu ${resolveBackground(
                     background
                 )} ${!isPinned && expanded ? 'z-50 shadow-2xl' : 'z-30'}`}
@@ -1168,10 +1169,11 @@ const LeftSidebar = ({
                         Both fade in lockstep with the menu labels so the
                         whole expanded view dissolves smoothly. */}
                         {productSelect && (
-                            <motion.div
-                                initial={false}
-                                animate={{ width: expanded ? 234 : 32 }}
-                                transition={SIDEBAR_TRANSITION}
+                            <div
+                                style={{
+                                    width: expanded ? 234 : 32,
+                                    transition: hasMounted ? SIDEBAR_CSS_TRANSITION : 'none',
+                                }}
                                 className={`mx-2 pb-2 flex-shrink-0 [&_button>svg:last-child]:transition-opacity [&_button>svg:last-child]:duration-200 [&_button>span>span>span:nth-child(2)]:transition-opacity [&_button>span>span>span:nth-child(2)]:duration-200 ${
                                     expanded
                                         ? ''
@@ -1179,7 +1181,7 @@ const LeftSidebar = ({
                                 }`}
                             >
                                 {productSelect}
-                            </motion.div>
+                            </div>
                         )}
 
                         {/* Inline search: always rendered with the magnifying-glass
@@ -1195,22 +1197,17 @@ const LeftSidebar = ({
                                 onBlur={handleSearchBlur}
                                 onKeyDown={handleSearchKeyDown}
                             >
-                                <motion.div
-                                    initial={false}
-                                    animate={{ width: expanded ? 234 : 32 }}
-                                    transition={SIDEBAR_TRANSITION}
-                                    // Transition the colors on the descendant
-                                    // input itself — `transition-colors` on this
-                                    // wrapper would only animate the wrapper's
-                                    // own colors (which never change), so the
-                                    // input bg/border were flipping instantly
-                                    // and reading as out-of-sync with the rest.
+                                <div
+                                    style={{
+                                        width: expanded ? 234 : 32,
+                                        transition: hasMounted ? SIDEBAR_CSS_TRANSITION : 'none',
+                                    }}
                                     className={`overflow-hidden [&_input]:transition-colors [&_input]:duration-200 ${
                                         expanded ? '' : '[&_input]:!bg-transparent [&_input]:!border-transparent'
                                     }`}
                                 >
                                     {inlineSearch}
-                                </motion.div>
+                                </div>
                             </div>
                         )}
 
@@ -1228,18 +1225,16 @@ const LeftSidebar = ({
                             // Width animates in lockstep with the panel so the
                             // border-y always stays inside the visible area
                             // rather than overflowing the 250px content box.
-                            <motion.div
-                                initial={false}
-                                animate={{ width: tabsWidthTarget }}
-                                transition={SIDEBAR_TRANSITION}
-                                onAnimationComplete={() => {
-                                    // Width has settled — safe to flip the
-                                    // tab strip's flex direction. Doing this
-                                    // mid-animation makes SidebarTabButton's
-                                    // FLIP measure mid-flight positions, so
-                                    // the icons appear to snap on first pin.
-                                    setTabsAnimating(false)
-                                    setAppliedPinned(isPinned)
+                            <div
+                                style={{
+                                    width: tabsWidthTarget,
+                                    transition: hasMounted ? SIDEBAR_CSS_TRANSITION : 'none',
+                                }}
+                                onTransitionEnd={(e) => {
+                                    if (e.propertyName === 'width' && e.target === e.currentTarget) {
+                                        setTabsAnimating(false)
+                                        setAppliedPinned(isPinned)
+                                    }
                                 }}
                                 className={`mx-2 flex gap-px flex-shrink-0 ${
                                     appliedPinned ? 'flex-row' : 'flex-col items-stretch py-2 border-y border-secondary'
@@ -1263,7 +1258,7 @@ const LeftSidebar = ({
                                         }}
                                     />
                                 ))}
-                            </motion.div>
+                            </div>
                         )}
 
                         <div className="flex-1 min-h-0 flex flex-col">
@@ -1313,7 +1308,7 @@ const LeftSidebar = ({
                         </div>
                     )}
                 </div>
-            </motion.div>
+            </div>
         </aside>
     )
 }
@@ -1413,12 +1408,13 @@ const FloatingTOC = ({
     contentRef,
     background = false,
 }: FloatingTOCProps) => {
+    const { hasMounted } = useReaderView()
     return (
         <aside
             data-scheme="secondary"
-            className={`flex-shrink-0 flex flex-col border-l border-primary transition-[width] duration-300 overflow-hidden ${resolveBackground(
-                background
-            )} ${isTocVisible ? 'w-[250px]' : 'w-12'}`}
+            className={`flex-shrink-0 flex flex-col border-l border-primary ${
+                hasMounted ? 'transition-[width] duration-300' : ''
+            } overflow-hidden ${resolveBackground(background)} ${isTocVisible ? 'w-[250px]' : 'w-12'}`}
         >
             <div className="flex-1 min-h-0 flex flex-col w-[250px]">
                 {isTocVisible && (
