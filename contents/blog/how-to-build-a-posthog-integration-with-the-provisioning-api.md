@@ -39,12 +39,12 @@ It looks like this:
   "grant_types": ["authorization_code"],
   "response_types": ["code"],
   "com.posthog": {
-    "scopes": ["query:read", "insight:read", "project:read", "person:read"]
+    "scopes": ["query:read", "endpoint:write", "session_recording:read", "sharing_configuration:write", "insight:read", "project:read", "project:write", "person:read"]
   }
 }
 ```
 
-The `client_id` has to be the exact URL the file is served from, or it won't register. The `com.posthog.scopes` list is a ceiling: tokens can never go above it, whatever an individual request asks for. I ask for `query:read` because I need to run queries later to build the dashboard. More on that below.
+The `client_id` has to be the exact URL the file is served from, or it won't register. The `com.posthog.scopes` list is a ceiling: tokens can never go above it, whatever an individual request asks for. These scopes are everything the dashboard needs later: reading the analytics back and embedding a session recording. More on both below.
 
 Because HogFarm holds no secret (`token_endpoint_auth_method` is `"none"`), I use PKCE to prove the token exchange. I generate a random verifier and send only its SHA-256 hash with the first call. The verifier gets replayed at token exchange.
 
@@ -66,7 +66,7 @@ await fetch(`${HOST}/api/agentic/provisioning/account_requests`, {
     client_id: clientId,
     code_challenge: challenge,
     code_challenge_method: "S256",
-    scopes: ["query:read", "insight:read", "project:read", "person:read"],
+    scopes: ["query:read", "endpoint:write", "session_recording:read", "sharing_configuration:write", "insight:read", "project:read", "project:write", "person:read"],
     configuration: { region: "US", organization_name: farmName },
   }),
 })
@@ -112,26 +112,68 @@ The response carries `complete.access_configuration.api_key` (the `phc_` token) 
 
 ## Reading the data back
 
-Now for the fun part, giving critical business insights directly to the farmers. The OAuth access token can query the farmer's project directly. So the dashboard is just a few HogQL queries:
+Now for the fun part, giving critical business insights directly to the farmers. I could fire ad-hoc HogQL at the project on every dashboard load, but PostHog points you at [Endpoints](/docs/endpoints) instead: named, saved queries the project owns and you call by name. So when a project is provisioned I publish the dashboard's queries once, with `endpoint:write`:
 
 ```ts
-await fetch(`${HOST}/api/projects/${teamId}/query/`, {
+await fetch(`${HOST}/api/projects/${teamId}/endpoints/`, {
   method: "POST",
-  headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
+  headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" },
   body: JSON.stringify({
+    name: "hogfarm_pageview_trend",
     query: {
       kind: "HogQLQuery",
       query: `SELECT toDate(timestamp), count() FROM events
               WHERE event = '$pageview' AND timestamp > now() - INTERVAL 7 DAY
               GROUP BY 1 ORDER BY 1`,
     },
+    data_freshness_seconds: 3600,
   }),
 })
 ```
 
-That one builds the seven-day trend chart. A couple more get unique visitors and top pages. The access token gets cached and refreshed with the rotating refresh token when it expires, so the reads keep going without bothering the farmer.
+Then the dashboard runs them by name:
+
+```ts
+await fetch(`${HOST}/api/projects/${teamId}/endpoints/hogfarm_pageview_trend/run/?version=1`, {
+  method: "POST",
+  headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" },
+  body: "{}",
+})
+```
+
+That one builds the seven-day trend chart, two more get unique visitors and top pages. I pin `?version=1` so editing a query later can't quietly change a live farm's numbers. I leave them unmaterialized and read live: a freshly materialized endpoint serves empty until its first background refresh, which is the wrong default for a dashboard that has to look right the moment it loads.
 
 Access tokens last an hour, so for anything long-lived you're storing the refresh token. Encrypt it. I keep them in Postgres with AES-256-GCM and a key that only lives in the environment, never in the database.
+
+## Session replay, mostly for free
+
+The farm site loads the PostHog snippet with session recording turned on, but that alone records nothing: a brand-new project is opted out at the project level, and the client-side switch can't override it. So at provision time I flip it on with `project:write`:
+
+```ts
+await fetch(`${HOST}/api/projects/${teamId}/`, {
+  method: "PATCH",
+  headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" },
+  body: JSON.stringify({ session_recording_opt_in: true }),
+})
+```
+
+Now every visit records. On the dashboard I play the most recent one inline. The provisioning token also has `sharing_configuration:write`, so I flip on public sharing for the latest recording and get an embed token back:
+
+```ts
+const res = await fetch(
+  `${HOST}/api/projects/${teamId}/session_recordings/${recordingId}/sharing/`,
+  {
+    method: "PATCH",
+    headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ enabled: true }),
+  },
+)
+const { access_token } = await res.json()
+// /embedded is the one PostHog page built to be iframed
+const embedUrl = `https://us.posthog.com/embedded/${access_token}`
+```
+
+I drop that URL in an iframe and the farmer watches real visitors move through their site. The recording lives in their own project; HogFarm just borrows a public view of the latest one. (A shared recording is viewable by anyone with the link, which is fine for a demo, but a real builder would gate or expire it.)
 
 ## The stuff that bit me
 
